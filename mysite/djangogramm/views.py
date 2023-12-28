@@ -7,7 +7,8 @@ def registration(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            return HttpResponse('')
+            email = form.cleaned_data['email']
+            return HttpResponse('email')
     else:
         form = RegistrationForm()
 
