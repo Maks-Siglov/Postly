@@ -120,6 +120,9 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = '/media/'
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 

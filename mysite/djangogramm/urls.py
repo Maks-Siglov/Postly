@@ -3,5 +3,7 @@ from django.urls import path
 from djangogramm import views
 
 urlpatterns = [
-    path('register/', views.registration, name='registration'),
+    path('', views.index, name='index'),
+    path('register/', views.registration, name='register'),
+    path('profile/<str:link_key>/', views.profile, name='profile'),
 ]
