@@ -15,4 +15,4 @@ class RegistrationForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['full_name', 'bio', 'avatar']
+        fields = ['username', 'bio', 'avatar', 'password']
