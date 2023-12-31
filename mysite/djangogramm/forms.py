@@ -1,6 +1,6 @@
 from django import forms
 
-from djangogramm.models import UserProfile, User
+from djangogramm.models import UserProfile, User, Post
 
 
 class RegistrationForm(forms.ModelForm):
@@ -16,3 +16,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['full_name', 'bio', 'avatar']
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'image']
