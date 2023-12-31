@@ -10,15 +10,3 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
-
-
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = ['full_name', 'bio', 'avatar']
-
-
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['title', 'content', 'image']
