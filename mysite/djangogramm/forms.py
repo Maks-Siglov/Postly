@@ -1,18 +1,18 @@
 from django import forms
-from django.contrib.auth.models import User
 
-from djangogramm.models import UserProfile
+from djangogramm.models import UserProfile, User
 
 
-class RegistrationForm(forms.Form):
-    email = forms.EmailField()
+class RegistrationForm(forms.ModelForm):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ['email']
+        fields = ['username', 'email', 'password']
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['username', 'bio', 'avatar', 'password']
+        fields = ['full_name', 'bio', 'avatar']
