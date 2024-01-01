@@ -5,7 +5,15 @@
 {% block content %}
 <h2>Profile</h2>
     {% csrf_token %}
-    {{ form.as_p }}
+
+    {% if form.avatar.value %}
+          Avatar: <img src="{{ form.avatar.value.url }}" alt="Current Avatar">
+    {% endif %}
+    <p>{{ form.avatar }}</p>
+
+    <p>Full name: {{ form.full_name }}</p>
+    <p>Bio: {{ form.bio }}</p>
+
 <p><a href="{% url 'edit_profile' username=user.username %}">Edit Profile</a></p>
 <p><a href="{% url 'create_post' %}">Create post</a></p>
 <p><a href="{% url 'post_list' %}">Post list</a></p>

@@ -5,7 +5,19 @@
 {% block content %}
 <h2>Post list</h2>
 {% for post in posts %}
-    <p>{{ post.title }}</p>
+    <div class="post-container">
+      <h4>{{ post.title }}</h4>
+      <p>{{ post.content }}</p>
+
+      {% if post.image.value %}
+        <img src="{{ post.image.value.url }}" alt="{{ post.title }}">
+      {% endif %}
+
+      {% if post.tag %}
+        <p>Tag: <span class="tag">{{ post.tag.name }}</span> </p>
+      {% endif %}
+
+    </div>
 {% endfor %}
-<p><a href="{% url 'profile' %}">Profile</a></p>
+<p><a href="{% url 'profile' user.username %}">Profile</a></p>
 {% endblock %}
