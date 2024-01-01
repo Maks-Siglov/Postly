@@ -17,9 +17,9 @@ def create_post(request):
     else:
         form = PostForm()
 
-    return render(request, 'djangogramm/create_post.html', {'form': form})
+    return render(request, 'djangogramm/post/create_post.html', {'form': form})
 
 
 def post_list(request):
     posts = Post.objects.all()
-    return render(request, 'djangogramm/post_list.html', {'posts': posts})
+    return render(request, 'djangogramm/post/post_list.html', {'posts': posts})

@@ -1,6 +1,6 @@
 from django import forms
 
-from djangogramm.models import UserProfile, User, Post
+from djangogramm.models import User
 
 
 class RegistrationForm(forms.ModelForm):

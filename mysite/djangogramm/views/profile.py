@@ -1,12 +1,13 @@
+from django.contrib import messages
 from django.contrib.auth import login
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
 from djangogramm.forms import ProfileForm
 from djangogramm.models import UserProfile, User
 
 
-def profile(request, link_key):
+def profile_registration(request, link_key):
     if request.method == 'POST':
         user = User.objects.get(email_hash=link_key)
         user.activate = True
@@ -18,10 +19,52 @@ def profile(request, link_key):
             user_profile.save()
 
             login(request, user)
-            return HttpResponse(
-                'Profile saved and user logged in successfully'
+            messages.success(
+                request, 'Profile saved and user logged in successfully'
             )
+            return redirect('profile', user.username)
     else:
         form = ProfileForm()
 
-    return render(request, 'djangogramm/profile.html', {"form": form})
+    return render(
+        request, 'djangogramm/profile/profile_registration.html', {"form": form}
+    )
+
+
+@login_required(login_url='login')
+def profile(request, username):
+    if request.user.username != username:
+        messages.error(
+            request, 'You do not have permission to view this profile.'
+        )
+        return redirect('index')
+
+    user = User.objects.get(username=username)
+    form = ProfileForm(instance=user.profile)
+    return render(
+        request, 'djangogramm/profile/profile.html', {"form":  form},
+    )
+
+
+@login_required(login_url='login')
+def edit_profile(request, username):
+    user = User.objects.get(username=username)
+
+    if request.user.username != username:
+        messages.error(
+            request, 'You do not have permission to view this profile.'
+        )
+        return redirect('index')
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('profile', username=username)
+    else:
+        form = ProfileForm(instance=user.profile)
+
+    return render(
+        request, 'djangogramm/profile/edit_profile.html', {"form": form},
+    )

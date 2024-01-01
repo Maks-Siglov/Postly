@@ -112,12 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'djangogramm.User'
 
-AUTHENTICATION_BACKENDS = [
-    'djangogramm.backends.CustomUserAuthBackend',
-]
-
-LOGIN_REDIRECT_URL = '/profile/'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
