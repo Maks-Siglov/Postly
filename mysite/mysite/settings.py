@@ -112,6 +112,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'djangogramm.User'
 
+AUTHENTICATION_BACKENDS = [
+    'djangogramm.backends.CustomUserAuthBackend',
+]
+
+LOGIN_REDIRECT_URL = '/profile/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
@@ -122,7 +127,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-MEDIA_ROOT = BASE_DIR/"media"
+MEDIA_ROOT = BASE_DIR/"djangogramm/media"
 MEDIA_URL = 'media/'
 
 # Internationalization

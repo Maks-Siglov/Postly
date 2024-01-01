@@ -9,7 +9,9 @@ def registration(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.set_password(user.password)
+            user.save()
             email = user.email
             send_confirmation_email(user, email)
             return HttpResponse('Email has been sent, please check your box')
