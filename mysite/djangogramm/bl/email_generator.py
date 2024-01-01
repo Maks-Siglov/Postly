@@ -1,8 +1,8 @@
 import hashlib
 
-from django.urls import reverse
-from django.core.mail import send_mail
 from django.conf import settings
+from django.core.mail import send_mail
+from django.urls import reverse
 
 from djangogramm.models import User
 

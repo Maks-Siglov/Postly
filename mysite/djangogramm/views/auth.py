@@ -1,7 +1,7 @@
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
+from django.shortcuts import redirect, render
 
 from djangogramm.bl.email_generator import send_confirmation_email
 from djangogramm.forms import RegistrationForm
