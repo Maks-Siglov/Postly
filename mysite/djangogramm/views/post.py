@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from djangogramm.forms import PostForm
 from djangogramm.models import Post, Tag
@@ -19,7 +19,6 @@ def create_post(request):
                 post.tag = tag
 
             post.save()
-            print(post.tag.name)
             return redirect('post_list')
     else:
         form = PostForm()
@@ -30,3 +29,16 @@ def create_post(request):
 def post_list(request):
     posts = Post.objects.all()
     return render(request, 'djangogramm/post/post_list.html', {'posts': posts})
+
+
+@login_required
+def like_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    user = request.user
+
+    if user in post.likes.all():
+        post.likes.remove(user)
+    else:
+        post.likes.add(user)
+
+    return redirect('post_list')

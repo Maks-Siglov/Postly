@@ -18,6 +18,7 @@
       {% endif %}
 
     </div>
+    <p><a href="{% url 'like_post' post.id %}">Like</a></p>
 {% endfor %}
 <p><a href="{% url 'profile' user.username %}">Profile</a></p>
 {% endblock %}

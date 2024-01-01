@@ -15,4 +15,5 @@ urlpatterns = [
     path('create_post/', post.create_post, name='create_post'),
     path('post_list/', post.post_list, name='post_list'),
     path('login/', auth.login_view, name='login'),
+    path('like_post/<int:post_id>', post.like_post, name='like_post'),
 ]
