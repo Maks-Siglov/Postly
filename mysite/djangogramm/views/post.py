@@ -36,7 +36,12 @@ def post_list(request) -> HttpResponse:
 def user_posts(request, username: str) -> HttpResponse:
     user = User.objects.get(username=username)
     posts = Post.objects.filter(owner=user)
-    return render(request, "djangogramm/post/user_posts.html", {"posts": posts})
+    if request.user == user:
+        return render(
+            request, "djangogramm/post/user_posts.html", {"posts": posts}
+        )
+
+    return render(request, "djangogramm/post/post_list.html", {"posts": posts})
 
 
 def post_detail(request, post_id: int) -> HttpResponse:
@@ -96,12 +101,12 @@ def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
 
     if request.method == "POST":
         post.delete()
-        return redirect('user_posts', post.owner.username)
+        return redirect("user_posts", post.owner.username)
 
     return render(
         request,
         "djangogramm/post/delete_post.html",
-        {'post': post, 'user': post.owner}
+        {"post": post, "user": post.owner},
     )
 
 

@@ -9,7 +9,7 @@ from djangogramm.models import User, UserProfile
 
 
 def profile_registration(
-        request, link_key: str
+    request, link_key: str
 ) -> HttpResponse | HttpResponseRedirect:
     if request.method == "POST":
         user = User.objects.get(email_hash=link_key)
@@ -49,13 +49,13 @@ def profile(request, username: str) -> HttpResponse:
     return render(
         request,
         "djangogramm/profile/profile_view.html",
-        {"profile": profile_owner.profile, 'user': profile_owner}
+        {"profile": profile_owner.profile, "user": profile_owner},
     )
 
 
 @login_required(login_url="login")
 def edit_profile(
-        request, username: str
+    request, username: str
 ) -> HttpResponse | HttpResponseRedirect:
     user = User.objects.get(username=username)
 
