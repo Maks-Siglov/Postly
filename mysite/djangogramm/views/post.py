@@ -31,7 +31,7 @@ def post_list(request):
     return render(request, 'djangogramm/post/post_list.html', {'posts': posts})
 
 
-@login_required
+@login_required(login_url='login')
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
@@ -40,5 +40,24 @@ def like_post(request, post_id):
         post.likes.remove(user)
     else:
         post.likes.add(user)
+
+        if user in post.dislikes.all():
+            post.dislikes.remove(user)
+
+    return redirect('post_list')
+
+
+@login_required(login_url='login')
+def dislike_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    user = request.user
+
+    if user in post.dislikes.all():
+        post.dislikes.remove(user)
+    else:
+        post.dislikes.add(user)
+
+        if user in post.likes.all():
+            post.likes.remove(user)
 
     return redirect('post_list')

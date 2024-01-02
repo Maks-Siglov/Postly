@@ -27,5 +27,10 @@ class Post(models.Model):
         related_name='liked_post',
     )
 
+    dislikes = models.ManyToManyField(
+        'djangogramm.User',
+        related_name='disliked_post',
+    )
+
     def __str__(self):
         return self.title
