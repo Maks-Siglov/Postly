@@ -7,7 +7,7 @@ from djangogramm.bl.email_generator import send_confirmation_email
 from djangogramm.forms import RegistrationForm
 
 
-def registration(request):
+def registration(request) -> HttpResponse:
     if request.method == "POST":
         form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -23,7 +23,7 @@ def registration(request):
     return render(request, "djangogramm/auth/register.html", {"form": form})
 
 
-def login_view(request):
+def login_view(request) -> HttpResponse:
     if request.method == "POST":
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():

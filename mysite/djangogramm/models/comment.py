@@ -14,3 +14,13 @@ class Comment(models.Model):
     owner = models.ForeignKey(
         "djangogramm.User", on_delete=models.CASCADE, related_name="comments"
     )
+
+    likes = models.ManyToManyField(
+        "djangogramm.User",
+        related_name="liked_comments",
+    )
+
+    dislikes = models.ManyToManyField(
+        "djangogramm.User",
+        related_name="disliked_comments",
+    )

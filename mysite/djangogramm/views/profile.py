@@ -1,13 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from djangogramm.forms import ProfileForm
 from djangogramm.models import User, UserProfile
 
 
-def profile_registration(request, link_key):
+def profile_registration(
+        request, link_key: str
+) -> HttpResponse | HttpResponseRedirect:
     if request.method == "POST":
         user = User.objects.get(email_hash=link_key)
         user.activate = True
@@ -34,7 +37,7 @@ def profile_registration(request, link_key):
 
 
 @login_required(login_url="login")
-def profile(request, username):
+def profile(request, username: str) -> HttpResponse:
     profile_owner = User.objects.get(username=username)
     if request.user == profile_owner:
         return render(
@@ -51,7 +54,9 @@ def profile(request, username):
 
 
 @login_required(login_url="login")
-def edit_profile(request, username):
+def edit_profile(
+        request, username: str
+) -> HttpResponse | HttpResponseRedirect:
     user = User.objects.get(username=username)
 
     if request.user.username != username:

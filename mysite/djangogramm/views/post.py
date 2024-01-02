@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from djangogramm.forms import PostForm, CommentForm
@@ -6,7 +7,7 @@ from djangogramm.models import Post, Tag, Comment
 
 
 @login_required(login_url="login")
-def create_post(request):
+def create_post(request) -> HttpResponse:
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -26,12 +27,12 @@ def create_post(request):
     return render(request, "djangogramm/post/create_post.html", {"form": form})
 
 
-def post_list(request):
+def post_list(request) -> HttpResponse:
     posts = Post.objects.all()
     return render(request, "djangogramm/post/post_list.html", {"posts": posts})
 
 
-def post_detail(request, post_id: int):
+def post_detail(request, post_id: int) -> HttpResponse:
     post = get_object_or_404(Post, id=post_id)
     comments = Comment.objects.filter(post=post)
     comment_form = CommentForm()
@@ -52,7 +53,7 @@ def post_detail(request, post_id: int):
 
 
 @login_required(login_url="login")
-def like_post(request, post_id: int):
+def like_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
@@ -68,7 +69,7 @@ def like_post(request, post_id: int):
 
 
 @login_required(login_url="login")
-def dislike_post(request, post_id: int):
+def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
@@ -81,3 +82,35 @@ def dislike_post(request, post_id: int):
             post.likes.remove(user)
 
     return redirect("post_list")
+
+
+@login_required(login_url="login")
+def like_comment(request, comment_id: int) -> HttpResponseRedirect:
+    comment = get_object_or_404(Comment, id=comment_id)
+    user = request.user
+
+    if user in comment.likes.all():
+        comment.likes.remove(user)
+    else:
+        comment.likes.add(user)
+
+        if user in comment.dislikes.all():
+            comment.dislikes.remove(user)
+
+    return redirect("post_detail", comment.post.id)
+
+
+@login_required(login_url="login")
+def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
+    comment = get_object_or_404(Comment, id=comment_id)
+    user = request.user
+
+    if user in comment.dislikes.all():
+        comment.dislikes.remove(user)
+    else:
+        comment.dislikes.add(user)
+
+        if user in comment.likes.all():
+            comment.likes.remove(user)
+
+    return redirect("post_detail", comment.post.id)

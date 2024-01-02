@@ -29,3 +29,16 @@ urlpatterns += [
     path("like_post/<int:post_id>", post.like_post, name="like_post"),
     path("dislike_post/<int:post_id>", post.dislike_post, name="dislike_post"),
 ]
+
+urlpatterns += [
+    path(
+        "like_comment/<int:comment_id>",
+        post.like_comment,
+        name="like_comment",
+    ),
+    path(
+        "dislike_comment/<int:comment_id>",
+        post.dislike_comment,
+        name="dislike_comment",
+    ),
+]

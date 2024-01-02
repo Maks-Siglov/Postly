@@ -24,7 +24,12 @@
 
     <h3>Comments</h3>
     {% for comment in comments %}
-        <p>{{ comment.owner.username }} - {{ comment.content }}</p>
+        <p>{{ comment.owner.username }}</p>
+        <p>{{ comment.content }}</p>
+        <p>
+        {{ comment.likes.count }} <a href="{% url 'like_comment' comment.id %}">Like</a>
+        {{ comment.dislikes.count }} <a href="{% url 'dislike_comment' comment.id %}">Dislike</a>
+    </p>
     {% endfor %}
 
     <h4>Add comment</h4>
