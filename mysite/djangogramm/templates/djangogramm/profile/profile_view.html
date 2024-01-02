@@ -13,7 +13,5 @@
     <p>Full name: {{ profile.full_name }}</p>
     <p>Bio: {{ profile.bio }}</p>
 
-<p><a href="{% url 'edit_profile' username=user.username %}">Edit Profile</a></p>
-<p><a href="{% url 'create_post' %}">Create post</a></p>
 <p><a href="{% url 'post_list' %}">Post list</a></p>
 {% endblock %}

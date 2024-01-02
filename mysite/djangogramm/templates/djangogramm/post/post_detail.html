@@ -11,11 +11,16 @@
 
     <p>{{ post.content }}</p>
     <p>Date: {{ post.creation_date }}</p>
-    <p>Owner: {{ post.owner }}</p>
+    <p>Owner: <a href="{% url 'profile' post.owner.username%}">{{ post.owner.username }}</a></p>
 
       {% if post.tag %}
         <p>Tag: <span class="tag">{{ post.tag.name }}</span></p>
       {% endif %}
+
+    <p>
+        {{ post.likes.count }} <a href="{% url 'like_post' post.id %}">Like</a>
+        {{ post.dislikes.count }} <a href="{% url 'dislike_post' post.id %}">Dislike</a>
+    </p>
 
     <h3>Comments</h3>
     {% for comment in comments %}

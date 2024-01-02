@@ -35,18 +35,18 @@ def profile_registration(request, link_key):
 
 @login_required(login_url="login")
 def profile(request, username):
-    if request.user.username != username:
-        messages.error(
-            request, "You do not have permission to view this profile."
+    profile_owner = User.objects.get(username=username)
+    if request.user == profile_owner:
+        return render(
+            request,
+            "djangogramm/profile/profile.html",
+            {"profile": profile_owner.profile},
         )
-        return redirect("index")
 
-    user = User.objects.get(username=username)
-    form = ProfileForm(instance=user.profile)
     return render(
         request,
-        "djangogramm/profile/profile.html",
-        {"form": form},
+        "djangogramm/profile/profile_view.html",
+        {"profile": profile_owner.profile}
     )
 
 
