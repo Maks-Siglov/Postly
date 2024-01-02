@@ -8,13 +8,9 @@ class Comment(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
 
     post = models.ForeignKey(
-        'djangogramm.Post',
-        on_delete=models.CASCADE,
-        related_name='comments'
+        "djangogramm.Post", on_delete=models.CASCADE, related_name="comments"
     )
 
     owner = models.ForeignKey(
-        'djangogramm.User',
-        on_delete=models.CASCADE,
-        related_name='comments'
+        "djangogramm.User", on_delete=models.CASCADE, related_name="comments"
     )
