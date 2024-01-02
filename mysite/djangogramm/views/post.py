@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from djangogramm.forms import PostForm
-from djangogramm.models import Post, Tag
+from djangogramm.forms import PostForm, CommentForm
+from djangogramm.models import Post, Tag, Comment
 
 
 @login_required(login_url='login')
@@ -31,8 +31,28 @@ def post_list(request):
     return render(request, 'djangogramm/post/post_list.html', {'posts': posts})
 
 
+def post_detail(request, post_id: int):
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post=post)
+    comment_form = CommentForm()
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.owner = request.user
+            comment.save()
+
+    return render(
+        request,
+        'djangogramm/post/post_detail.html',
+        {'post': post, 'comments': comments, 'comment_form': comment_form}
+    )
+
+
 @login_required(login_url='login')
-def like_post(request, post_id):
+def like_post(request, post_id: int):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
@@ -48,7 +68,7 @@ def like_post(request, post_id):
 
 
 @login_required(login_url='login')
-def dislike_post(request, post_id):
+def dislike_post(request, post_id: int):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 

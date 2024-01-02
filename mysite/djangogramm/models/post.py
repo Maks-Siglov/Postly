@@ -7,6 +7,8 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     image = models.ImageField(upload_to='post_image/', blank=True, null=True)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     owner = models.ForeignKey(
         'djangogramm.User',

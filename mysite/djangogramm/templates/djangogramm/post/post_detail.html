@@ -1,0 +1,33 @@
+{% extends 'djangogramm/base.html' %}
+
+{% block title %}Post {{ post.title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ post.title }}</h2>
+
+    {% if post.image.value %}
+        <img src="{{ post.image.value.url }}" alt="{{ post.title }}">
+      {% endif %}
+
+    <p>{{ post.content }}</p>
+    <p>Date: {{ post.creation_date }}</p>
+    <p>Owner: {{ post.owner }}</p>
+
+      {% if post.tag %}
+        <p>Tag: <span class="tag">{{ post.tag.name }}</span></p>
+      {% endif %}
+
+    <h3>Comments</h3>
+    {% for comment in comments %}
+        <p>{{ comment.owner.username }} - {{ comment.content }}</p>
+    {% endfor %}
+
+    <h4>Add comment</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Comment</button>
+    </form>
+
+<p><a href="{% url 'post_list' %}">Post list</a></p>
+{% endblock %}
