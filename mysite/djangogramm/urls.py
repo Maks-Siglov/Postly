@@ -25,7 +25,10 @@ urlpatterns += [
 urlpatterns += [
     path("create_post/", post.create_post, name="create_post"),
     path("post_list/", post.post_list, name="post_list"),
+    path("post_list/<username>", post.user_posts, name="user_posts"),
     path("post_detail/<int:post_id>", post.post_detail, name="post_detail"),
+    path("post/<int:post_id>/edit", post.edit_post, name="edit_post"),
+    path("post/<int:post_id>/delete", post.delete_post, name="delete_post"),
     path("like_post/<int:post_id>", post.like_post, name="like_post"),
     path("dislike_post/<int:post_id>", post.dislike_post, name="dislike_post"),
 ]

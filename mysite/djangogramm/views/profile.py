@@ -49,7 +49,7 @@ def profile(request, username: str) -> HttpResponse:
     return render(
         request,
         "djangogramm/profile/profile_view.html",
-        {"profile": profile_owner.profile}
+        {"profile": profile_owner.profile, 'user': profile_owner}
     )
 
 
@@ -59,7 +59,7 @@ def edit_profile(
 ) -> HttpResponse | HttpResponseRedirect:
     user = User.objects.get(username=username)
 
-    if request.user.username != username:
+    if request.user != user:
         messages.error(
             request, "You do not have permission to view this profile."
         )
