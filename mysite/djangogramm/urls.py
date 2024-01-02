@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from djangogramm.views import auth, main_page, post, profile
@@ -14,6 +15,7 @@ urlpatterns += [
         profile.profile_registration,
         name="profile_registration",
     ),
+    path('logout/', LogoutView.as_view(), name='logout')
 ]
 
 urlpatterns += [
