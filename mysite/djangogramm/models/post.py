@@ -14,22 +14,16 @@ class Post(models.Model):
         "djangogramm.User", on_delete=models.CASCADE, related_name="posts"
     )
 
-    tag = models.ForeignKey(
-        "djangogramm.Tag",
-        on_delete=models.CASCADE,
-        related_name="posts",
-        blank=True,
-        null=True,
+    tags = models.ManyToManyField(
+        "djangogramm.Tag", related_name="posts", blank=True
     )
 
     likes = models.ManyToManyField(
-        "djangogramm.User",
-        related_name="liked_post",
+        "djangogramm.User", related_name="liked_post"
     )
 
     dislikes = models.ManyToManyField(
-        "djangogramm.User",
-        related_name="disliked_post",
+        "djangogramm.User", related_name="disliked_post"
     )
 
     def __str__(self):

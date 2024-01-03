@@ -14,13 +14,13 @@ def create_post(request) -> HttpResponse:
         if form.is_valid():
             post = form.save(commit=False)
             post.owner = request.user
+            post.save()
 
             tag_name = form.cleaned_data["tag"]
             if tag_name:
                 tag, created = Tag.objects.get_or_create(name=tag_name)
-                post.tag = tag
+                post.tags.add(tag)
 
-            post.save()
             return redirect("post_list")
     else:
         form = PostForm()
@@ -77,6 +77,13 @@ def edit_post(request, post_id: int) -> HttpResponseRedirect:
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
+            tag_name = form.cleaned_data["tag"]
+
+            if tag_name:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                post.tags.clear()
+                post.tags.add(tag)
+
             form.save()
             messages.success(request, "Post updated successfully.")
             return redirect("user_posts", post.owner.username)

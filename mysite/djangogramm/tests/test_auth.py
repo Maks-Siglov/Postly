@@ -53,11 +53,11 @@ def test_registration(client: Client):
 @pytest.mark.django_db
 def test_login(client: Client):
     user = User.objects.create_user(
-        username='tes_tuser', password='test_password'
+        username="tes_tuser", password="test_password"
     )
     response = client.post(
-        reverse('login'),
-        {'username': 'tes_tuser', 'password': 'test_password'}
+        reverse("login"),
+        {"username": "tes_tuser", "password": "test_password"},
     )
 
     assert response.status_code == 302
@@ -67,18 +67,18 @@ def test_login(client: Client):
 @pytest.mark.django_db
 def test_logout(client: Client):
     user = User.objects.create_user(
-        username='test_user', password='test_password'
+        username="test_user", password="test_password"
     )
     profile = UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user
     )
-    client.login(username='test_user', password='test_password')
+    client.login(username="test_user", password="test_password")
 
-    response = client.get(reverse('profile',  args=[user.username]))
+    response = client.get(reverse("profile", args=[user.username]))
     assert response.status_code == 200
 
-    response = client.post(reverse('logout'))
+    response = client.post(reverse("logout"))
     assert response.status_code == 302
 
-    response = client.get(reverse('profile',  args=[user.username]))
+    response = client.get(reverse("profile", args=[user.username]))
     assert response.status_code == 302

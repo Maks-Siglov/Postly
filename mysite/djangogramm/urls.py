@@ -15,7 +15,7 @@ urlpatterns += [
         profile.profile_registration,
         name="profile_registration",
     ),
-    path('logout/', LogoutView.as_view(), name='logout')
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]
 
 urlpatterns += [

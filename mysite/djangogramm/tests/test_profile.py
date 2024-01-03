@@ -16,7 +16,7 @@ def test_profile(client: Client):
     )
     client.login(username="test_user", password="test_password")
 
-    response = client.get(reverse('profile', args=[user.username]))
+    response = client.get(reverse("profile", args=[user.username]))
     assert response.status_code == 200
 
 
@@ -34,13 +34,13 @@ def test_not_owner_profile_view(client: Client):
         full_name="other_test_full_name", bio="other_test_bio", user=other_user
     )
 
-    response = client.get(reverse('profile', args=[other_user.username]))
+    response = client.get(reverse("profile", args=[other_user.username]))
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
 def test_unauthenticated_profile_view(client: Client):
-    response = client.get(reverse('profile', args=['test_user']))
+    response = client.get(reverse("profile", args=["test_user"]))
     assert response.status_code == 302
 
 
@@ -52,13 +52,13 @@ def test_edit_profile(client: Client):
     profile = UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user
     )
-    client.login(username='test_user', password='test_password')
+    client.login(username="test_user", password="test_password")
 
-    response_get = client.get(reverse('edit_profile', args=[user.username]))
+    response_get = client.get(reverse("edit_profile", args=[user.username]))
     assert response_get.status_code == 200
 
     response_post = client.post(
-        reverse('edit_profile', args=[user.username]),
+        reverse("edit_profile", args=[user.username]),
         data={
             "full_name": "edit_full_name",
             "bio": "edit_bio",
