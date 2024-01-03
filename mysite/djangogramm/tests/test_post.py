@@ -1,9 +1,10 @@
 import pytest
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.urls import reverse
 from django.test.client import Client
 
-from djangogramm.models import User, Post
+from djangogramm.models import User, Post, Comment
 
 
 @pytest.mark.django_db
@@ -123,3 +124,125 @@ def test_edit_post(client: Client):
     assert edited_post.content == edit_post_data["content"]
     tag = edited_post.tags.all()[0]
     assert tag.name == edit_post_data["tag"]
+
+
+@pytest.mark.django_db
+def test_not_owner_edit(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    response_get = client.get(reverse("edit_post", args=[post.id]))
+    assert response_get.status_code == 302
+
+
+@pytest.mark.django_db
+def test_delete_post(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    client.login(username="test_username", password="test_password")
+
+    response_get = client.get(reverse("delete_post", args=[post.id]))
+    assert response_get.status_code == 200
+
+    response_post = client.post(reverse("delete_post", args=[post.id]))
+    assert response_post.status_code == 302
+
+    with pytest.raises(ObjectDoesNotExist):
+        post.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_not_owner_delete(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    response_get = client.get(reverse("delete_post", args=[post.id]))
+    assert response_get.status_code == 302
+
+
+@pytest.mark.django_db
+def test_post_like(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    client.login(username="test_username", password="test_password")
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+
+    response = client.get(reverse("like_post", args=[post.id]))
+    assert response.status_code == 302
+    assert user in post.likes.all()
+
+    response = client.get(reverse("like_post", args=[post.id]))
+    assert user not in post.likes.all()
+
+
+@pytest.mark.django_db
+def test_post_dislike(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    client.login(username="test_username", password="test_password")
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+
+    response = client.get(reverse("dislike_post", args=[post.id]))
+    assert response.status_code == 302
+    assert user in post.dislikes.all()
+
+    response = client.get(reverse("dislike_post", args=[post.id]))
+    assert user not in post.dislikes.all()
+
+
+@pytest.mark.django_db
+def test_comment_like(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    client.login(username="test_username", password="test_password")
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    comment = Comment.objects.create(
+        content="test_content", post=post, owner=user
+    )
+
+    response = client.get(reverse("like_comment", args=[comment.id]))
+    assert response.status_code == 302
+    assert user in comment.likes.all()
+
+    response = client.get(reverse("like_comment", args=[comment.id]))
+    assert user not in comment.likes.all()
+
+
+@pytest.mark.django_db
+def test_comment_dislike(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    client.login(username="test_username", password="test_password")
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    comment = Comment.objects.create(
+        content="test_content", post=post, owner=user
+    )
+
+    response = client.get(reverse("dislike_comment", args=[comment.id]))
+    assert response.status_code == 302
+    assert user in comment.dislikes.all()
+
+    response = client.get(reverse("dislike_comment", args=[comment.id]))
+    assert user not in comment.dislikes.all()
