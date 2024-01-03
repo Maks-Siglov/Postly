@@ -44,6 +44,7 @@ def user_posts(request, username: str) -> HttpResponse:
     return render(request, "djangogramm/post/post_list.html", {"posts": posts})
 
 
+@login_required(login_url="login")
 def post_detail(request, post_id: int) -> HttpResponse:
     post = get_object_or_404(Post, id=post_id)
     comments = Comment.objects.filter(post=post)

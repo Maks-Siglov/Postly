@@ -23,5 +23,7 @@
         {{ post.dislikes.count }} <a href="{% url 'dislike_post' post.id %}">Dislike</a>
     </p>
 {% endfor %}
-<p><a href="{% url 'profile' user.username %}">Profile</a></p>
+{% if user.is_authenticated %}
+    <p><a href="{% url 'profile' user.username %}">Profile</a></p>
+{% endif %}
 {% endblock %}

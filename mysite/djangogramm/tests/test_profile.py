@@ -39,6 +39,12 @@ def test_not_owner_profile_view(client: Client):
 
 
 @pytest.mark.django_db
+def test_unauthenticated_profile_view(client: Client):
+    response = client.get(reverse('profile', args=['test_user']))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
 def test_edit_profile(client: Client):
     user = User.objects.create_user(
         username="test_user", password="test_password"
