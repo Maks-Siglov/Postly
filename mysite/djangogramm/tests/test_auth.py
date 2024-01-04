@@ -1,9 +1,9 @@
-import pytest
 import re
+import pytest
 
 from django.core import mail
-from django.urls import reverse
 from django.test import Client
+from django.urls import reverse
 
 from djangogramm.models import User, UserProfile
 

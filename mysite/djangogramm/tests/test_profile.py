@@ -1,7 +1,7 @@
 import pytest
 
-from django.urls import reverse
 from django.test.client import Client
+from django.urls import reverse
 
 from djangogramm.models import User, UserProfile
 

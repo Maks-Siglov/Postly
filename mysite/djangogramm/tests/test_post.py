@@ -1,10 +1,10 @@
 import pytest
+
 from django.core.exceptions import ObjectDoesNotExist
-
-from django.urls import reverse
 from django.test.client import Client
+from django.urls import reverse
 
-from djangogramm.models import User, Post, Comment
+from djangogramm.models import Comment, Post, User
 
 
 @pytest.mark.django_db
@@ -71,7 +71,7 @@ def test_create_post(client: Client):
     assert post.owner == user
     assert post.content == post_data["content"]
     tag = post.tags.all()[0]
-    assert tag.name == post_data["tags"].split(',')[0]
+    assert tag.name == post_data["tags"].split(",")[0]
 
 
 @pytest.mark.django_db
@@ -123,7 +123,7 @@ def test_edit_post(client: Client):
     assert edited_post.title == edit_post_data["title"]
     assert edited_post.content == edit_post_data["content"]
     tag = edited_post.tags.all()[0]
-    assert tag.name == edit_post_data["tags"].split(', ')[0]
+    assert tag.name == edit_post_data["tags"].split(", ")[0]
 
 
 @pytest.mark.django_db

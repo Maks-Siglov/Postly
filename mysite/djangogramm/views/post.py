@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
-from djangogramm.forms import PostForm, CommentForm
-from djangogramm.models import User, Post, Tag, Comment, Image
+from djangogramm.forms import CommentForm, PostForm
+from djangogramm.models import Comment, Image, Post, Tag, User
 
 
 @login_required(login_url="login")
@@ -16,12 +16,12 @@ def create_post(request) -> HttpResponse:
             post.owner = request.user
             post.save()
 
-            if form.cleaned_data['image']:
-                image = request.FILES['image']
+            if form.cleaned_data["image"]:
+                image = request.FILES["image"]
                 post_image = Image.objects.create(image=image)
                 post.images.add(post_image)
 
-            tag_names = form.cleaned_data["tags"].split(',')
+            tag_names = form.cleaned_data["tags"].split(",")
             for tag_name in tag_names:
                 tag_name = tag_name.strip()
                 if tag_name:
@@ -84,7 +84,7 @@ def edit_post(request, post_id: int) -> HttpResponseRedirect:
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
-            tag_names = form.cleaned_data["tags"].split(',')
+            tag_names = form.cleaned_data["tags"].split(",")
             for tag_name in tag_names:
                 tag_name = tag_name.strip()
                 if tag_name:

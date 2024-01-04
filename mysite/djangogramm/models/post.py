@@ -13,13 +13,9 @@ class Post(models.Model):
         "djangogramm.User", on_delete=models.CASCADE, related_name="posts"
     )
 
-    images = models.ManyToManyField(
-        "djangogramm.Image", related_name="posts"
-    )
+    images = models.ManyToManyField("djangogramm.Image", related_name="posts")
 
-    tags = models.ManyToManyField(
-        "djangogramm.Tag", related_name="posts"
-    )
+    tags = models.ManyToManyField("djangogramm.Tag", related_name="posts")
 
     likes = models.ManyToManyField(
         "djangogramm.User", related_name="liked_post"
