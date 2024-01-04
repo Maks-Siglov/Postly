@@ -79,12 +79,12 @@ def edit_post(request, post_id: int) -> HttpResponseRedirect:
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
-            tag_name = form.cleaned_data["tag"]
-
-            if tag_name:
-                tag, created = Tag.objects.get_or_create(name=tag_name)
-                post.tags.clear()
-                post.tags.add(tag)
+            tag_names = form.cleaned_data["tags"].split(',')
+            for tag_name in tag_names:
+                tag_name = tag_name.strip()
+                if tag_name:
+                    tag, created = Tag.objects.get_or_create(name=tag_name)
+                    post.tags.add(tag)
 
             form.save()
             messages.success(request, "Post updated successfully.")
