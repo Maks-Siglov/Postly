@@ -33,6 +33,7 @@ def test_registration(client: Client):
 
     re_pattern = re.compile(r"http(s?)://\S+")
     profile_registration_link_pattern = re_pattern.search(mail.outbox[0].body)
+    assert profile_registration_link_pattern
     profile_link = profile_registration_link_pattern.group()
     assert profile_link
 
