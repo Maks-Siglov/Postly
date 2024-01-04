@@ -16,9 +16,8 @@ def profile_registration(
         user.activate = True
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
-            user_profile_data = form.cleaned_data
-            user_profile_data["user"] = user
-            user_profile = UserProfile(**user_profile_data)
+            form.cleaned_data["user"] = user
+            user_profile = UserProfile(**form.cleaned_data)
             user_profile.save()
 
             login(request, user)

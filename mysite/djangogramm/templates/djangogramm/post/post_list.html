@@ -9,10 +9,6 @@
       <h4><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h4>
       <p>{{ post.content }}</p>
 
-      {% if post.image.value %}
-        <img src="{{ post.image.value.url }}" alt="{{ post.title }}">
-      {% endif %}
-
       {% if post.tag %}
         <p>Tag: <span class="tag">{{ post.tag.name }}</span></p>
       {% endif %}

@@ -6,7 +6,6 @@ class Post(models.Model):
 
     title = models.CharField(max_length=100)
     content = models.TextField()
-    image = models.ImageField(upload_to="post_image/", blank=True, null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -14,8 +13,12 @@ class Post(models.Model):
         "djangogramm.User", on_delete=models.CASCADE, related_name="posts"
     )
 
+    images = models.ManyToManyField(
+        "djangogramm.Image", related_name="posts"
+    )
+
     tags = models.ManyToManyField(
-        "djangogramm.Tag", related_name="posts", blank=True
+        "djangogramm.Tag", related_name="posts"
     )
 
     likes = models.ManyToManyField(

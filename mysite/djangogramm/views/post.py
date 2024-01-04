@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from djangogramm.forms import PostForm, CommentForm
-from djangogramm.models import User, Post, Tag, Comment
+from djangogramm.models import User, Post, Tag, Comment, Image
 
 
 @login_required(login_url="login")
@@ -15,6 +15,11 @@ def create_post(request) -> HttpResponse:
             post = form.save(commit=False)
             post.owner = request.user
             post.save()
+
+            if form.cleaned_data['image']:
+                image = request.FILES['image']
+                post_image = Image.objects.create(image=image)
+                post.images.add(post_image)
 
             tag_names = form.cleaned_data["tags"].split(',')
             for tag_name in tag_names:
