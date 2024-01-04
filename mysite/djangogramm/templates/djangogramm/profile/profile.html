@@ -7,7 +7,7 @@
     {% csrf_token %}
 
     {% if profile.avatar %}
-        Avatar: <img src="{{ profile.avatar.url }}" alt="Current Avatar">
+        Avatar: <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
     {% endif %}
 
     <p>Full name: {{ profile.full_name }}</p>

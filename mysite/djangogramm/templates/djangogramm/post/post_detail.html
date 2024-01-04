@@ -8,7 +8,7 @@
     <p>
     {% if post.images.all %}
         {% for image in post.images.all %}
-            <img src="{{ image.image.url }}" alt="Image">
+            <img src="{{ image.image.url }}" alt="Image" width="200" height="200">
         {% endfor %}
     {% endif %}
     </p>
@@ -31,11 +31,13 @@
 
     <h3>Comments</h3>
     {% for comment in comments %}
-        <p>{{ comment.owner.username }}</p>
-        <p>{{ comment.content }}</p>
         <p>
-        {{ comment.likes.count }} <a href="{% url 'like_comment' comment.id %}">Like</a>
-        {{ comment.dislikes.count }} <a href="{% url 'dislike_comment' comment.id %}">Dislike</a>
+            <a href="{% url 'profile' comment.owner.username%}">{{ comment.owner.username }}</a>:
+            {{ comment.content }}
+        </p>
+        <p>
+        {{ comment.likes.count }} <a href="{% url 'like_comment' comment.id %}?referring_page={{ request.path }}">Like</a>
+        {{ comment.dislikes.count }} <a href="{% url 'dislike_comment' comment.id %}?referring_page={{ request.path }}">Dislike</a>
     </p>
     {% endfor %}
 
