@@ -31,7 +31,7 @@ def test_registration(client: Client):
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "Registration Confirmation"
 
-    re_pattern = re.compile(r"http://\S+")
+    re_pattern = re.compile(r"http(s?)://\S+")
     profile_registration_link_pattern = re_pattern.search(mail.outbox[0].body)
     profile_link = profile_registration_link_pattern.group()
     assert profile_link

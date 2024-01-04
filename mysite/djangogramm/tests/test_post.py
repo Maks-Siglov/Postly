@@ -62,7 +62,7 @@ def test_create_post(client: Client):
     post_data = {
         "title": "test_title_post",
         "content": "test_content",
-        "tag": "test_tag",
+        "tags": "test_tag, second_test_tag",
     }
     response_post = client.post(reverse("create_post"), post_data)
     assert response_post.status_code == 302
@@ -71,7 +71,7 @@ def test_create_post(client: Client):
     assert post.owner == user
     assert post.content == post_data["content"]
     tag = post.tags.all()[0]
-    assert tag.name == post_data["tag"]
+    assert tag.name == post_data["tags"].split(',')[0]
 
 
 @pytest.mark.django_db
@@ -113,7 +113,7 @@ def test_edit_post(client: Client):
     edit_post_data = {
         "title": "edit_test_title_post",
         "content": "edit_test_content",
-        "tag": "edit_test_tag",
+        "tags": "edit_test_tag",
     }
     response_post = client.post(
         reverse("edit_post", args=[post.id]), edit_post_data
@@ -123,7 +123,7 @@ def test_edit_post(client: Client):
     assert edited_post.title == edit_post_data["title"]
     assert edited_post.content == edit_post_data["content"]
     tag = edited_post.tags.all()[0]
-    assert tag.name == edit_post_data["tag"]
+    assert tag.name == edit_post_data["tags"]
 
 
 @pytest.mark.django_db
