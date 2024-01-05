@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>Profile</h2>
+    {% csrf_token %}
+
+    {% if profile.avatar %}
+        Avatar: <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
+    {% endif %}
+
+    <p>Full name: {{ profile.full_name }}</p>
+    <p>Bio: {{ profile.bio }}</p>
+
+<p><a href="{% url 'edit_profile' username=user.username %}">Edit Profile</a></p>
+<p><a href="{% url 'create_post' %}">Create post</a></p>
+<p><a href="{% url 'post_list' %}">Post list</a></p>
+<p><a href="{% url 'user_posts' user.username %}">My posts</a></p>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+{% endblock %}
