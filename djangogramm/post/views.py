@@ -19,8 +19,7 @@ def create_post(request) -> HttpResponse:
 
             if form.cleaned_data["image"]:
                 image = request.FILES["image"]
-                post_image = Image.objects.create(image=image)
-                post.images.add(post_image)
+                Image.objects.create(image=image, post=post)
 
             tag_names = form.cleaned_data["tags"].split(",")
             for tag_name in tag_names:

@@ -13,8 +13,6 @@ class Post(models.Model):
         "my_auth.User", on_delete=models.CASCADE, related_name="posts"
     )
 
-    images = models.ManyToManyField("post.Image", related_name="posts")
-
     tags = models.ManyToManyField("post.Tag", related_name="posts")
 
     likes = models.ManyToManyField("my_auth.User", related_name="liked_post")
