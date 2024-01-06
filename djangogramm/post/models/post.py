@@ -18,9 +18,5 @@ class Post(models.Model):
 
     likes = GenericRelation("post.Like", related_name="liked_post")
 
-    # dislikes = models.ManyToManyField(
-    #     "my_auth.User", related_name="disliked_post"
-    # )
-
     def __str__(self):
         return self.title

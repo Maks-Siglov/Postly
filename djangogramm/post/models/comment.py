@@ -17,9 +17,3 @@ class Comment(models.Model):
     )
 
     likes = GenericRelation("post.Like", related_name="liked_comments")
-
-
-    # dislikes = models.ManyToManyField(
-    #     "my_auth.User",
-    #     related_name="disliked_comments",
-    # )
