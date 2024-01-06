@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 
@@ -15,11 +16,11 @@ class Post(models.Model):
 
     tags = models.ManyToManyField("post.Tag", related_name="posts")
 
-    likes = models.ManyToManyField("my_auth.User", related_name="liked_post")
+    likes = GenericRelation("post.Like", related_name="liked_post")
 
-    dislikes = models.ManyToManyField(
-        "my_auth.User", related_name="disliked_post"
-    )
+    # dislikes = models.ManyToManyField(
+    #     "my_auth.User", related_name="disliked_post"
+    # )
 
     def __str__(self):
         return self.title

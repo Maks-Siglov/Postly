@@ -1,10 +1,12 @@
 import pytest
+
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test.client import Client
 from django.urls import reverse
 
 from my_auth.models import User
-from post.models import Comment, Post
+from post.models import Comment, Post, Like
 
 
 @pytest.mark.django_db
@@ -182,10 +184,18 @@ def test_post_like(client: Client):
 
     response = client.get(reverse("like_post", args=[post.id]))
     assert response.status_code == 302
-    assert user in post.likes.all()
+
+    like_content_type = ContentType.objects.get_for_model(Post)
+    like = Like.objects.get(
+        content_type=like_content_type, owner=user, value=True
+    )
+    assert like
 
     response = client.get(reverse("like_post", args=[post.id]))
-    assert user not in post.likes.all()
+    with pytest.raises(ObjectDoesNotExist):
+        Like.objects.get(
+            content_type=like_content_type, owner=user, value=True
+        )
 
 
 @pytest.mark.django_db
@@ -200,10 +210,18 @@ def test_post_dislike(client: Client):
 
     response = client.get(reverse("dislike_post", args=[post.id]))
     assert response.status_code == 302
-    assert user in post.dislikes.all()
+
+    like_content_type = ContentType.objects.get_for_model(Post)
+    dislike = Like.objects.get(
+        content_type=like_content_type, owner=user, value=False
+    )
+    assert dislike
 
     response = client.get(reverse("dislike_post", args=[post.id]))
-    assert user not in post.dislikes.all()
+    with pytest.raises(ObjectDoesNotExist):
+        Like.objects.get(
+            content_type=like_content_type, owner=user, value=False
+        )
 
 
 @pytest.mark.django_db
@@ -221,10 +239,18 @@ def test_comment_like(client: Client):
 
     response = client.get(reverse("like_comment", args=[comment.id]))
     assert response.status_code == 302
-    assert user in comment.likes.all()
+
+    like_content_type = ContentType.objects.get_for_model(Comment)
+    like = Like.objects.get(
+        content_type=like_content_type, owner=user, value=True
+    )
+    assert like
 
     response = client.get(reverse("like_comment", args=[comment.id]))
-    assert user not in comment.likes.all()
+    with pytest.raises(ObjectDoesNotExist):
+        Like.objects.get(
+            content_type=like_content_type, owner=user, value=True
+        )
 
 
 @pytest.mark.django_db
@@ -242,7 +268,15 @@ def test_comment_dislike(client: Client):
 
     response = client.get(reverse("dislike_comment", args=[comment.id]))
     assert response.status_code == 302
-    assert user in comment.dislikes.all()
+
+    like_content_type = ContentType.objects.get_for_model(Comment)
+    dislike = Like.objects.get(
+        content_type=like_content_type, owner=user, value=False
+    )
+    assert dislike
 
     response = client.get(reverse("dislike_comment", args=[comment.id]))
-    assert user not in comment.dislikes.all()
+    with pytest.raises(ObjectDoesNotExist):
+        Like.objects.get(
+            content_type=like_content_type, owner=user, value=False
+        )

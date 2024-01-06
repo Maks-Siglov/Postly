@@ -1,11 +1,12 @@
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from my_auth.models import User
 from post.forms import CommentForm, PostForm
-from post.models import Comment, Image, Post, Tag
+from post.models import Comment, Image, Post, Tag, Like
 
 
 @login_required(login_url="login")
@@ -128,13 +129,27 @@ def like_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
-    if user in post.likes.all():
-        post.likes.remove(user)
-    else:
-        post.likes.add(user)
+    like_content_type = ContentType.objects.get_for_model(Post)
 
-        if user in post.dislikes.all():
-            post.dislikes.remove(user)
+    dislike = Like.objects.filter(
+        value=False,
+        owner=user,
+        content_type=like_content_type,
+        object_id=post.id,
+    ).first()
+    if dislike:
+        dislike.delete()
+
+    like, created = Like.objects.get_or_create(
+        value=True,
+        owner=user,
+        content_type=like_content_type,
+        object_id=post.id,
+    )
+    if created:
+        like.save()
+    else:
+        like.delete()
 
     return redirect("post_list")
 
@@ -144,13 +159,27 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
-    if user in post.dislikes.all():
-        post.dislikes.remove(user)
-    else:
-        post.dislikes.add(user)
+    like_content_type = ContentType.objects.get_for_model(Post)
 
-        if user in post.likes.all():
-            post.likes.remove(user)
+    like = Like.objects.filter(
+        value=True,
+        owner=user,
+        content_type=like_content_type,
+        object_id=post.id,
+    ).first()
+    if like:
+        like.delete()
+
+    dislike, created = Like.objects.get_or_create(
+        value=False,
+        owner=user,
+        content_type=like_content_type,
+        object_id=post.id,
+    )
+    if created:
+        dislike.save()
+    else:
+        dislike.delete()
 
     return redirect("post_list")
 
@@ -160,13 +189,27 @@ def like_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
     user = request.user
 
-    if user in comment.likes.all():
-        comment.likes.remove(user)
-    else:
-        comment.likes.add(user)
+    like_content_type = ContentType.objects.get_for_model(Comment)
 
-        if user in comment.dislikes.all():
-            comment.dislikes.remove(user)
+    dislike = Like.objects.filter(
+        value=False,
+        owner=user,
+        content_type=like_content_type,
+        object_id=comment.id,
+    ).first()
+    if dislike:
+        dislike.delete()
+
+    like, created = Like.objects.get_or_create(
+        value=True,
+        owner=user,
+        content_type=like_content_type,
+        object_id=comment.id,
+    )
+    if created:
+        like.save()
+    else:
+        like.delete()
 
     return redirect("post_detail", comment.post.id)
 
@@ -176,12 +219,26 @@ def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
     user = request.user
 
-    if user in comment.dislikes.all():
-        comment.dislikes.remove(user)
-    else:
-        comment.dislikes.add(user)
+    like_content_type = ContentType.objects.get_for_model(Comment)
 
-        if user in comment.likes.all():
-            comment.likes.remove(user)
+    like = Like.objects.filter(
+        value=True,
+        owner=user,
+        content_type=like_content_type,
+        object_id=comment.id,
+    ).first()
+    if like:
+        like.delete()
+
+    dislike, created = Like.objects.get_or_create(
+        value=False,
+        owner=user,
+        content_type=like_content_type,
+        object_id=comment.id,
+    )
+    if created:
+        dislike.save()
+    else:
+        dislike.delete()
 
     return redirect("post_detail", comment.post.id)

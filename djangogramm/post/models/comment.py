@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 
@@ -15,12 +16,10 @@ class Comment(models.Model):
         "my_auth.User", on_delete=models.CASCADE, related_name="comments"
     )
 
-    likes = models.ManyToManyField(
-        "my_auth.User",
-        related_name="liked_comments",
-    )
+    likes = GenericRelation("post.Like", related_name="liked_comments")
 
-    dislikes = models.ManyToManyField(
-        "my_auth.User",
-        related_name="disliked_comments",
-    )
+
+    # dislikes = models.ManyToManyField(
+    #     "my_auth.User",
+    #     related_name="disliked_comments",
+    # )
