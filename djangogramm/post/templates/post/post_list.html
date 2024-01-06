@@ -14,10 +14,6 @@
       {% endif %}
 
     </div>
-    <p>
-        {{  post.likes.count }} <a href="{% url 'like_post' post.id %}">Like</a>
-        {{ post.likes.count }} <a href="{% url 'dislike_post' post.id %}">Dislike</a>
-    </p>
 {% endfor %}
 {% if user.is_authenticated %}
     <p><a href="{% url 'profile' user.username %}">Profile</a></p>

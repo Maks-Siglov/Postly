@@ -53,9 +53,10 @@ def user_posts(request, username: str) -> HttpResponse:
 @login_required(login_url="login")
 def post_detail(request, post_id: int) -> HttpResponse:
     post = get_object_or_404(Post, id=post_id)
+    likes = post.likes.likes().count()
+    dislikes = post.likes.dislikes().count()
     comments = Comment.objects.filter(post=post)
     comment_form = CommentForm()
-
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -67,7 +68,13 @@ def post_detail(request, post_id: int) -> HttpResponse:
     return render(
         request,
         "post/post_detail.html",
-        {"post": post, "comments": comments, "comment_form": comment_form},
+        {
+            "post": post,
+            "comments": comments,
+            "comment_form": comment_form,
+            "likes": likes,
+            "dislikes": dislikes,
+        },
     )
 
 
@@ -151,7 +158,7 @@ def like_post(request, post_id: int) -> HttpResponseRedirect:
     else:
         like.delete()
 
-    return redirect("post_list")
+    return redirect("post_detail", post.id)
 
 
 @login_required(login_url="login")
@@ -181,7 +188,7 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     else:
         dislike.delete()
 
-    return redirect("post_list")
+    return redirect("post_detail", post.id)
 
 
 @login_required(login_url="login")

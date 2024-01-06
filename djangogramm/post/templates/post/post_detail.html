@@ -25,8 +25,8 @@
     {% endif %}
 
     <p>
-        {{ post.likes.count }} <a href="{% url 'like_post' post.id %}">Like</a>
-        {{ post.dislikes.count }} <a href="{% url 'dislike_post' post.id %}">Dislike</a>
+        {{ likes }} <a href="{% url 'like_post' post.id %}">Like</a>
+        {{ dislikes }} <a href="{% url 'dislike_post' post.id %}">Dislike</a>
     </p>
 
     <h3>Comments</h3>
