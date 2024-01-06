@@ -7,10 +7,10 @@ from django.db import models
 
 class LikeManager(models.Manager):
     def likes(self):
-        return self.objects.all.filter(value=True)
+        return super().get_queryset().filter(value=True)
 
     def dislikes(self):
-        return self.objects.all.filter(value=False)
+        return super().get_queryset().filter(value=False)
 
 
 class Like(models.Model):
