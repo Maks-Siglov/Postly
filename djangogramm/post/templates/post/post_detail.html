@@ -1,5 +1,7 @@
 {% extends 'main/base.html' %}
 
+{% load custom_filters %}
+
 {% block title %}Post {{ post.title }}{% endblock %}
 
 {% block content %}
@@ -25,8 +27,8 @@
     {% endif %}
 
     <p>
-        {{ likes }} <a href="{% url 'like_post' post.id %}">Like</a>
-        {{ dislikes }} <a href="{% url 'dislike_post' post.id %}">Dislike</a>
+        {{ Post|likes_count:post.id }} <a href="{% url 'like_post' post.id %}">Like</a>
+        {{ Post|dislikes_count:post.id }} <a href="{% url 'dislike_post' post.id %}">Dislike</a>
     </p>
 
     <h3>Comments</h3>
@@ -36,8 +38,8 @@
             {{ comment.content }}
         </p>
         <p>
-        {{ comment.likes.count }} <a href="{% url 'like_comment' comment.id %}?referring_page={{ request.path }}">Like</a>
-        {{ comment.dislikes.count }} <a href="{% url 'dislike_comment' comment.id %}?referring_page={{ request.path }}">Dislike</a>
+        {{ Comment|likes_count:comment.id }} <a href="{% url 'like_comment' comment.id %}?referring_page={{ request.path }}">Like</a>
+        {{ Comment|dislikes_count:comment.id  }} <a href="{% url 'dislike_comment' comment.id %}?referring_page={{ request.path }}">Dislike</a>
     </p>
     {% endfor %}
 

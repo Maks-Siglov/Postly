@@ -53,8 +53,6 @@ def user_posts(request, username: str) -> HttpResponse:
 @login_required(login_url="login")
 def post_detail(request, post_id: int) -> HttpResponse:
     post = get_object_or_404(Post, id=post_id)
-    likes = post.likes.likes().count()
-    dislikes = post.likes.dislikes().count()
     comments = Comment.objects.filter(post=post)
     comment_form = CommentForm()
     if request.method == "POST":
@@ -64,16 +62,15 @@ def post_detail(request, post_id: int) -> HttpResponse:
             comment.post = post
             comment.owner = request.user
             comment.save()
-
     return render(
         request,
         "post/post_detail.html",
         {
             "post": post,
+            "Post": Post,
+            "Comment": Comment,
             "comments": comments,
             "comment_form": comment_form,
-            "likes": likes,
-            "dislikes": dislikes,
         },
     )
 
