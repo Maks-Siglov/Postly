@@ -5,7 +5,7 @@ from django.core import mail
 from django.test import Client
 from django.urls import reverse
 
-from my_auth.models import User
+from users.models import User
 from userprofile.models import UserProfile
 
 

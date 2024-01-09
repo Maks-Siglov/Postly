@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from my_auth import views
+from users import views
 
 urlpatterns = [
     path("register/", views.registration, name="register"),

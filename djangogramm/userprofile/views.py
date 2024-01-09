@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
-from my_auth.models import User
+from users.models import User
 from userprofile.forms import ProfileForm
 from userprofile.models import UserProfile
 

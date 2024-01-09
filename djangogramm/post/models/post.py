@@ -11,7 +11,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     owner = models.ForeignKey(
-        "my_auth.User", on_delete=models.CASCADE, related_name="posts"
+        "users.User", on_delete=models.CASCADE, related_name="posts"
     )
 
     tags = models.ManyToManyField("post.Tag", related_name="posts")

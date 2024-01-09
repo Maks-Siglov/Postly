@@ -13,7 +13,7 @@ class Comment(models.Model):
     )
 
     owner = models.ForeignKey(
-        "my_auth.User", on_delete=models.CASCADE, related_name="comments"
+        "users.User", on_delete=models.CASCADE, related_name="comments"
     )
 
     likes = GenericRelation("post.Like", related_name="liked_comments")

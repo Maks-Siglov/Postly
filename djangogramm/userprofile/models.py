@@ -9,5 +9,5 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
 
     user = models.OneToOneField(
-        "my_auth.User", on_delete=models.CASCADE, related_name="profile"
+        "users.User", on_delete=models.CASCADE, related_name="profile"
     )

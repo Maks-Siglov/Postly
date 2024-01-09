@@ -1,6 +1,6 @@
 from django import forms
 
-from my_auth.models import User
+from users.models import User
 
 
 class RegistrationForm(forms.ModelForm):

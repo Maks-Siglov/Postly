@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
-from my_auth.models import User
+from users.models import User
 from post.forms import CommentForm, PostForm
 from post.models import Comment, Image, Post, Tag, Like
 

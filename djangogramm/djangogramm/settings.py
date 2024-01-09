@@ -42,12 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'my_auth.apps.AuthConfig',
 
     'debug_toolbar',
 
     'main.apps.MainConfig',
     'post.apps.PostConfig',
+    'users.apps.AuthConfig',
     'userprofile.apps.UserprofileConfig',
 ]
 
@@ -117,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'my_auth.User'
+AUTH_USER_MODEL = 'users.User'
 
 LOGOUT_REDIRECT_URL = '/'
 

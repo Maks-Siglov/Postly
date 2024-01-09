@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test.client import Client
 from django.urls import reverse
 
-from my_auth.models import User
+from users.models import User
 from post.models import Comment, Post, Like
 
 

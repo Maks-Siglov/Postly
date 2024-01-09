@@ -3,8 +3,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from my_auth.bl.email_generator import send_confirmation_email
-from my_auth.forms import RegistrationForm
+from users.bl.email_generator import send_confirmation_email
+from users.forms import RegistrationForm
 
 
 def registration(request) -> HttpResponse:

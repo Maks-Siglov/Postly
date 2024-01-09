@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.urls import reverse
 
-from my_auth.models import User
+from users.models import User
 
 
 def send_confirmation_email(user: User, email: str) -> None:
