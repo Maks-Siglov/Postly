@@ -20,7 +20,7 @@ def registration(request) -> HttpResponse:
     else:
         form = RegistrationForm()
 
-    return render(request, "my_auth/register.html", {"form": form})
+    return render(request, "users/register.html", {"form": form})
 
 
 def login_view(request) -> HttpResponse:
@@ -32,10 +32,10 @@ def login_view(request) -> HttpResponse:
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("profile", user.username)
+                return redirect("profile:profile", user.username)
 
             form.add_error(None, "Invalid login credentials")
     else:
         form = AuthenticationForm()
 
-    return render(request, "my_auth/login.html", {"form": form})
+    return render(request, "users/login.html", {"form": form})

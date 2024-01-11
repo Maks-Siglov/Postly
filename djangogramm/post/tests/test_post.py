@@ -11,7 +11,7 @@ from post.models import Comment, Post, Like
 
 @pytest.mark.django_db
 def test_post_list(client: Client):
-    response = client.get(reverse("post_list"))
+    response = client.get(reverse("post:post_list"))
     assert response.status_code == 200
     assert "posts" in response.context
 
@@ -26,7 +26,7 @@ def test_user_posts(client: Client):
     )
     client.login(username="test_username", password="test_password")
 
-    response = client.get(reverse("user_posts", args=[user.username]))
+    response = client.get(reverse("post:user_posts", args=[user.username]))
     assert response.status_code == 200
     assert "posts" in response.context
 
@@ -43,7 +43,7 @@ def test_other_user_posts(client: Client):
         title="test_title_post", content="test_content", owner=other_user
     )
 
-    response = client.get(reverse("user_posts", args=[other_user.username]))
+    response = client.get(reverse("post:user_posts", args=[other_user.username]))
     assert response.status_code == 200
     assert "posts" in response.context
 
@@ -58,7 +58,7 @@ def test_create_post(client: Client):
     )
     client.login(username="test_username", password="test_password")
 
-    response_get = client.get(reverse("create_post"))
+    response_get = client.get(reverse("post:create_post"))
     assert response_get.status_code == 200
 
     post_data = {
@@ -66,7 +66,7 @@ def test_create_post(client: Client):
         "content": "test_content",
         "tags": "test_tag, second_test_tag",
     }
-    response_post = client.post(reverse("create_post"), post_data)
+    response_post = client.post(reverse("post:create_post"), post_data)
     assert response_post.status_code == 302
 
     post = Post.objects.get(title=post_data["title"])
@@ -86,12 +86,12 @@ def test_post_detail(client: Client):
     )
     client.login(username="test_username", password="test_password")
 
-    response_get = client.get(reverse("post_detail", args=[post.id]))
+    response_get = client.get(reverse("post:post_detail", args=[post.id]))
     assert response_get.status_code == 200
 
     post_comment_data = {"content": "my_test_comment"}
     response_post = client.post(
-        reverse("post_detail", args=[post.id]), post_comment_data
+        reverse("post:post_detail", args=[post.id]), post_comment_data
     )
     assert response_post.status_code == 200
     assert post.comments.count() == 1
@@ -109,7 +109,7 @@ def test_edit_post(client: Client):
     )
     client.login(username="test_username", password="test_password")
 
-    response_get = client.get(reverse("edit_post", args=[post.id]))
+    response_get = client.get(reverse("post:edit_post", args=[post.id]))
     assert response_get.status_code == 200
 
     edit_post_data = {
@@ -118,7 +118,7 @@ def test_edit_post(client: Client):
         "tags": "edit_test_tag, second_edit_test_tag",
     }
     response_post = client.post(
-        reverse("edit_post", args=[post.id]), edit_post_data
+        reverse("post:edit_post", args=[post.id]), edit_post_data
     )
     assert response_post.status_code == 302
     edited_post = Post.objects.get(id=post.id)
@@ -136,7 +136,7 @@ def test_not_owner_edit(client: Client):
     post = Post.objects.create(
         title="test_title_post", content="test_content", owner=user
     )
-    response_get = client.get(reverse("edit_post", args=[post.id]))
+    response_get = client.get(reverse("post:edit_post", args=[post.id]))
     assert response_get.status_code == 302
 
 
@@ -150,10 +150,10 @@ def test_delete_post(client: Client):
     )
     client.login(username="test_username", password="test_password")
 
-    response_get = client.get(reverse("delete_post", args=[post.id]))
+    response_get = client.get(reverse("post:delete_post", args=[post.id]))
     assert response_get.status_code == 200
 
-    response_post = client.post(reverse("delete_post", args=[post.id]))
+    response_post = client.post(reverse("post:delete_post", args=[post.id]))
     assert response_post.status_code == 302
 
     with pytest.raises(ObjectDoesNotExist):
@@ -168,7 +168,7 @@ def test_not_owner_delete(client: Client):
     post = Post.objects.create(
         title="test_title_post", content="test_content", owner=user
     )
-    response_get = client.get(reverse("delete_post", args=[post.id]))
+    response_get = client.get(reverse("post:delete_post", args=[post.id]))
     assert response_get.status_code == 302
 
 
@@ -182,7 +182,7 @@ def test_post_like(client: Client):
         title="test_title_post", content="test_content", owner=user
     )
 
-    response = client.get(reverse("like_post", args=[post.id]))
+    response = client.get(reverse("post:like_post", args=[post.id]))
     assert response.status_code == 302
 
     like_content_type = ContentType.objects.get_for_model(Post)
@@ -191,7 +191,7 @@ def test_post_like(client: Client):
     )
     assert like
 
-    response = client.get(reverse("like_post", args=[post.id]))
+    response = client.get(reverse("post:like_post", args=[post.id]))
     with pytest.raises(ObjectDoesNotExist):
         Like.objects.get(
             content_type=like_content_type, owner=user, value=True
@@ -208,7 +208,7 @@ def test_post_dislike(client: Client):
         title="test_title_post", content="test_content", owner=user
     )
 
-    response = client.get(reverse("dislike_post", args=[post.id]))
+    response = client.get(reverse("post:dislike_post", args=[post.id]))
     assert response.status_code == 302
 
     like_content_type = ContentType.objects.get_for_model(Post)
@@ -217,7 +217,7 @@ def test_post_dislike(client: Client):
     )
     assert dislike
 
-    response = client.get(reverse("dislike_post", args=[post.id]))
+    response = client.get(reverse("post:dislike_post", args=[post.id]))
     with pytest.raises(ObjectDoesNotExist):
         Like.objects.get(
             content_type=like_content_type, owner=user, value=False
@@ -237,7 +237,7 @@ def test_comment_like(client: Client):
         content="test_content", post=post, owner=user
     )
 
-    response = client.get(reverse("like_comment", args=[comment.id]))
+    response = client.get(reverse("post:like_comment", args=[comment.id]))
     assert response.status_code == 302
 
     like_content_type = ContentType.objects.get_for_model(Comment)
@@ -246,7 +246,7 @@ def test_comment_like(client: Client):
     )
     assert like
 
-    response = client.get(reverse("like_comment", args=[comment.id]))
+    response = client.get(reverse("post:like_comment", args=[comment.id]))
     with pytest.raises(ObjectDoesNotExist):
         Like.objects.get(
             content_type=like_content_type, owner=user, value=True
@@ -266,7 +266,7 @@ def test_comment_dislike(client: Client):
         content="test_content", post=post, owner=user
     )
 
-    response = client.get(reverse("dislike_comment", args=[comment.id]))
+    response = client.get(reverse("post:dislike_comment", args=[comment.id]))
     assert response.status_code == 302
 
     like_content_type = ContentType.objects.get_for_model(Comment)
@@ -275,7 +275,7 @@ def test_comment_dislike(client: Client):
     )
     assert dislike
 
-    response = client.get(reverse("dislike_comment", args=[comment.id]))
+    response = client.get(reverse("post:dislike_comment", args=[comment.id]))
     with pytest.raises(ObjectDoesNotExist):
         Like.objects.get(
             content_type=like_content_type, owner=user, value=False

@@ -11,11 +11,11 @@ from userprofile.models import UserProfile
 
 @pytest.mark.django_db
 def test_registration(client: Client):
-    response = client.get(reverse("register"))
+    response = client.get(reverse("users:register"))
     assert response.status_code == 200
 
     response = client.post(
-        reverse("register"),
+        reverse("users:register"),
         {
             "username": "Test_username",
             "email": "new_user@example.com",
@@ -58,7 +58,7 @@ def test_login(client: Client):
         username="tes_tuser", password="test_password"
     )
     response = client.post(
-        reverse("login"),
+        reverse("users:login"),
         {"username": "tes_tuser", "password": "test_password"},
     )
 
@@ -76,11 +76,11 @@ def test_logout(client: Client):
     )
     client.login(username="test_user", password="test_password")
 
-    response = client.get(reverse("profile", args=[user.username]))
+    response = client.get(reverse("profile:profile", args=[user.username]))
     assert response.status_code == 200
 
-    response = client.post(reverse("logout"))
+    response = client.post(reverse("users:logout"))
     assert response.status_code == 302
 
-    response = client.get(reverse("profile", args=[user.username]))
+    response = client.get(reverse("profile:profile", args=[user.username]))
     assert response.status_code == 302

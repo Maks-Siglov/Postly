@@ -9,7 +9,7 @@ from post.forms import CommentForm, PostForm
 from post.models import Comment, Image, Post, Tag, Like
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def create_post(request) -> HttpResponse:
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
@@ -29,7 +29,7 @@ def create_post(request) -> HttpResponse:
                     tag, created = Tag.objects.get_or_create(name=tag_name)
                     post.tags.add(tag)
 
-            return redirect("post_list")
+            return redirect("post:post_list")
     else:
         form = PostForm()
 
@@ -50,7 +50,7 @@ def user_posts(request, username: str) -> HttpResponse:
     return render(request, "post/post_list.html", {"posts": posts})
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def post_detail(request, post_id: int) -> HttpResponse:
     post = get_object_or_404(Post, id=post_id)
     comments = Comment.objects.filter(post=post)
@@ -75,14 +75,14 @@ def post_detail(request, post_id: int) -> HttpResponse:
     )
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def edit_post(request, post_id: int) -> HttpResponseRedirect:
     post = Post.objects.get(id=post_id)
     if request.user != post.owner:
         messages.error(
             request, "You do not have permission to view this userprofile."
         )
-        return redirect("post_list")
+        return redirect("post:post_list")
 
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
@@ -96,7 +96,7 @@ def edit_post(request, post_id: int) -> HttpResponseRedirect:
 
             form.save()
             messages.success(request, "Post updated successfully.")
-            return redirect("user_posts", post.owner.username)
+            return redirect("post:user_posts", post.owner.username)
     else:
         form = PostForm(instance=post)
 
@@ -107,7 +107,7 @@ def edit_post(request, post_id: int) -> HttpResponseRedirect:
     )
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
 
@@ -115,11 +115,11 @@ def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
         messages.error(
             request, "You do not have permission to view this userprofile."
         )
-        return redirect("post_list")
+        return redirect("post:post_list")
 
     if request.method == "POST":
         post.delete()
-        return redirect("user_posts", post.owner.username)
+        return redirect("post:user_posts", post.owner.username)
 
     return render(
         request,
@@ -128,7 +128,7 @@ def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
     )
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def like_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
@@ -155,10 +155,10 @@ def like_post(request, post_id: int) -> HttpResponseRedirect:
     else:
         like.delete()
 
-    return redirect("post_detail", post.id)
+    return redirect("post:post_detail", post.id)
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
@@ -185,10 +185,10 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     else:
         dislike.delete()
 
-    return redirect("post_detail", post.id)
+    return redirect("post:post_detail", post.id)
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def like_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
     user = request.user
@@ -215,10 +215,10 @@ def like_comment(request, comment_id: int) -> HttpResponseRedirect:
     else:
         like.delete()
 
-    return redirect("post_detail", comment.post.id)
+    return redirect("post:post_detail", comment.post.id)
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
     user = request.user
@@ -245,4 +245,4 @@ def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
     else:
         dislike.delete()
 
-    return redirect("post_detail", comment.post.id)
+    return redirect("post:post_detail", comment.post.id)

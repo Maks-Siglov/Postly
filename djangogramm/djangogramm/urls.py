@@ -22,9 +22,9 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
-    path('', include('users.urls')),
-    path('', include('post.urls')),
-    path('', include('userprofile.urls')),
+    path('', include('users.urls', namespace='users')),
+    path('', include('post.urls', namespace='post')),
+    path('', include('userprofile.urls', namespace='profile')),
 ]
 
 if settings.DEBUG:

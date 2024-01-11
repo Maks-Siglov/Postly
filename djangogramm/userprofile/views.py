@@ -25,7 +25,7 @@ def profile_registration(
             messages.success(
                 request, "Profile saved and user logged in successfully"
             )
-            return redirect("profile", user.username)
+            return redirect("profile:profile", user.username)
     else:
         form = ProfileForm()
 
@@ -36,7 +36,7 @@ def profile_registration(
     )
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def profile(request, username: str) -> HttpResponse:
     profile_owner = User.objects.get(username=username)
     if request.user == profile_owner:
@@ -53,7 +53,7 @@ def profile(request, username: str) -> HttpResponse:
     )
 
 
-@login_required(login_url="login")
+@login_required(login_url="users:login")
 def edit_profile(
     request, username: str
 ) -> HttpResponse | HttpResponseRedirect:
@@ -63,14 +63,14 @@ def edit_profile(
         messages.error(
             request, "You do not have permission to view this userprofile."
         )
-        return redirect("index")
+        return redirect("main:index")
 
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=user.profile)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated successfully.")
-            return redirect("profile", username=username)
+            return redirect("profile:profile", username=username)
     else:
         form = ProfileForm(instance=user.profile)
 

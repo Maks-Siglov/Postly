@@ -1,0 +1,28 @@
+body {
+    padding-top: 56px;
+}
+
+header {
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+    color: #b4b6bb;
+}
+
+.navbar-nav .nav-link:hover {
+    text-decoration: underline;
+}
+
+.container {
+    padding: 20px;
+}
