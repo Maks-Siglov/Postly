@@ -15,7 +15,4 @@
 
     </div>
 {% endfor %}
-{% if user.is_authenticated %}
-    <p><a href="{% url 'profile:profile' user.username %}">Profile</a></p>
-{% endif %}
 {% endblock %}

@@ -26,3 +26,8 @@ header {
 .container {
     padding: 20px;
 }
+
+.small-icon {
+    width: 15px;
+    height: 15px;
+}
