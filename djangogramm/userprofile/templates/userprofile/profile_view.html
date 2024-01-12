@@ -9,16 +9,16 @@
     {% csrf_token %}
 
     {% if profile.avatar %}
-        Avatar: <img src="{{ profile.avatar.url }}" alt="Current Avatar">
+        <img src="{{ profile.avatar.url }}" alt="Current Avatar" class="img-fluid rounded" width="100" height="100">
     {% endif %}
 
     <p>Full name: {{ profile.full_name }}</p>
     <p>Bio: {{ profile.bio }}</p>
 
 <p><a href="{% url 'post:user_posts' profile.user.username %}">{{ profile.user.username }} posts</a></p>
-{% if not request.user|is_following:profile.user %}
-    <p><a href="{% url "users:follow"  profile.id %}">Follow</a></p>
+{% if not request.user.profile|is_following:profile %}
+    <p><a href="{% url "profile:follow"  profile.id %}">Follow</a></p>
 {% else %}
-    <p><a href="{% url "users:unfollow"  profile.id %}">Unfollow</a></p>
+    <p><a href="{% url "profile:unfollow"  profile.id %}">Unfollow</a></p>
 {% endif %}
 {% endblock %}

@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 
 from users.models import User
 from userprofile.forms import ProfileForm
-from userprofile.models import UserProfile
+from userprofile.models import UserProfile, Follow
 
 
 def profile_registration(
@@ -82,9 +82,43 @@ def edit_profile(
 
 
 @login_required(login_url="users:login")
-def followers(request, username: str) -> HttpResponse:
-    user = User.objects.get(username=username)
-    user_followers = [follow.follower for follow in user.followers.all()]
+def follow(request, profile_id: int) -> HttpResponseRedirect:
+    following_profile = UserProfile.objects.get(id=profile_id)
+    follower_profile = request.user.profile
+    if not follower_profile.following.filter(
+            following_id=following_profile.id
+    ).exists():
+        Follow.objects.create(
+            follower=follower_profile, following=following_profile
+        )
+        messages.success(
+            request, f"You are following to {following_profile.full_name}."
+        )
+    return redirect("profile:profile", following_profile.user.username)
+
+
+@login_required(login_url="users:login")
+def unfollow(request, profile_id: int) -> HttpResponseRedirect:
+    unfollowing_profile = UserProfile.objects.get(id=profile_id)
+    unfollower_profile = request.user.profile
+    follow_obj = unfollower_profile.following.filter(
+        following_id=unfollowing_profile.id
+    )
+    if follow_obj:
+        follow_obj.delete()
+        messages.error(
+            request, f"You are unfollowing {unfollowing_profile.full_name}."
+        )
+
+    return redirect("profile:profile", unfollowing_profile.user.username)
+
+
+@login_required(login_url="users:login")
+def followers(request, profile_id: int) -> HttpResponse:
+    user_profile = UserProfile.objects.get(id=profile_id)
+    user_followers = [
+        follow.follower for follow in user_profile.followers.all()
+    ]
     return render(
         request,
         "userprofile/followers_list.html",
@@ -93,9 +127,11 @@ def followers(request, username: str) -> HttpResponse:
 
 
 @login_required(login_url="users:login")
-def following(request, username: str) -> HttpResponse:
-    user = User.objects.get(username=username)
-    user_following = [follow.following for follow in user.following.all()]
+def following(request, profile_id: int) -> HttpResponse:
+    user_profile = UserProfile.objects.get(id=profile_id)
+    user_following = [
+        follow.following for follow in user_profile.following.all()
+    ]
     return render(
         request,
         "userprofile/following_list.html",
