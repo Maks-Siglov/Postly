@@ -162,6 +162,15 @@ INTERNAL_IPS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+AWS_ACCESS_KEY_ID = 'AKIAW3MEEKNOHPBTI2MI'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'djangogramms-s3-bucket'
+AWS_S3_REGION_NAME = 'eu-central-1'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_QUERYSTRING_AUTH = False
+
+
 # LOGGING = {
 #     "version": 1,
 #     "disable_existing_loggers": False,
