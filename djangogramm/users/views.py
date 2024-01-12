@@ -4,21 +4,21 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from users.bl.email_generator import send_confirmation_email
-from users.forms import RegistrationForm
+from users.forms import RegisterForm
 
 
 def registration(request) -> HttpResponse:
     if request.method == "POST":
-        form = RegistrationForm(request.POST, request.FILES)
+        form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(user.password)
             user.save()
             email = user.email
             send_confirmation_email(user, email)
-            return HttpResponse("Email has been sent, please check your box")
+            return render(request, 'users/registration_success.html')
     else:
-        form = RegistrationForm()
+        form = RegisterForm()
 
     return render(request, "users/register.html", {"form": form})
 

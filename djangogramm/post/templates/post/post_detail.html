@@ -18,10 +18,9 @@
                 </div>
             {% endif %}
 
-            <p class="card-text">{{ post.content }}</p>
+            <p>{{ post.content }}</p>
             <p class="card-text"><small class="text-muted">Date: {{ post.creation_date }} | Owner:
-             <a href="{% url 'profile:profile' post.owner.username %}">{{ post.owner.username }}</a></small></p>
-
+            <a href="{% url 'profile:profile' post.owner.username %}">{{ post.owner.username }}</a></small></p>
             {% if post.tags %}
                 <div class="tag-section">
                     <span class="tag-heading">Tag:</span>
@@ -42,6 +41,13 @@
                 <span class="dislike-count">{{ post|dislikes_count:post.id }}</span>
             </div>
         </div>
+
+        {% if request.user == post.owner %}
+            <div class="btn-group">
+                <a href="{% url 'post:edit_post' post.id %}" class="btn btn-secondary btn-sm">Edit post</a>
+                <a href="{% url 'post:delete_post' post.id %}" class="btn btn-danger btn-sm">Delete post</a>
+            </div>
+        {% endif %}
 
         <div class="card-footer">
             <h3 class="comments-heading">Comments</h3>

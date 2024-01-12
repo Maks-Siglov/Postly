@@ -1,25 +1,24 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Post list{% endblock %}
+{% block title %}My Posts{% endblock %}
 
 {% block content %}
-<h2>My posts</h2>
-{% for post in posts %}
-    <div class="post-container">
-      <h4><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></h4>
-      <p>{{ post.content }}</p>
+    <h2 class="mb-4">My Posts</h2>
 
-      {% if post.image.value %}
-        <img src="{{ post.image.value.url }}" alt="{{ post.title }}">
-      {% endif %}
+    {% for post in posts %}
+        <div class="card mb-4 post-container">
+            <div class="card-body">
+                <h4 class="card-title"><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></h4>
+                <p class="card-text">{{ post.content|slice:":200" }}</p>
+            </div>
 
-      {% if post.tag %}
-        <p>Tag: <span class="tag">{{ post.tag.name }}</span></p>
-      {% endif %}
-    </div>
-    <p><a href="{% url 'post:edit_post' post.id %}">Edit post</a></p>
-    <p><a href="{% url 'post:delete_post' post.id %}">Delete post</a></p>
-
-{% endfor %}
-<p><a href="{% url 'profile:profile' user.username %}">Profile</a></p>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <div>
+                    <p><a href="{% url 'post:edit_post' post.id %}" class="btn btn-secondary btn-sm">Edit post</a></p>
+                    <p><a href="{% url 'post:delete_post' post.id %}" class="btn btn-danger btn-sm">Delete post</a></p>
+                </div>
+                <small class="text-muted">Date: {{ post.creation_date }}</small>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

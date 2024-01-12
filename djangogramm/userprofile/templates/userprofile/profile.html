@@ -3,20 +3,27 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<h2>Profile</h2>
-    {% csrf_token %}
+    <div class="container">
+        <h2 class="mt-4">Profile</h2>
 
-    {% if profile.avatar %}
-        Avatar: <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
-    {% endif %}
+        {% if profile.avatar %}
+            <div class="mb-4">
+                <strong>Avatar:</strong>
+                <img src="{{ profile.avatar.url }}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
+            </div>
+        {% endif %}
 
-    <p>Full name: {{ profile.full_name }}</p>
-    <p>Bio: {{ profile.bio }}</p>
+        <p><strong>Full name:</strong> {{ profile.full_name }}</p>
+        <p><strong>Bio:</strong> {{ profile.bio }}</p>
 
-<p><a href="{% url 'profile:edit_profile' username=user.username %}">Edit Profile</a></p>
-<p><a href="{% url 'post:create_post' %}">Create post</a></p>
-<form method="post" action="{% url 'users:logout' %}">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
+        <div class="mt-4">
+            <a href="{% url 'profile:edit_profile' username=user.username %}" class="btn btn-primary">Edit Profile</a>
+            <a href="{% url 'post:create_post' %}" class="btn btn-success">Create Post</a>
+        </div>
+
+        <form method="post" action="{% url 'users:logout' %}" class="mt-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
 {% endblock %}
