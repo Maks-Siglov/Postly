@@ -14,4 +14,6 @@ urlpatterns = [
         views.profile_registration,
         name="profile_registration",
     ),
+    path('followers/<str:username>', views.followers, name="followers"),
+    path('following/<str:username>', views.following, name="following"),
 ]

@@ -79,3 +79,25 @@ def edit_profile(
         "userprofile/edit_profile.html",
         {"form": form},
     )
+
+
+@login_required(login_url="users:login")
+def followers(request, username: str) -> HttpResponse:
+    user = User.objects.get(username=username)
+    user_followers = [follow.follower for follow in user.followers.all()]
+    return render(
+        request,
+        "userprofile/followers_list.html",
+        {"user_followers": user_followers}
+    )
+
+
+@login_required(login_url="users:login")
+def following(request, username: str) -> HttpResponse:
+    user = User.objects.get(username=username)
+    user_following = [follow.following for follow in user.following.all()]
+    return render(
+        request,
+        "userprofile/following_list.html",
+        {"user_following": user_following},
+    )

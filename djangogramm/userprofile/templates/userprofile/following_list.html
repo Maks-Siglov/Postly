@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <h2>Following</h2>
+
+  {% if user_following %}
+    <ul>
+      {% for following_user in user_following %}
+        <li>
+          {% if follower.avatar %}
+                <img src="{{ follower.avatar.url }}" alt="{{ follower.username }}'s avatar" width="50" height="50">
+            {% else %}
+                <img src="{% static 'deps/images/default-avatar.png' %}" alt="Default Avatar" width="50" height="50">
+          {% endif %}
+          <a href="{% url 'profile:profile' following_user.username %}">
+            {{ following_user.username }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You are not following anyone yet.</p>
+  {% endif %}
+{% endblock %}

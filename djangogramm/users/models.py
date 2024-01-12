@@ -20,7 +20,7 @@ class Follow(models.Model):
     following = models.ForeignKey(
         'users.User',
         on_delete=models.CASCADE,
-        related_name='follower',
+        related_name='followers',
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

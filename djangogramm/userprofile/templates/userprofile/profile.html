@@ -20,6 +20,11 @@
         <p><strong>Full name:</strong> {{ profile.full_name }}</p>
         <p><strong>Bio:</strong> {{ profile.bio }}</p>
 
+         <div class="mt-4">
+            <a href="{% url 'profile:followers' username=user.username %}" class="btn btn-primary">Followers</a>
+            <a href="{% url 'profile:following' username=user.username %}" class="btn btn-primary">My following</a>
+        </div>
+
         <div class="mt-4">
             <a href="{% url 'profile:edit_profile' username=user.username %}" class="btn btn-primary">Edit Profile</a>
             <a href="{% url 'post:create_post' %}" class="btn btn-success">Create Post</a>
