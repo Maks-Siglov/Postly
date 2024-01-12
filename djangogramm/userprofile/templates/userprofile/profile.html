@@ -1,17 +1,21 @@
 {% extends 'main/base.html' %}
 
+{% load static %}
+
 {% block title %}Profile{% endblock %}
 
 {% block content %}
     <div class="container">
         <h2 class="mt-4">Profile</h2>
 
-        {% if profile.avatar %}
-            <div class="mb-4">
-                <strong>Avatar:</strong>
+        <div class="mb-4">
+            <strong>Avatar:</strong>
+            {% if profile.avatar %}
                 <img src="{{ profile.avatar.url }}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
-            </div>
-        {% endif %}
+            {% else %}
+                <img src="{% static "deps/images/default-avatar.png" %}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
+            {% endif %}
+        </div>
 
         <p><strong>Full name:</strong> {{ profile.full_name }}</p>
         <p><strong>Bio:</strong> {{ profile.bio }}</p>

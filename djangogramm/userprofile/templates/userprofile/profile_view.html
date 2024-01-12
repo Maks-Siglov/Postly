@@ -1,5 +1,7 @@
 {% extends 'main/base.html' %}
 
+{% load follow_tag %}
+
 {% block title %}Profile{% endblock %}
 
 {% block content %}
@@ -14,4 +16,9 @@
     <p>Bio: {{ profile.bio }}</p>
 
 <p><a href="{% url 'post:user_posts' profile.user.username %}">{{ profile.user.username }} posts</a></p>
+{% if not request.user|is_following:profile.user %}
+    <p><a href="{% url "users:follow"  profile.id %}">Follow</a></p>
+{% else %}
+    <p><a href="{% url "users:unfollow"  profile.id %}">Unfollow</a></p>
+{% endif %}
 {% endblock %}
