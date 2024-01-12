@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from users.models import User
 from userprofile.models import UserProfile
-
+from django.contrib.auth.hashers import make_password
 
 @pytest.mark.django_db
 def test_registration(client: Client):
@@ -19,7 +19,8 @@ def test_registration(client: Client):
         {
             "username": "Test_username",
             "email": "new_user@example.com",
-            "password": "test_password",
+            "password1": "test_password",
+            "password2": "test_password"
         },
     )
     assert response.status_code == 200

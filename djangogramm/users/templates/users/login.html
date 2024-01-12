@@ -6,6 +6,10 @@
 <form method="post" action="/login/" class="mt-4">
     {% csrf_token %}
 
+    {% if form.non_field_errors %}
+        {{ form.non_field_errors }}
+    {% endif %}
+
     <div class="form-group">
         <label for="id_username">Username:</label>
         <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="100" required id="id_username" class="form-control">

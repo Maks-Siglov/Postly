@@ -1,19 +1,17 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from users.bl.email_generator import send_confirmation_email
-from users.forms import RegisterForm
+from users.forms import RegisterForm, LoginForm
 
 
 def registration(request) -> HttpResponse:
     if request.method == "POST":
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(user.password)
-            user.save()
+            user = form.save()
             email = user.email
             send_confirmation_email(user, email)
             return render(request, 'users/registration_success.html')
@@ -25,7 +23,8 @@ def registration(request) -> HttpResponse:
 
 def login_view(request) -> HttpResponse:
     if request.method == "POST":
-        form = AuthenticationForm(request, request.POST)
+        form = LoginForm(request, request.POST)
+        print(make_password("289331qq"))
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
@@ -36,6 +35,6 @@ def login_view(request) -> HttpResponse:
 
             form.add_error(None, "Invalid login credentials")
     else:
-        form = AuthenticationForm()
+        form = LoginForm()
 
     return render(request, "users/login.html", {"form": form})
