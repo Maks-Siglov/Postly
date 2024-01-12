@@ -11,3 +11,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         "users.User", on_delete=models.CASCADE, related_name="profile"
     )
+
+    class Meta:
+        verbose_name = "Profile"
