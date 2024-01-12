@@ -24,7 +24,6 @@ def registration(request) -> HttpResponse:
 def login_view(request) -> HttpResponse:
     if request.method == "POST":
         form = LoginForm(request, request.POST)
-        print(make_password("289331qq"))
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
