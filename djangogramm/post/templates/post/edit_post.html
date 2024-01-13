@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <label for="id_image">Image:</label>
-                <input type="file" name="image" accept="image/*" id="id_image" class="form-control-file">
+                <input type="file" multiple name="images" accept="image/*" id="id_image" class="form-control-file">
 
                 {% if form.image.errors %}
                     <div class="invalid-feedback">Please choose a valid image file.</div>

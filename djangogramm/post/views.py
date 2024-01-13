@@ -19,8 +19,9 @@ def create_post(request) -> HttpResponse:
             post.save()
 
             images = request.FILES.getlist("images")
-            for image in images:
-                Image.objects.create(image=image, post=post)
+            if images:
+                for image in images:
+                    Image.objects.create(image=image, post=post)
 
             tag_names = form.cleaned_data["tags"].split(",")
             for tag_name in tag_names:
@@ -87,12 +88,20 @@ def edit_post(request, post_id: int) -> HttpResponseRedirect:
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
+
             tag_names = form.cleaned_data["tags"].split(",")
             for tag_name in tag_names:
                 tag_name = tag_name.strip()
                 if tag_name:
                     tag, created = Tag.objects.get_or_create(name=tag_name)
                     post.tags.add(tag)
+
+            images = request.FILES.getlist("images")
+            if images:
+                recent_images = Image.objects.filter(post=post)
+                recent_images.delete()
+                for image in images:
+                    Image.objects.create(image=image, post=post)
 
             form.save()
             messages.success(request, "Post updated successfully.")
