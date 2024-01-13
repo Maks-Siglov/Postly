@@ -10,13 +10,15 @@
         <div class="card-body">
             <h2 class="card-title">{{ post.title }}</h2>
 
+            <div class="card-group">
             {% if post.images.all %}
                 <div class="image-gallery">
                     {% for image in post.images.all %}
-                        <img src="{{ image.image.url }}" alt="Image" class="img-thumbnail">
+                        <img src="{{ image.image.url }}" alt="Image" class="img-fluid rounded" width="150" height="150">
                     {% endfor %}
                 </div>
             {% endif %}
+            </div>
 
             <p>{{ post.content }}</p>
             <p class="card-text"><small class="text-muted">Date: {{ post.creation_date }} | Owner:

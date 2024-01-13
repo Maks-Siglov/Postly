@@ -11,7 +11,7 @@
         <div class="mb-4">
             <strong>Avatar:</strong>
             {% if profile.avatar %}
-                <img src="{{ profile.avatar.url }}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
+                <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
             {% else %}
                 <img src="{% static "deps/images/default-avatar.png" %}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
             {% endif %}

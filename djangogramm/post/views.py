@@ -18,8 +18,8 @@ def create_post(request) -> HttpResponse:
             post.owner = request.user
             post.save()
 
-            if form.cleaned_data["image"]:
-                image = request.FILES["image"]
+            images = request.FILES.getlist("images")
+            for image in images:
                 Image.objects.create(image=image, post=post)
 
             tag_names = form.cleaned_data["tags"].split(",")
