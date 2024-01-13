@@ -73,3 +73,31 @@ def test_edit_profile(client: Client):
     edited_profile = UserProfile.objects.get(user=user)
     assert edited_profile.full_name == "edit_full_name"
     assert edited_profile.bio == "edit_bio"
+
+
+@pytest.mark.django_db
+def test_follow(client: Client):
+    user = User.objects.create_user(
+        username="test_user", password="test_password"
+    )
+    profile = UserProfile.objects.create(
+        full_name="Test_full_name", bio="Test_bio", user=user
+    )
+    second_user = User.objects.create_user(
+        username="second_test_user", password="second_test_password"
+    )
+    second_profile = UserProfile.objects.create(
+        full_name="second_full_name", bio="second_bio", user=second_user
+    )
+
+    client.login(username="test_user", password="test_password")
+
+    response = client.get(reverse("profile:follow", args=[second_profile.id]))
+    assert response.status_code == 302
+    assert second_profile.followers.all()[0].follower_id == profile.id
+
+    response = client.get(
+        reverse("profile:unfollow", args=[second_profile.id])
+    )
+    assert response.status_code == 302
+    assert second_profile.followers.first() is None
