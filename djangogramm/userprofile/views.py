@@ -122,9 +122,12 @@ def unfollow(request, profile_id: int) -> HttpResponseRedirect:
 @login_required(login_url="users:login")
 def followers(request, profile_id: int) -> HttpResponse:
     user_profile = UserProfile.objects.get(id=profile_id)
-    user_followers = [
-        follow.follower for follow in user_profile.followers.all()
-    ]
+
+    follower_ids_list = list(
+        user_profile.followers.all().values_list('follower__id', flat=True)
+    )
+    user_followers = UserProfile.objects.filter(id__in=follower_ids_list).all()
+
     return render(
         request,
         "userprofile/followers_list.html",
@@ -135,9 +138,13 @@ def followers(request, profile_id: int) -> HttpResponse:
 @login_required(login_url="users:login")
 def following(request, profile_id: int) -> HttpResponse:
     user_profile = UserProfile.objects.get(id=profile_id)
-    following_users = [
-        follow.following for follow in user_profile.following.all()
-    ]
+
+    following_id_list = list(
+        user_profile.following.all().values_list('following__id', flat=True)
+    )
+    following_users = UserProfile.objects.filter(
+        id__in=following_id_list
+    ).all()
     return render(
         request,
         "userprofile/following_list.html",
