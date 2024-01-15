@@ -1,5 +1,6 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
+from django.contrib.auth.views import PasswordResetConfirmView
 
 from users import views
 
@@ -10,9 +11,4 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("forgot_password/", views.forgot_password, name="forgot_password"),
-    path(
-        "reset_password/<str:link_key>",
-        views.reset_password,
-        name="reset_password",
-    )
 ]

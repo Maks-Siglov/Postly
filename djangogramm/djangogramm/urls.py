@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetCompleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +26,19 @@ urlpatterns = [
     path('', include('users.urls', namespace='users')),
     path('', include('post.urls', namespace='post')),
     path('', include('userprofile.urls', namespace='profile')),
+]
+
+urlpatterns += [
+    path(
+        "reset/<uidb64>/<token>/",
+        PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "reset/done/",
+        PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
 ]
 
 if settings.DEBUG:

@@ -1,13 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import SetPasswordForm
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
+from djangogramm import settings
 from users.bl.confirmation_email import send_confirmation_email
-from users.bl.reset_password_email import send_resetting_password_email
-from users.forms import RegisterForm, LoginForm, EmailForm
-from users.models import User
+from users.forms import RegisterForm, LoginForm, UserForgotPasswordForm
+
 
 
 def registration(request) -> HttpResponse:
@@ -44,31 +43,13 @@ def login_view(request) -> HttpResponse:
 
 def forgot_password(request) -> HttpResponse:
     if request.method == "POST":
-        form = EmailForm(request.POST)
+        form = UserForgotPasswordForm(request.POST)
         if form.is_valid():
-            user_email = form.cleaned_data["email"]
-            user = User.objects.get(email=user_email)
-
-            send_resetting_password_email(user)
-            return render(request, "users/forgot_password_email.html")
+            form.save(request=request, from_email=settings.DEFAULT_FROM_EMAIL)
+            messages.success(
+                request, "We sent you an email to reset your password"
+            )
 
     else:
-        form = EmailForm()
+        form = UserForgotPasswordForm()
     return render(request, "users/forgot_password.html", {"form": form})
-
-
-def reset_password(
-        request, link_key: str
-) -> HttpResponse | HttpResponseRedirect:
-    user = User.objects.get(email_hash=link_key)
-    if request.method == "POST":
-        form = SetPasswordForm(user=user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "You successfully reset your password")
-            return redirect("users:login")
-
-    else:
-        form = SetPasswordForm(user=user)
-
-    return render(request, "users/reset_password.html", {"form": form})
