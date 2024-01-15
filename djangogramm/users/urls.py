@@ -9,4 +9,10 @@ urlpatterns = [
     path("register/", views.registration, name="register"),
     path("login/", views.login_view, name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("forgot_password/", views.forgot_password, name="forgot_password"),
+    path(
+        "reset_password/<str:link_key>",
+        views.reset_password,
+        name="reset_password",
+    )
 ]
