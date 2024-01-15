@@ -14,12 +14,14 @@ def profile_registration(
 ) -> HttpResponse | HttpResponseRedirect:
     if request.method == "POST":
         user = User.objects.get(email_hash=link_key)
-        user.activate = True
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
-            form.cleaned_data["user"] = user
+            user.activate_profile = True
+
             user_profile = UserProfile(**form.cleaned_data)
+            user.profile = user_profile
             user_profile.save()
+            user.save()
 
             login(request, user)
             messages.success(
@@ -39,6 +41,10 @@ def profile_registration(
 @login_required(login_url="users:login")
 def profile(request, username: str) -> HttpResponse:
     profile_owner = User.objects.get(username=username)
+
+    if not profile_owner.activate_profile:
+        return render(request, "userprofile/check_email.html")
+
     if request.user == profile_owner:
         return render(
             request,
