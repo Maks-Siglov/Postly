@@ -135,11 +135,11 @@ def followers(request, profile_id: int) -> HttpResponse:
 @login_required(login_url="users:login")
 def following(request, profile_id: int) -> HttpResponse:
     user_profile = UserProfile.objects.get(id=profile_id)
-    user_following = [
+    following_users = [
         follow.following for follow in user_profile.following.all()
     ]
     return render(
         request,
         "userprofile/following_list.html",
-        {"user_following": user_following},
+        {"following_users": following_users},
     )

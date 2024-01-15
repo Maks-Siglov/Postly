@@ -5,17 +5,17 @@
 {% block content %}
   <h2>Following</h2>
 
-  {% if user_following %}
+  {% if following_users %}
     <ul>
-      {% for following_user in user_following %}
+      {% for following in following_users %}
         <li>
-          {% if follower.avatar %}
-                <img src="{{ follower.avatar.url }}" alt="{{ follower.username }}'s avatar" width="50" height="50">
+          {% if following.avatar %}
+                <img src="{{ following.avatar.url }}"  width="50" height="50">
             {% else %}
                 <img src="{% static 'deps/images/default-avatar.png' %}" alt="Default Avatar" width="50" height="50">
           {% endif %}
-          <a href="{% url 'profile:profile' following_user.username %}">
-            {{ following_user.username }}
+          <a href="{% url 'profile:profile' following.user.username %}">
+            {{ following.user.username }}
           </a>
         </li>
       {% endfor %}

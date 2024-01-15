@@ -22,10 +22,10 @@
                     <a class="nav-link" href="{% url 'post:post_list' %}">Posts</a>
                 </li>
                 {% if user.is_authenticated %}
-                        <a class="nav-link" href="{% url 'post:user_posts' user.username %}">My Posts</a>
+                        <a class="nav-link" href="{% url 'post:user_posts' request.user.username %}">My Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile:profile' user.username %}">Profile</a>
+                        <a class="nav-link" href="{% url 'profile:profile' request.user.username %}">Profile</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
