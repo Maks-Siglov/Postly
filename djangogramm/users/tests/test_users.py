@@ -9,6 +9,7 @@ from users.models import User
 from userprofile.models import UserProfile
 from django.contrib.auth.hashers import make_password
 
+
 @pytest.mark.django_db
 def test_registration(client: Client):
     response = client.get(reverse("users:register"))

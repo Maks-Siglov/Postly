@@ -9,7 +9,7 @@ from userprofile.forms import ProfileForm
 from userprofile.models import UserProfile, Follow
 
 
-def profile_registration(
+def activate_profile(
     request, link_key: str
 ) -> HttpResponse | HttpResponseRedirect:
     if request.method == "POST":
