@@ -1,24 +1,45 @@
 {% extends 'main/base.html' %}
 
+{% load static %}
 {% load follow_tag %}
 
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<h2>Profile</h2>
-    {% csrf_token %}
+<div class="col-md-5">
+    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+        <h3 class="text-center mb-4">Profile</h3>
+        <div class="row">
+            {% csrf_token %}
 
-    {% if profile.avatar %}
-        <img src="{{ profile.avatar.url }}" alt="Current Avatar" class="img-fluid rounded" width="100" height="100">
-    {% endif %}
+            <div class="col-md-12 mb-3 text-center">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
+                {% else %}
+                    <img src="{% static "deps/images/default-avatar.png" %}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
+                {% endif %}
+            </div>
 
-    <p>Full name: {{ profile.full_name }}</p>
-    <p>Bio: {{ profile.bio }}</p>
+        <div class="col-md-12 mb-3">
+             <label for="id_first_name" class="form-label">Full name:</label>
+            {{ profile.full_name }}
+        </div>
+         <div class="col-md-12 mb-3">
+             <label for="id_first_name" class="form-label">Bio:</label>
+            {{ profile.bio }}
+        </div>
 
-<p><a href="{% url 'post:user_posts' profile.user.username %}">{{ profile.user.username }} posts</a></p>
-{% if not request.user.profile|is_following:profile %}
-    <p><a href="{% url "profile:follow"  profile.id %}">Follow</a></p>
-{% else %}
-    <p><a href="{% url "profile:unfollow"  profile.id %}">Unfollow</a></p>
-{% endif %}
+        <div class="mt-4">
+            <p><a href="{% url 'post:user_posts' profile.user.username %}" class="btn-secondary">{{ profile.user.username }} posts</a></p>
+            {% if not request.user.profile|is_following:profile %}
+                <p><a href="{% url "profile:follow"  profile.id %}" class="btn-success">Follow</a></p>
+            {% else %}
+                <p><a href="{% url "profile:unfollow"  profile.id %}" class="btn-danger">Unfollow</a></p>
+            {% endif %}
+        </div>
+
+        </div>
+    </div>
+</div>
+
 {% endblock %}

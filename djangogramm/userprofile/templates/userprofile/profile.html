@@ -5,34 +5,46 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h2 class="mt-4">Profile</h2>
 
-        <div class="mb-4">
-            <strong>Avatar:</strong>
-            {% if profile.avatar %}
-                <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
-            {% else %}
-                <img src="{% static "deps/images/default-avatar.png" %}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
-            {% endif %}
+<div class="col-md-5">
+    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+        <h3 class="text-center mb-4">Profile</h3>
+        <div class="row">
+                <div class="col-md-12 mb-3 text-center">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
+                    {% else %}
+                        <img src="{% static "deps/images/default-avatar.png" %}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
+                    {% endif %}
+                </div>
+
+                <div class="col-md-12 mb-3">
+                     <label for="id_first_name" class="form-label">Full name:</label>
+                    {{ profile.full_name }}
+                </div>
+
+                <div class="col-md-12 mb-3">
+                     <label for="id_first_name" class="form-label">Bio:</label>
+                    {{ profile.bio }}
+                </div>
+
+            <div class="mt-4">
+                <a href="{% url 'profile:followers' profile.id %}" class="btn btn-primary">Followers</a>
+                <a href="{% url 'profile:following' profile.id %}" class="btn btn-primary">My following</a>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'profile:edit_profile' username=user.username %}" class="btn btn-primary">Edit Profile</a>
+                <a href="{% url 'post:create_post' %}" class="btn btn-success">Create Post</a>
+            </div>
+
+            <form method="post" action="{% url 'users:logout' %}" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
         </div>
-
-        <p><strong>Full name:</strong> {{ profile.full_name }}</p>
-        <p><strong>Bio:</strong> {{ profile.bio }}</p>
-
-         <div class="mt-4">
-            <a href="{% url 'profile:followers' profile.id %}" class="btn btn-primary">Followers</a>
-            <a href="{% url 'profile:following' profile.id %}" class="btn btn-primary">My following</a>
-        </div>
-
-        <div class="mt-4">
-            <a href="{% url 'profile:edit_profile' username=user.username %}" class="btn btn-primary">Edit Profile</a>
-            <a href="{% url 'post:create_post' %}" class="btn btn-success">Create Post</a>
-        </div>
-
-        <form method="post" action="{% url 'users:logout' %}" class="mt-4">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
     </div>
+</div>
+
+
 {% endblock %}
