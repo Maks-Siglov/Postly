@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
+from post.utils import q_search
 from users.models import User
 from post.forms import CommentForm, PostForm
 from post.models import Comment, Image, Post, Tag, Like
@@ -38,13 +39,21 @@ def create_post(request) -> HttpResponse:
 
 
 def post_list(request) -> HttpResponse:
-    posts = Post.objects.all()
+    query = request.GET.get("q", None)
+    if query:
+        posts = q_search(query)
+    else:
+        posts = Post.objects.all()
     return render(request, "post/post_list.html", {"posts": posts})
 
 
 def user_posts(request, username: str) -> HttpResponse:
+    query = request.GET.get("q", None)
     user = User.objects.get(username=username)
-    posts = Post.objects.filter(owner=user)
+    if query:
+        posts = q_search(query)
+    else:
+        posts = Post.objects.filter(owner=user)
     if request.user == user:
         return render(request, "post/user_posts.html", {"posts": posts})
 
