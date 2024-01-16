@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 
+{% load account %}
+{% load socialaccount %}
+
 {% block content %}
 
 <div class="row">
@@ -42,6 +45,8 @@
                     </div>
 
                 </form>
+            <a href="{% provider_login_url 'github' %}">Log in with GitHub</a>
+            <a href="{% provider_login_url 'google' %}">Log in with Google</a>
             </div>
         </div>
     </div>
