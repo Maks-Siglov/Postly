@@ -39,14 +39,20 @@
 
                     <div class="d-flex justify-content-center m-4">
                         <button type="submit" class="btn btn-success  mr-2">Login</button>
-                </div>
-                    <div class="d-flex mt-3 justify-content-center">
-                        <a href="{% url "users:forgot_password" %}">Forgot your password?</a> | <a href="{% url "users:register" %}">Create account</a>
-                    </div>
 
                 </form>
-            <a href="{% provider_login_url 'github' %}">Log in with GitHub</a>
-            <a href="{% provider_login_url 'google' %}">Log in with Google</a>
+                </div>
+
+                <div class="row mt-3">
+                    <a href="{% url "users:forgot_password" %}" class="col text-end">Forgot your password?</a> |
+                    <a href="{% url "users:register" %}" class="col">Create account</a>
+                </div>
+
+                <div class="row">
+                    <a href="{% provider_login_url 'github' %}" class="col text-end">Log in with GitHub</a> |
+                    <a href="{% provider_login_url 'google' %}" class="col">Log in with Google</a>
+                </div>
+
             </div>
         </div>
     </div>
