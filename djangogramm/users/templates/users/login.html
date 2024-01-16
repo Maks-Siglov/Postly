@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load account %}
 {% load socialaccount %}
 
@@ -47,10 +48,17 @@
                     <a href="{% url "users:forgot_password" %}" class="col text-end">Forgot your password?</a> |
                     <a href="{% url "users:register" %}" class="col">Create account</a>
                 </div>
-
-                <div class="row">
-                    <a href="{% provider_login_url 'github' %}" class="col text-end">Log in with GitHub</a> |
-                    <a href="{% provider_login_url 'google' %}" class="col">Log in with Google</a>
+                <hr>
+                <div class="text-center">
+                    <p>Or you can log in through:</p>
+                    <a href="{% provider_login_url 'github' %}" class="btn btn-dark">
+                        <img class="mx-1" src="{% static "deps/images/github.svg" %}" alt="Catalog Icon" width="16" height="16">
+                        GitHub
+                    </a>
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-dark">
+                        <img class="mx-1" src="{% static "deps/images/google.svg" %}" alt="Catalog Icon" width="16" height="16">
+                        Google
+                    </a>
                 </div>
 
             </div>
