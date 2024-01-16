@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
@@ -40,6 +41,7 @@ def create_post(request) -> HttpResponse:
 
 
 def post_list(request) -> HttpResponse:
+    page = request.GET.get("page", 1)
     query = request.GET.get("q", None)
     order_by = request.GET.get("order_by", None)
     if query:
@@ -56,7 +58,10 @@ def post_list(request) -> HttpResponse:
         else:
             posts = posts.order_by(order_by)
 
-    return render(request, "post/post_list.html", {"posts": posts})
+    paginator = Paginator(posts, 3)
+    current_page = paginator.page(int(page))
+
+    return render(request, "post/post_list.html", {"posts": current_page})
 
 
 def user_posts(request, username: str) -> HttpResponse:
