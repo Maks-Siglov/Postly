@@ -20,10 +20,20 @@
     {% for post in posts %}
         <div class="card mt-4 post-container">
             <div class="card-body">
-                <h4 class="card-title"><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></h4>
-                <p class="card-text">{{ post.content|slice:":200" }}</p>
-            </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="card-title"><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></h4>
+                        <p class="card-text">{{ post.content }}</p>
 
+                        {% if post.tag %}
+                            <p class="card-text">Tag: <span class="badge badge-info">{{ post.tag.name }}</span></p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{% url 'profile:profile' post.owner.username %}">{{ post.owner.username }}</a>
+                    </div>
+                </div>
+            </div>
             <div class="card-footer d-flex justify-content-between align-items-center">
                 <div>
                     <p><a href="{% url 'post:edit_post' post.id %}" class="btn btn-secondary btn-sm">Edit post</a></p>

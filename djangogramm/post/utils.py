@@ -12,7 +12,7 @@ def q_search(query) -> QuerySet[Post] | None:
     if query.isdigit() and len(query) <= 5:
         return Post.objects.filter(id=int(query))
 
-    vector = SearchVector("title", 'content')
+    vector = SearchVector("title", 'content', 'owner__username')
     query = SearchQuery(query)
 
     result = (
