@@ -56,6 +56,7 @@ def post_detail(request, post_id: int) -> HttpResponse:
     post = get_object_or_404(Post, id=post_id)
     comments = Comment.objects.filter(post=post)
     comment_form = CommentForm()
+
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -63,6 +64,7 @@ def post_detail(request, post_id: int) -> HttpResponse:
             comment.post = post
             comment.owner = request.user
             comment.save()
+
     return render(
         request,
         "post/post_detail.html",
