@@ -40,10 +40,15 @@ def create_post(request) -> HttpResponse:
 
 def post_list(request) -> HttpResponse:
     query = request.GET.get("q", None)
+    order_by = request.GET.get("order_by", None)
     if query:
         posts = q_search(query)
     else:
         posts = Post.objects.all()
+
+    if order_by:
+        posts = posts.order_by(order_by)
+
     return render(request, "post/post_list.html", {"posts": posts})
 
 
