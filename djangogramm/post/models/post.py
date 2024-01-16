@@ -18,5 +18,8 @@ class Post(models.Model):
 
     likes = GenericRelation("post.Like", related_name="liked_post")
 
+    class Meta:
+        ordering = ("id",)
+
     def __str__(self):
         return self.title
