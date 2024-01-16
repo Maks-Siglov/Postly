@@ -50,29 +50,44 @@ def post_list(request) -> HttpResponse:
         posts = Post.objects.all()
 
     if order_by:
-        if order_by == 'likes':
+        if order_by and order_by != "default" and order_by != 'likes':
+            posts = posts.order_by(order_by)
+        elif order_by == 'likes':
             posts = (
                 Post.objects.annotate(like_count=Count('likes'))
                 .order_by('-like_count')
             )
-        else:
-            posts = posts.order_by(order_by)
 
-    paginator = Paginator(posts, 3)
+    paginator = Paginator(posts, 5)
     current_page = paginator.page(int(page))
 
     return render(request, "post/post_list.html", {"posts": current_page})
 
 
 def user_posts(request, username: str) -> HttpResponse:
+    page = request.GET.get("page", 1)
     query = request.GET.get("q", None)
     user = User.objects.get(username=username)
+    order_by = request.GET.get("order_by", None)
     if query:
         posts = q_search(query)
     else:
         posts = Post.objects.filter(owner=user)
+
+    if order_by:
+        if order_by and order_by != "default" and order_by != 'likes':
+            posts = posts.order_by(order_by)
+        elif order_by == 'likes':
+            posts = (
+                Post.objects.annotate(like_count=Count('likes'))
+                .order_by('-like_count')
+            )
+
+    paginator = Paginator(posts, 5)
+    current_page = paginator.page(int(page))
+
     if request.user == user:
-        return render(request, "post/user_posts.html", {"posts": posts})
+        return render(request, "post/user_posts.html", {"posts": current_page})
 
     return render(request, "post/post_list.html", {"posts": posts})
 

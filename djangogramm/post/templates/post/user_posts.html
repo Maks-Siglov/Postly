@@ -1,14 +1,51 @@
 {% extends 'base.html' %}
 
+{% load custom_filters %}
+
 {% block title %}My Posts{% endblock %}
 
 {% block content %}
     <h2 class="mb-4">My Posts</h2>
 
-    <form class="d-flex mt-4" role="search" action="{% url "post:post_list" %}" method="get">
-        <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success " type="submit">Search</button>
-    </form>
+    <div class="row">
+        <div class="dropdown text-end col">
+            <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                Filters
+            </button>
+
+            <form  method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                <div class="form-check text-white mx-3">
+                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default"
+                           {% if not request.GET.order_by or request.GET.order_by == 'default' %}checked{% endif %}>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        By default
+                    </label>
+                </div>
+
+                <div class="form-check mx-3">
+                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="-creation_date"{% if request.GET.order_by == 'creation_date' %}checked{% endif %}>
+                    <label class="form-check-label" for="flexRadioDefault2">Newest</label>
+                </div>
+                <div class="form-check mx-3">
+                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="creation_date"{% if request.GET.order_by == 'creation_date' %}checked{% endif %}>
+                    <label class="form-check-label" for="flexRadioDefault2">Oldest</label>
+                </div>
+                <div class="form-check mx-3">
+                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="likes"{% if request.GET.order_by == 'likes' %}checked{% endif %}>
+                    <label class="form-check-label" for="flexRadioDefault2">Most liked</label>
+                </div>
+                <button type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
+            </form>
+        </div>
+
+        <div class="col">
+            <form class="d-flex " role="search" action="{% url "post:user_posts" request.user.username %}" method="get">
+                <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success " type="submit">Search</button>
+            </form>
+        </div>
+    </div>
 
     {% if request.GET.q %}
          <h3 class="mt-4">Search results by query {{ request.GET.q }}</h3>
@@ -43,4 +80,29 @@
             </div>
         </div>
     {% endfor %}
+
+    {% if posts %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center my-4">
+            <div class="custom-shadow d-flex">
+                <li class="page-item {% if not posts.has_previous %}disabled{% endif %}">
+                  <a class="page-link" href="{% if posts.has_previous %}?{% change_params page=posts.previous_page_number %}{% else %}#{% endif %}">Previous</a>
+                </li>
+
+                {% for page in posts.paginator.page_range %}
+                    {% if page >= posts.number|add:-2 and page <= posts.number|add:2 %}
+                    <li class="page-item {% if posts.number == page %} active {% endif %}">
+                        <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                <li class="page-item {% if not posts.has_next %}disabled{% endif %}">
+                  <a class="page-link" href="{% if posts.has_next %}?{% change_params page=posts.next_page_number %}{% else %}#{% endif %}">Next</a>
+                </li>
+            </div>
+        </ul>
+    </nav>
+    {% endif %}
+
 {% endblock %}
