@@ -8,6 +8,13 @@
     <h2 class="mb-4">My Posts</h2>
 
     <div class="row">
+        <div class="col">
+            <form class="d-flex " role="search" action="{% url "post:user_posts" request.user.username %}" method="get">
+                <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success " type="submit">Search</button>
+            </form>
+        </div>
+
         <div class="dropdown text-end col">
             <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -36,13 +43,6 @@
                     <label class="form-check-label" for="flexRadioDefault2">Most liked</label>
                 </div>
                 <button type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
-            </form>
-        </div>
-
-        <div class="col">
-            <form class="d-flex " role="search" action="{% url "post:user_posts" request.user.username %}" method="get">
-                <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success " type="submit">Search</button>
             </form>
         </div>
     </div>
