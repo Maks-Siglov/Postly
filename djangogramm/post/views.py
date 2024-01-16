@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -47,7 +48,13 @@ def post_list(request) -> HttpResponse:
         posts = Post.objects.all()
 
     if order_by:
-        posts = posts.order_by(order_by)
+        if order_by == 'likes':
+            posts = (
+                Post.objects.annotate(like_count=Count('likes'))
+                .order_by('-like_count')
+            )
+        else:
+            posts = posts.order_by(order_by)
 
     return render(request, "post/post_list.html", {"posts": posts})
 
