@@ -18,17 +18,17 @@ class UserProfile(models.Model):
 
 class Follow(models.Model):
     follower = models.ForeignKey(
-        'userprofile.UserProfile',
+        "userprofile.UserProfile",
         on_delete=models.SET_NULL,
-        related_name='following',
+        related_name="following",
         null=True,
     )
     following = models.ForeignKey(
-        'userprofile.UserProfile',
+        "userprofile.UserProfile",
         on_delete=models.CASCADE,
-        related_name='followers',
+        related_name="followers",
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('follower', 'following')
+        unique_together = ("follower", "following")

@@ -50,12 +50,11 @@ def post_list(request) -> HttpResponse:
         posts = Post.objects.all()
 
     if order_by:
-        if order_by and order_by != "default" and order_by != 'likes':
+        if order_by and order_by != "default" and order_by != "likes":
             posts = posts.order_by(order_by)
-        elif order_by == 'likes':
-            posts = (
-                Post.objects.annotate(like_count=Count('likes'))
-                .order_by('-like_count')
+        elif order_by == "likes":
+            posts = Post.objects.annotate(like_count=Count("likes")).order_by(
+                "-like_count"
             )
 
     paginator = Paginator(posts, 5)
@@ -75,12 +74,11 @@ def user_posts(request, username: str) -> HttpResponse:
         posts = Post.objects.filter(owner=user)
 
     if order_by:
-        if order_by and order_by != "default" and order_by != 'likes':
+        if order_by and order_by != "default" and order_by != "likes":
             posts = posts.order_by(order_by)
-        elif order_by == 'likes':
-            posts = (
-                Post.objects.annotate(like_count=Count('likes'))
-                .order_by('-like_count')
+        elif order_by == "likes":
+            posts = Post.objects.annotate(like_count=Count("likes")).order_by(
+                "-like_count"
             )
 
     paginator = Paginator(posts, 5)

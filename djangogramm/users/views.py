@@ -15,7 +15,7 @@ def registration(request) -> HttpResponse:
             user = form.save()
             email = user.email
             send_confirmation_email(user, email)
-            return render(request, 'users/registration_success.html')
+            return render(request, "users/registration_success.html")
     else:
         form = RegisterForm()
 

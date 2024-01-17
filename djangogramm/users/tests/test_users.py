@@ -21,7 +21,7 @@ def test_registration(client: Client):
             "username": "Test_username",
             "email": "new_user@example.com",
             "password1": "test_password",
-            "password2": "test_password"
+            "password2": "test_password",
         },
     )
     assert response.status_code == 200

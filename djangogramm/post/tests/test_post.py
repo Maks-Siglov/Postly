@@ -43,7 +43,9 @@ def test_other_user_posts(client: Client):
         title="test_title_post", content="test_content", owner=other_user
     )
 
-    response = client.get(reverse("post:user_posts", args=[other_user.username]))
+    response = client.get(
+        reverse("post:user_posts", args=[other_user.username])
+    )
     assert response.status_code == 200
     assert "posts" in response.context
 

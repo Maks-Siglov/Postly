@@ -26,7 +26,7 @@ def activate_profile(
             login(
                 request,
                 user,
-                backend="django.contrib.auth.backends.ModelBackend"
+                backend="django.contrib.auth.backends.ModelBackend",
             )
             messages.success(
                 request, "Profile saved and user logged in successfully"
@@ -64,7 +64,7 @@ def profile(request, username: str) -> HttpResponse | HttpResponseRedirect:
 
 
 def create_profile(
-        request, username: str
+    request, username: str
 ) -> HttpResponse | HttpResponseRedirect:
     user = User.objects.get(username=username)
     if request.method == "POST":
@@ -81,7 +81,7 @@ def create_profile(
     else:
         form = ProfileForm()
 
-    return render(request, 'userprofile/create_profile.html', {"form": form})
+    return render(request, "userprofile/create_profile.html", {"form": form})
 
 
 @login_required(login_url="users:login")
@@ -117,7 +117,7 @@ def follow(request, profile_id: int) -> HttpResponseRedirect:
     following_profile = UserProfile.objects.get(id=profile_id)
     follower_profile = request.user.profile
     if not follower_profile.following.filter(
-            following_id=following_profile.id
+        following_id=following_profile.id
     ).exists():
         Follow.objects.create(
             follower=follower_profile, following=following_profile
@@ -149,14 +149,14 @@ def followers(request, profile_id: int) -> HttpResponse:
     user_profile = UserProfile.objects.get(id=profile_id)
 
     follower_ids_list = list(
-        user_profile.followers.all().values_list('follower__id', flat=True)
+        user_profile.followers.all().values_list("follower__id", flat=True)
     )
     user_followers = UserProfile.objects.filter(id__in=follower_ids_list).all()
 
     return render(
         request,
         "userprofile/followers_list.html",
-        {"user_followers": user_followers}
+        {"user_followers": user_followers},
     )
 
 
@@ -165,7 +165,7 @@ def following(request, profile_id: int) -> HttpResponse:
     user_profile = UserProfile.objects.get(id=profile_id)
 
     following_id_list = list(
-        user_profile.following.all().values_list('following__id', flat=True)
+        user_profile.following.all().values_list("following__id", flat=True)
     )
     following_users = UserProfile.objects.filter(
         id__in=following_id_list
