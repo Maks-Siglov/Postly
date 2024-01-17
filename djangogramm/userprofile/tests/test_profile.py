@@ -9,7 +9,7 @@ from userprofile.models import UserProfile
 @pytest.mark.django_db
 def test_profile(client: Client):
     user = User.objects.create_user(
-        username="test_user", password="test_password"
+        username="test_user", password="test_password", activate_profile=True
     )
     profile = UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user

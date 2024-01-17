@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.postgres",
+    'django.contrib.sites',
 
     'allauth',
     'allauth.account',
@@ -135,6 +136,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+SITE_ID = 1
+
 AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/login/'
@@ -187,11 +190,11 @@ STATIC_URL = "static/"
 
 STATICFILES_DIRS = (BASE_DIR / "static",)
 
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
-]
+# INTERNAL_IPS = [
+#     # ...
+#     "127.0.0.1",
+#     # ...
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

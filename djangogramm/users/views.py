@@ -8,7 +8,6 @@ from users.bl.confirmation_email import send_confirmation_email
 from users.forms import RegisterForm, LoginForm, UserForgotPasswordForm
 
 
-
 def registration(request) -> HttpResponse:
     if request.method == "POST":
         form = RegisterForm(request.POST, request.FILES)

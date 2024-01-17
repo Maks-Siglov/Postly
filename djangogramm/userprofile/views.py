@@ -23,7 +23,11 @@ def activate_profile(
             user_profile.save()
             user.save()
 
-            login(request, user)
+            login(
+                request,
+                user,
+                backend="django.contrib.auth.backends.ModelBackend"
+            )
             messages.success(
                 request, "Profile saved and user logged in successfully"
             )
@@ -39,7 +43,7 @@ def activate_profile(
 
 
 @login_required(login_url="users:login")
-def profile(request, username: str) -> HttpResponse:
+def profile(request, username: str) -> HttpResponse | HttpResponseRedirect:
     profile_owner = User.objects.get(username=username)
 
     if not profile_owner.activate_profile:
@@ -57,6 +61,27 @@ def profile(request, username: str) -> HttpResponse:
         "userprofile/profile_view.html",
         {"profile": profile_owner.profile, "user": profile_owner},
     )
+
+
+def create_profile(
+        request, username: str
+) -> HttpResponse | HttpResponseRedirect:
+    user = User.objects.get(username=username)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user.activate_profile = True
+
+            user_profile = UserProfile(**form.cleaned_data)
+            user.profile = user_profile
+            user_profile.save()
+            user.save()
+
+            return redirect("profile:profile", username)
+    else:
+        form = ProfileForm()
+
+    return render(request, 'userprofile/create_profile.html', {"form": form})
 
 
 @login_required(login_url="users:login")

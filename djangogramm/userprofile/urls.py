@@ -14,6 +14,7 @@ urlpatterns = [
         views.activate_profile,
         name="activate_profile",
     ),
+    path('create_profile/<str:username>', views.create_profile, name="create_profile"),
     path("follow/<int:profile_id>", views.follow, name="follow"),
     path("unfollow/<int:profile_id>", views.unfollow, name="unfollow"),
     path('followers/<int:profile_id>', views.followers, name="followers"),
