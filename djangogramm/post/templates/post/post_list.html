@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <h4 class="card-title"><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></h4>
-                    <p class="card-text">{{ post.content }}</p>
+                    <p class="card-text">{{ post.content|slice:":150" }}</p>
 
                     {% if post.tag %}
                         <p class="card-text">Tag: <span class="badge badge-info">{{ post.tag.name }}</span></p>
