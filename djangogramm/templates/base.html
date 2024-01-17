@@ -28,6 +28,10 @@
                         <a class="nav-link" href="{% url 'post:user_posts' request.user.username %}">My Posts</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'post:following_posts' request.user.username %}">Following feed</a>
+                    </li>
+
                     {% if  request|has_social and not request.user.activate_profile%}
                         <li class="nav-item">
                         <a href="{% url 'profile:create_profile' request.user.username %}">Create profile</a>

@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from post.utils import q_search
+from userprofile.models import UserProfile
 from users.models import User
 from post.forms import CommentForm, PostForm
 from post.models import Comment, Image, Post, Tag, Like
@@ -88,6 +89,39 @@ def user_posts(request, username: str) -> HttpResponse:
         return render(request, "post/user_posts.html", {"posts": current_page})
 
     return render(request, "post/post_list.html", {"posts": posts})
+
+
+@login_required(login_url="users:login")
+def following_posts(request, username: str) -> HttpResponse:
+    page = request.GET.get("page", 1)
+    query = request.GET.get("q", None)
+    user = User.objects.get(username=username)
+    order_by = request.GET.get("order_by", None)
+
+    following_id_list = list(
+        user.profile.following.all().values_list("following_id", flat=True)
+    )
+    following_users = User.objects.filter(
+        id__in=following_id_list
+    ).all()
+
+    if query:
+        posts = q_search(query)
+    else:
+        posts = Post.objects.filter(owner__in=following_users)
+
+    if order_by:
+        if order_by and order_by != "default" and order_by != "likes":
+            posts = posts.order_by(order_by)
+        elif order_by == "likes":
+            posts = Post.objects.annotate(like_count=Count("likes")).order_by(
+                "-like_count"
+            )
+
+    paginator = Paginator(posts, 5)
+    current_page = paginator.page(int(page))
+
+    return render(request, "post/post_list.html", {"posts": current_page})
 
 
 @login_required(login_url="users:login")
