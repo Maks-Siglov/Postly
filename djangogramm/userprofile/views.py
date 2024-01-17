@@ -94,7 +94,7 @@ def edit_profile(
         messages.error(
             request, "You do not have permission to view this userprofile."
         )
-        return redirect("main:index")
+        return redirect("post:post_list")
 
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=user.profile)

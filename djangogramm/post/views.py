@@ -7,7 +7,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from post.utils import q_search
-from userprofile.models import UserProfile
 from users.models import User
 from post.forms import CommentForm, PostForm
 from post.models import Comment, Image, Post, Tag, Like

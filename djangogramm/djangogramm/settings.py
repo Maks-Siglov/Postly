@@ -46,13 +46,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "django.contrib.sites",
+
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
+
     "debug_toolbar",
-    "main.apps.MainConfig",
+
     "post.apps.PostConfig",
     "users.apps.AuthConfig",
     "userprofile.apps.UserprofileConfig",
@@ -67,6 +69,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+
     "allauth.account.middleware.AccountMiddleware",
 ]
 
