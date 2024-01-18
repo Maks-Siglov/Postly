@@ -39,12 +39,12 @@
             <div class="post-actions">
                 {% csrf_token %}
 
-                <a href="#" class="like-button" data-post-id="{{ post.id }}" data-like-url="{% url 'post:like_post' post.id %}">
+                <a href="{% url 'post:like_post' post.id %}" class="like-button">
                     <img src="{% static 'deps/images/like-button.png' %}" alt="Like" class="like-icon small-icon">
                 </a>
                 <span class="like-count" id="like-count-{{ post.id }}">{{ post|likes_count:post.id }}</span>
 
-                <a href="#" class="dislike-button" data-post-id="{{ post.id }}" data-dislike-url="{% url 'post:dislike_post' post.id %}">
+                <a href="{% url 'post:dislike_post' post.id %}" class="dislike-button">
                     <img src="{% static 'deps/images/dislike-button.png' %}" alt="Dislike" class="dislike-icon small-icon">
                 </a>
                 <span class="dislike-count" id="dislike-count-{{ post.id }}">{{ post|dislikes_count:post.id }}</span>
