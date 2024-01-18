@@ -145,8 +145,6 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = "users.User"
 
-LOGIN_URL = "/login/"
-LOGOUT_REDIRECT_URL = "/"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -177,7 +175,11 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 SOCIALACCOUNT_QUERY_EMAIL = True
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = '/'
+
+LOGOUT_REDIRECT_URL = "/"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

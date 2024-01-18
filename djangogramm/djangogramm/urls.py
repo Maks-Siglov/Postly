@@ -26,7 +26,6 @@ urlpatterns = [
     path("", include("post.urls", namespace="post")),
     path("", include("userprofile.urls", namespace="profile")),
     path("accounts/", include("allauth.urls")),
-    path("accounts/", include("allauth.socialaccount.urls")),
 ]
 
 
