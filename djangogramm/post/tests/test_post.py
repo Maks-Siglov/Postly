@@ -39,13 +39,8 @@ def test_following_posts(client: Client):
 
 
 @pytest.mark.django_db
-def test_user_posts(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
+def test_user_posts(client: Client, test_user_post):
+    user, post = test_user_post
     client.login(username="test_username", password="test_password")
 
     response = client.get(reverse("post:user_posts", args=[user.username]))
@@ -54,17 +49,13 @@ def test_user_posts(client: Client):
 
 
 @pytest.mark.django_db
-def test_other_user_posts(client: Client):
+def test_other_user_posts(client: Client, test_user_post):
     user = User.objects.create_user(
-        username="test_username", password="test_password"
+        username="my_test_username", password="my_test_password"
     )
-    client.login(username="test_username", password="test_password")
-    other_user = User.objects.create_user(
-        username="other_test_username", password="other_test_password"
-    )
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=other_user
-    )
+    client.login(username="my_test_username", password="my_test_password")
+
+    other_user, post = test_user_post
 
     response = client.get(
         reverse("post:user_posts", args=[other_user.username])
@@ -103,13 +94,8 @@ def test_create_post(client: Client):
 
 
 @pytest.mark.django_db
-def test_post_detail(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
+def test_post_detail(client: Client, test_user_post):
+    user, post = test_user_post
     client.login(username="test_username", password="test_password")
 
     response_get = client.get(reverse("post:post_detail", args=[post.id]))
@@ -126,13 +112,8 @@ def test_post_detail(client: Client):
 
 
 @pytest.mark.django_db
-def test_edit_post(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
+def test_edit_post(client: Client, test_user_post):
+    user, post = test_user_post
     client.login(username="test_username", password="test_password")
 
     response_get = client.get(reverse("post:edit_post", args=[post.id]))
@@ -155,25 +136,15 @@ def test_edit_post(client: Client):
 
 
 @pytest.mark.django_db
-def test_not_owner_edit(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
+def test_not_owner_edit(client: Client, test_user_post):
+    user, post = test_user_post
     response_get = client.get(reverse("post:edit_post", args=[post.id]))
     assert response_get.status_code == 302
 
 
 @pytest.mark.django_db
-def test_delete_post(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
+def test_delete_post(client: Client, test_user_post):
+    user, post = test_user_post
     client.login(username="test_username", password="test_password")
 
     response_get = client.get(reverse("post:delete_post", args=[post.id]))
@@ -187,26 +158,16 @@ def test_delete_post(client: Client):
 
 
 @pytest.mark.django_db
-def test_not_owner_delete(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
+def test_not_owner_delete(client: Client, test_user_post):
+    user, post = test_user_post
     response_get = client.get(reverse("post:delete_post", args=[post.id]))
     assert response_get.status_code == 302
 
 
 @pytest.mark.django_db
-def test_post_like(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
+def test_post_like(client: Client, test_user_post):
+    user, post = test_user_post
     client.login(username="test_username", password="test_password")
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
 
     response = client.get(reverse("post:like_post", args=[post.id]))
     assert response.status_code == 302
@@ -225,14 +186,9 @@ def test_post_like(client: Client):
 
 
 @pytest.mark.django_db
-def test_post_dislike(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
+def test_post_dislike(client: Client, test_user_post):
+    user, post = test_user_post
     client.login(username="test_username", password="test_password")
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
 
     response = client.get(reverse("post:dislike_post", args=[post.id]))
     assert response.status_code == 302
@@ -251,17 +207,9 @@ def test_post_dislike(client: Client):
 
 
 @pytest.mark.django_db
-def test_comment_like(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
+def test_comment_like(client: Client, test_user_post_comment):
+    user, post, comment = test_user_post_comment
     client.login(username="test_username", password="test_password")
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
-    comment = Comment.objects.create(
-        content="test_content", post=post, owner=user
-    )
 
     response = client.get(reverse("post:like_comment", args=[comment.id]))
     assert response.status_code == 302
@@ -280,17 +228,9 @@ def test_comment_like(client: Client):
 
 
 @pytest.mark.django_db
-def test_comment_dislike(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
+def test_comment_dislike(client: Client, test_user_post_comment):
+    user, post, comment = test_user_post_comment
     client.login(username="test_username", password="test_password")
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
-    comment = Comment.objects.create(
-        content="test_content", post=post, owner=user
-    )
 
     response = client.get(reverse("post:dislike_comment", args=[comment.id]))
     assert response.status_code == 302
@@ -309,17 +249,9 @@ def test_comment_dislike(client: Client):
 
 
 @pytest.mark.django_db
-def test_edit_comment(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
+def test_edit_comment(client: Client, test_user_post_comment):
+    user, post, comment = test_user_post_comment
     client.login(username="test_username", password="test_password")
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
-    comment = Comment.objects.create(
-        content="test_content", post=post, owner=user
-    )
 
     response = client.get(reverse("post:edit_comment", args=[comment.id]))
     assert response.status_code == 200
@@ -339,17 +271,9 @@ def test_edit_comment(client: Client):
 
 
 @pytest.mark.django_db
-def test_delete_comment(client: Client):
-    user = User.objects.create_user(
-        username="test_username", password="test_password"
-    )
+def test_delete_comment(client: Client, test_user_post_comment):
+    user, post, comment = test_user_post_comment
     client.login(username="test_username", password="test_password")
-    post = Post.objects.create(
-        title="test_title_post", content="test_content", owner=user
-    )
-    comment = Comment.objects.create(
-        content="test_content", post=post, owner=user
-    )
 
     response = client.post(reverse("post:delete_comment", args=[comment.id]))
     assert response.status_code == 302

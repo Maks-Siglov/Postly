@@ -7,13 +7,8 @@ from userprofile.models import UserProfile
 
 
 @pytest.mark.django_db
-def test_profile(client: Client):
-    user = User.objects.create_user(
-        username="test_user", password="test_password", activate_profile=True
-    )
-    profile = UserProfile.objects.create(
-        full_name="Test_full_name", bio="Test_bio", user=user
-    )
+def test_profile(client: Client, test_user_profile):
+    user, profile = test_user_profile
     client.login(username="test_user", password="test_password")
 
     response = client.get(reverse("profile:profile", args=[user.username]))
@@ -47,13 +42,8 @@ def test_unauthenticated_profile_view(client: Client):
 
 
 @pytest.mark.django_db
-def test_edit_profile(client: Client):
-    user = User.objects.create_user(
-        username="test_user", password="test_password"
-    )
-    profile = UserProfile.objects.create(
-        full_name="Test_full_name", bio="Test_bio", user=user
-    )
+def test_edit_profile(client: Client, test_user_profile):
+    user, profile = test_user_profile
     client.login(username="test_user", password="test_password")
 
     response_get = client.get(
@@ -76,13 +66,9 @@ def test_edit_profile(client: Client):
 
 
 @pytest.mark.django_db
-def test_follow(client: Client):
-    user = User.objects.create_user(
-        username="test_user", password="test_password"
-    )
-    profile = UserProfile.objects.create(
-        full_name="Test_full_name", bio="Test_bio", user=user
-    )
+def test_follow(client: Client, test_user_profile):
+    user, profile = test_user_profile
+
     second_user = User.objects.create_user(
         username="second_test_user", password="second_test_password"
     )
