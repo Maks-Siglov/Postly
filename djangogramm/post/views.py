@@ -164,7 +164,7 @@ def edit_post(request, post_id: int) -> HttpResponseRedirect:
     post = Post.objects.get(id=post_id)
     if request.user != post.owner:
         messages.error(
-            request, "You do not have permission to view this userprofile."
+            request, "You do not have permission to do this."
         )
         return redirect("post:post_list")
 
@@ -205,7 +205,7 @@ def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
 
     if request.user != post.owner:
         messages.error(
-            request, "You do not have permission to view this userprofile."
+            request, "You do not have permission to do this."
         )
         return redirect("post:post_list")
 
@@ -280,8 +280,16 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     return redirect("post:post_detail", post.id)
 
 
+@login_required(login_url="users:login")
 def edit_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = Comment.objects.get(id=comment_id)
+
+    if request.user != comment.owner:
+        messages.error(
+            request, "You do not have permission to do this."
+        )
+        return redirect("post:post_list")
+
     if request.method == "POST":
         form = CommentForm(instance=comment, data=request.POST)
         if form.is_valid():
@@ -294,8 +302,16 @@ def edit_comment(request, comment_id: int) -> HttpResponseRedirect:
     return render(request, "post/edit_comment.html", {"form": form})
 
 
+@login_required(login_url="users:login")
 def delete_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = Comment.objects.get(id=comment_id)
+
+    if request.user != comment.owner:
+        messages.error(
+            request, "You do not have permission to do this."
+        )
+        return redirect("post:post_list")
+
     comment.delete()
     return redirect(request.META.get("HTTP_REFERER"))
 

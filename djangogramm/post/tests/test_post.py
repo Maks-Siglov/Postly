@@ -17,6 +17,13 @@ def test_post_list(client: Client):
 
 
 @pytest.mark.django_db
+def test_following_posts(client: Client):
+    response = client.get(reverse("post:following_posts"))
+    assert response.status_code == 200
+    assert "posts" in response.context
+
+
+@pytest.mark.django_db
 def test_user_posts(client: Client):
     user = User.objects.create_user(
         username="test_username", password="test_password"
@@ -282,3 +289,52 @@ def test_comment_dislike(client: Client):
         Like.objects.get(
             content_type=like_content_type, owner=user, value=False
         )
+
+
+@pytest.mark.django_db
+def test_edit_comment(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    client.login(username="test_username", password="test_password")
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    comment = Comment.objects.create(
+        content="test_content", post=post, owner=user
+    )
+
+    response = client.get(reverse("post:edit_comment", args=[comment.id]))
+    assert response.status_code == 200
+
+    edit_comment_data = {
+        'content': "test_edited_content"
+    }
+
+    response = client.post(
+        reverse("post:edit_comment", args=[comment.id]),
+        edit_comment_data
+    )
+    assert response.status_code == 302
+
+    edited_comment = Comment.objects.get(id=comment.id)
+    assert edited_comment.content == edit_comment_data["content"]
+
+
+@pytest.mark.django_db
+def test_delete_comment(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    client.login(username="test_username", password="test_password")
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    comment = Comment.objects.create(
+        content="test_content", post=post, owner=user
+    )
+
+    response = client.post(reverse("post:delete_post", args=[comment.id]))
+    assert response.status_code == 302
+
+    assert not Comment.objects.filter(id=comment.id).exists()
