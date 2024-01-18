@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from djangogramm import settings
-from users.bl.confirmation_email import send_confirmation_email
+from users.services.confirmation_email import send_confirmation_email
 from users.forms import RegisterForm, LoginForm, UserForgotPasswordForm
 
 
