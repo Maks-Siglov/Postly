@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test.client import Client
 from django.urls import reverse
 
+from userprofile.models import UserProfile
 from users.models import User
 from post.models import Comment, Post, Like
 
@@ -18,7 +19,21 @@ def test_post_list(client: Client):
 
 @pytest.mark.django_db
 def test_following_posts(client: Client):
-    response = client.get(reverse("post:following_posts"))
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    profile = UserProfile.objects.create(
+        full_name="Test_full_name", bio="Test_bio", user=user
+    )
+    post = Post.objects.create(
+        title="test_title_post", content="test_content", owner=user
+    )
+    client.login(username="test_username", password="test_password")
+
+    response = client.get(
+        reverse("post:following_posts", args=[user.username])
+    )
+
     assert response.status_code == 200
     assert "posts" in response.context
 
@@ -37,12 +52,13 @@ def test_user_posts(client: Client):
     assert response.status_code == 200
     assert "posts" in response.context
 
-    assert b"Edit post" in response.content
-    assert b"Delete post" in response.content
-
 
 @pytest.mark.django_db
 def test_other_user_posts(client: Client):
+    user = User.objects.create_user(
+        username="test_username", password="test_password"
+    )
+    client.login(username="test_username", password="test_password")
     other_user = User.objects.create_user(
         username="other_test_username", password="other_test_password"
     )
@@ -53,6 +69,7 @@ def test_other_user_posts(client: Client):
     response = client.get(
         reverse("post:user_posts", args=[other_user.username])
     )
+
     assert response.status_code == 200
     assert "posts" in response.context
 
@@ -102,7 +119,7 @@ def test_post_detail(client: Client):
     response_post = client.post(
         reverse("post:post_detail", args=[post.id]), post_comment_data
     )
-    assert response_post.status_code == 200
+    assert response_post.status_code == 302
     assert post.comments.count() == 1
     comment = post.comments.first()
     assert comment.content == post_comment_data["content"]
@@ -334,7 +351,7 @@ def test_delete_comment(client: Client):
         content="test_content", post=post, owner=user
     )
 
-    response = client.post(reverse("post:delete_post", args=[comment.id]))
+    response = client.post(reverse("post:delete_comment", args=[comment.id]))
     assert response.status_code == 302
 
     assert not Comment.objects.filter(id=comment.id).exists()

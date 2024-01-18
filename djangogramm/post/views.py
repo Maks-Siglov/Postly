@@ -66,8 +66,8 @@ def post_list(request) -> HttpResponse:
 def user_posts(request, username: str) -> HttpResponse:
     page = request.GET.get("page", 1)
     query = request.GET.get("q", None)
-    user = User.objects.get(username=username)
     order_by = request.GET.get("order_by", None)
+    user = User.objects.get(username=username)
     if query:
         posts = q_search(query)
     else:
@@ -313,7 +313,7 @@ def delete_comment(request, comment_id: int) -> HttpResponseRedirect:
         return redirect("post:post_list")
 
     comment.delete()
-    return redirect(request.META.get("HTTP_REFERER"))
+    return redirect('post:post_detail', comment.post.id)
 
 
 @login_required(login_url="users:login")
