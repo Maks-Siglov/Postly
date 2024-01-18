@@ -32,7 +32,7 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -196,12 +196,6 @@ USE_I18N = True
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = (BASE_DIR / "static",)
-
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
