@@ -35,8 +35,7 @@ class Like(models.Model):
     id = models.AutoField(primary_key=True)
 
     value = models.BooleanField(null=True, blank=True)
-    created_auto = models.DateTimeField(auto_now_add=True)
-    updated_auto = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
