@@ -6,7 +6,7 @@
 
 {% block content %}
 {% if posts %}
-    {% include 'includes/post_display.html' %}
+    {% include 'includes/posts_display.html' %}
 {% else %}
     <h2>There is no posts yet, you can <a href="{% url 'post:create_post' %}">create</a> one</h2>
 {% endif %}
