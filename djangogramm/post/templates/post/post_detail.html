@@ -68,6 +68,12 @@
                             <a href="{% url 'profile:profile' comment.owner.username %}">{{ comment.owner.username }}</a>:
                             {{ comment.content }}
                         </p>
+
+                        {% if request.user == comment.owner %}
+                            <a href="{% url 'post:edit_comment' comment.id %}">Edit comment</a>
+                            <a href="{% url 'post:delete_comment' comment.id %}">Delete comment</a>
+                        {% endif %}
+
                         <p class="comment-actions">
                              <a href="{% url 'post:like_comment' comment.id %}?referring_page={{ request.path }}">
                              <img src="{% static 'deps/images/like-button.png' %}" alt="Like_comment" class="like-icon small-icon">

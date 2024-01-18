@@ -136,6 +136,7 @@ def post_detail(request, post_id: int) -> HttpResponse:
             comment.post = post
             comment.owner = request.user
             comment.save()
+            return redirect("post:post_detail", post_id=post_id)
 
     return render(
         request,
@@ -269,6 +270,26 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
         dislike.delete()
 
     return redirect("post:post_detail", post.id)
+
+
+def edit_comment(request, comment_id: int) -> HttpResponseRedirect:
+    comment = Comment.objects.get(id=comment_id)
+    if request.method == "POST":
+        form = CommentForm(instance=comment, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('post:post_detail', comment.post.id)
+
+    else:
+        form = CommentForm(instance=comment)
+
+    return render(request, "post/edit_comment.html", {"form": form})
+
+
+def delete_comment(request, comment_id: int) -> HttpResponseRedirect:
+    comment = Comment.objects.get(id=comment_id)
+    comment.delete()
+    return redirect(request.META.get("HTTP_REFERER"))
 
 
 @login_required(login_url="users:login")
