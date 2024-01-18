@@ -85,9 +85,17 @@ def user_posts(request, username: str) -> HttpResponse:
     current_page = paginator.page(int(page))
 
     if request.user == user:
-        return render(request, "post/user_posts.html", {"posts": current_page})
+        return render(
+            request,
+            "post/my_posts.html",
+            {"posts": current_page, "user": user}
+        )
 
-    return render(request, "post/post_list.html", {"posts": posts})
+    return render(
+        request,
+        "post/user_posts.html",
+        {"posts": current_page, "user": user}
+    )
 
 
 @login_required(login_url="users:login")

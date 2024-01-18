@@ -2,15 +2,15 @@
 
 {% load custom_filters %}
 
-{% block title %}{{ user.username }} posts{% endblock %}
+{% block title %}My posts{% endblock %}
 
 {% block content %}
 
     {% if posts %}
-        <h1 class="mb-4">{{ user.username }} Posts</h1>
+        <h1 class="mb-4">My Posts</h1>
         {% include 'post/includes/posts_display.html' %}
     {% else %}
-        <h2>{{ user.username }} has no posts yet</h2>
+        <h2>There is no posts yet, you can <a href="{% url 'post:create_post' %}">create</a> one</h2>
     {% endif %}
 
 {% endblock %}

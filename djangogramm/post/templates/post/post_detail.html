@@ -8,11 +8,11 @@
 {% block content %}
     <div class="card post-card">
         <div class="card-body">
-        <div class="d-flex justify-content-end">
-            <p><small class="text-muted">Date: {{ post.creation_date }} | Owner:
+        <div class="row">
+            <h2 class="card-title col">{{ post.title }}</h2>
+            <p class="col text-end"><small class="text-muted">Date: {{ post.creation_date }} | Owner:
             <a href="{% url 'profile:profile' post.owner.username %}">{{ post.owner.username }}</a></small></p>
         </div>
-            <h2 class="card-title">{{ post.title }}</h2>
 
             <div class="card-group pb-4 m-2">
             {% if post.images.all %}
