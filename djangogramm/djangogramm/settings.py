@@ -162,7 +162,7 @@ SOCIALACCOUNT_PROVIDERS = {
         "APP": {
             "client_id": os.getenv("GITHUB_AUTH_CLIENT_ID"),
             "secret": os.getenv("GITHUB_AUTH_SECRET"),
-            "redirect_uri": "http://localhost:8000/accounts/github/login/",
+            "redirect_uri": "https://localhost:8000/accounts/github/login/",
         }
     },
     "google": {
@@ -170,7 +170,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": os.getenv("GOOGLE_AUTH_CLIENT_ID"),
             "secret": os.getenv("GITHUB_AUTH_SECRET"),
             "redirect_uri": (
-                "http://localhost:8000/accounts/google/login/callback/"
+                "https://localhost:8000/accounts/google/login/callback/"
             ),
         }
     },
