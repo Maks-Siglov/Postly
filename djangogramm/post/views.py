@@ -124,7 +124,7 @@ def post_detail(request, post_id: int) -> HttpResponse:
 
 
 @login_required(login_url="users:login")
-def edit_post(request, post_id: int) -> HttpResponseRedirect:
+def edit_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
     post = Post.objects.get(id=post_id)
     if request.user != post.owner:
         messages.error(
@@ -221,7 +221,9 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
 
 
 @login_required(login_url="users:login")
-def edit_comment(request, comment_id: int) -> HttpResponseRedirect:
+def edit_comment(
+        request, comment_id: int
+) -> HttpResponse | HttpResponseRedirect:
     comment = Comment.objects.get(id=comment_id)
 
     if request.user != comment.owner:

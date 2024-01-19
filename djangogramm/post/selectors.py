@@ -12,7 +12,7 @@ def get_posts(query: str | None, order_by: str | None) -> QuerySet[Post]:
     else:
         posts = Post.objects.all()
 
-    if order_by:
+    if order_by and posts:
         _order_by_post(posts, order_by)
 
     return posts
@@ -26,7 +26,7 @@ def get_users_post(
     else:
         posts = Post.objects.filter(owner=user)
 
-    if order_by:
+    if order_by and posts:
         _order_by_post(posts, order_by)
 
     return posts
@@ -47,7 +47,7 @@ def get_following_posts(
     else:
         posts = Post.objects.filter(owner__in=following_users)
 
-    if order_by:
+    if order_by and posts:
         _order_by_post(posts, order_by)
 
     return posts
