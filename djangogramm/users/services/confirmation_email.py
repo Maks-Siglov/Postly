@@ -13,7 +13,7 @@ def send_confirmation_email(user: User, email: str) -> None:
     user.save()
     redirect_url = reverse("profile:activate_profile", args=[link_key])
     unique_local_link = f"http://127.0.0.1:8000{redirect_url}"
-    dev_link = f"https://18.157.158.231:8000{redirect_url}"
+    dev_link = f"http://18.157.158.231:8000{redirect_url}"
 
     subject = "Registration Confirmation"
     message = (

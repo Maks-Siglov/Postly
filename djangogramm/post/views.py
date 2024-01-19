@@ -1,15 +1,18 @@
 from django.core.paginator import Paginator
 from django.contrib import messages
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
-from post.utils import q_search
 from post.forms import CommentForm, PostForm
-from post.models import Comment, Image, Post, Tag, Like
-from post.selectors import get_posts, get_users_post, get_following_posts
+from post.models import Comment, Image, Post, Tag
+from post.selectors import (
+    get_posts,
+    get_users_post,
+    get_following_posts,
+    get_like,
+    get_dislike,
+)
 from users.models import User
 
 
@@ -186,24 +189,12 @@ def like_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
-    like_content_type = ContentType.objects.get_for_model(Post)
+    dislike, like, like_created = get_like(post, user)
 
-    dislike = Like.objects.filter(
-        value=False,
-        owner=user,
-        content_type=like_content_type,
-        object_id=post.id,
-    ).first()
     if dislike:
         dislike.delete()
 
-    like, created = Like.objects.get_or_create(
-        value=True,
-        owner=user,
-        content_type=like_content_type,
-        object_id=post.id,
-    )
-    if created:
+    if like_created:
         like.save()
     else:
         like.delete()
@@ -216,24 +207,12 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
-    like_content_type = ContentType.objects.get_for_model(Post)
+    like, dislike, dislike_created = get_dislike(post, user)
 
-    like = Like.objects.filter(
-        value=True,
-        owner=user,
-        content_type=like_content_type,
-        object_id=post.id,
-    ).first()
     if like:
         like.delete()
 
-    dislike, created = Like.objects.get_or_create(
-        value=False,
-        owner=user,
-        content_type=like_content_type,
-        object_id=post.id,
-    )
-    if created:
+    if dislike_created:
         dislike.save()
     else:
         dislike.delete()
@@ -282,24 +261,12 @@ def like_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
     user = request.user
 
-    like_content_type = ContentType.objects.get_for_model(Comment)
+    dislike, like, like_created = get_like(comment, user)
 
-    dislike = Like.objects.filter(
-        value=False,
-        owner=user,
-        content_type=like_content_type,
-        object_id=comment.id,
-    ).first()
     if dislike:
         dislike.delete()
 
-    like, created = Like.objects.get_or_create(
-        value=True,
-        owner=user,
-        content_type=like_content_type,
-        object_id=comment.id,
-    )
-    if created:
+    if like_created:
         like.save()
     else:
         like.delete()
@@ -312,24 +279,12 @@ def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
     user = request.user
 
-    like_content_type = ContentType.objects.get_for_model(Comment)
+    like, dislike, dislike_created = get_dislike(comment, user)
 
-    like = Like.objects.filter(
-        value=True,
-        owner=user,
-        content_type=like_content_type,
-        object_id=comment.id,
-    ).first()
     if like:
         like.delete()
 
-    dislike, created = Like.objects.get_or_create(
-        value=False,
-        owner=user,
-        content_type=like_content_type,
-        object_id=comment.id,
-    )
-    if created:
+    if dislike_created:
         dislike.save()
     else:
         dislike.delete()
