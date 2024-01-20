@@ -35,3 +35,19 @@ header {
 .djangogramm-brand {
     margin-left: 20px;
 }
+
+@keyframes show-toast {
+    0% {top: -100%}
+    20% {top: 100px}
+    80% {top: 100px}
+    100% {top: -100%}
+}
+
+.show-notification {
+    position: fixed;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-name: show-toast;
+    animation-duration: 5s;
+}
