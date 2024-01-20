@@ -12,9 +12,7 @@
         <div class="card-body">
             <form method="post" class="comment-form">
 
-                {% if form.non_field_errors %}
-                    {{ form.non_field_errors }}
-                {% endif %}
+                {% include 'includes/non_field_errors.html' %}
 
                 {% csrf_token %}
 

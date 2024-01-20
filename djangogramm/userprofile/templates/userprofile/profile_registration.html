@@ -13,9 +13,7 @@
             <form method="post" enctype="multipart/form-data" class="mt-4">
                 {% csrf_token %}
 
-                {% if form.non_field_errors %}
-                    {{ form.non_field_errors }}
-                {% endif %}
+                {% include 'includes/non_field_errors.html' %}
 
                 <div class="form-group mt-3">
                     <label for="id_full_name">Full name:</label>

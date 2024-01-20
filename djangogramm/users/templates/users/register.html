@@ -11,9 +11,7 @@
                 <form method="post" action="/register/" class="mt-4">
                     {% csrf_token %}
 
-                    {% if form.non_field_errors %}
-                        {{ form.non_field_errors }}
-                    {% endif %}
+                    {% include 'includes/non_field_errors.html' %}
 
                     <div class="form-group m-3">
                         <label for="id_username">Username:</label>

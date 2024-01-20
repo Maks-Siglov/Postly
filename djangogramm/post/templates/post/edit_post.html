@@ -8,9 +8,7 @@
     <div class="card-body">
         <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
 
-            {% if form.non_field_errors %}
-                {{ form.non_field_errors }}
-            {% endif %}
+            {% include 'includes/non_field_errors.html' %}
 
             {% csrf_token %}
 
