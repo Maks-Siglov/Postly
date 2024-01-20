@@ -6,6 +6,11 @@
 <h2>Create post</h2>
 
 <form method="post" action="/create_post/" enctype="multipart/form-data">
+
+    {% if form.non_field_errors %}
+        {{ form.non_field_errors }}
+    {% endif %}
+
     {% csrf_token %}
     <div class="form-group mb-3">
         <label for="id_title">Title:</label>

@@ -8,6 +8,10 @@
         <div class="card-body">
             <form method="post" enctype="multipart/form-data" class="mt-4">
 
+                {% if form.non_field_errors %}
+                    {{ form.non_field_errors }}
+                {% endif %}
+
                 {% csrf_token %}
 
                 <div class="form-group mt-3">

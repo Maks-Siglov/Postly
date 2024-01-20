@@ -14,81 +14,16 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<header>
-   <nav class="navbar navbar-expand-lg bg-dark fixed-top" data-bs-theme="dark">
-        <a class="navbar-brand djangogramm-brand" href="{% url 'post:post_list' %}">DjangoGramm</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'post:user_posts' request.user.username %}">My Posts</a>
-                    </li>
+    {% include 'includes/header.html' %}
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'post:following_posts' request.user.username %}">Following feed</a>
-                    </li>
+    {% include 'includes/notifications.html' %}
 
-                     <li class="nav-item dropdown ">
-                            <a class="nav-link dropdown-toggle text-white" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                My profile
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item  text-white" href="{% url 'post:create_post' %}">Create post</a></li>
-                                <li><a class="dropdown-item  text-white" href="{% url 'profile:profile' request.user.username %}">Profile</a></li>
-                                {% if user.is_admin or user.is_staff %}
-                                    <li><a class="dropdown-item  text-white" href="{% url 'admin:index' %}">Admin</a></li>
-                                {% endif %}
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <form method="post" action="{% url 'users:logout' %}" class="mt-4">
-                                        {% csrf_token %}
-                                        <button class="dropdown-item  text-white" type="submit" >Logout</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:login' %}">Login</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-</header>
-
-
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == 'success' %}
-                    <div id="notification" class="position-fixed start-50 translate-middle-x z-3 alert alert-success fade show custom-shadow" role="alert">
-                        {{ message }}
-                    </div>
-                    {% endif %}
-                    {% if message.tags == 'warning' %}
-                    <div id="notification" class="position-fixed start-50 translate-middle-x z-3 alert alert-danger fade show custom-shadow" role="alert">
-                        {{ message }}
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
     </div>
-</div>
 
-<div class="container mt-4">
-    {% block content %}{% endblock %}
-</div>
-
-<script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
-<script src="{% static "deps/js/messages.js" %}"></script>
+    <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
+    <script src="{% static "deps/js/messages.js" %}"></script>
 </body>
 </html>

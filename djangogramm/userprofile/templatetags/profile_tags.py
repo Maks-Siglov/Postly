@@ -10,8 +10,3 @@ def is_following(profile: UserProfile, following_profile: UserProfile) -> bool:
     return Follow.objects.filter(
         follower__id=profile.id, following__id=following_profile.id
     ).exists()
-
-
-@register.filter
-def has_social(request) -> bool:
-    return request.user.socialaccount_set.exists()

@@ -13,6 +13,10 @@
             <form method="post" enctype="multipart/form-data" class="mt-4">
                 {% csrf_token %}
 
+                {% if form.non_field_errors %}
+                    {{ form.non_field_errors }}
+                {% endif %}
+
                 <div class="form-group mt-3">
                     <label for="id_full_name">Full name:</label>
                     <input type="text" name="full_name" maxlength="255" required id="id_full_name" class="form-control">
