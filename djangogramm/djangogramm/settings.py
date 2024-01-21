@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     "userprofile.apps.UserprofileConfig",
 ]
 
+SITE_ID = 1
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -139,8 +141,6 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-
-SITE_ID = 1
 
 AUTH_USER_MODEL = "users.User"
 

@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
+from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils.http import urlsafe_base64_decode
 
-from djangogramm import settings
-from users.services.confirmation_email import send_confirmation_email
-from users.forms import RegisterForm, LoginForm, UserForgotPasswordForm
+from users.models import User
+from users.services.verification_email import send_verification_email
+from users.forms import RegisterForm, LoginForm, ResetPasswordEmailForm
 
 
 def registration(request) -> HttpResponse:
@@ -13,8 +16,13 @@ def registration(request) -> HttpResponse:
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            email = user.email
-            send_confirmation_email(user, email)
+
+            send_verification_email(
+                request,
+                user,
+                subject="Verification Email",
+                template='users/emails/account_verification_email.html',
+            )
             return render(request, "users/registration_success.html")
     else:
         form = RegisterForm()
@@ -42,13 +50,63 @@ def login_view(request) -> HttpResponse:
 
 def forgot_password(request) -> HttpResponse:
     if request.method == "POST":
-        form = UserForgotPasswordForm(request.POST)
+        form = ResetPasswordEmailForm(request.POST)
         if form.is_valid():
-            form.save(request=request, from_email=settings.DEFAULT_FROM_EMAIL)
-            messages.success(
-                request, "We sent you an email to reset your password"
+            email = form.cleaned_data["email"]
+            user = User.objects.get(email=email)
+
+            send_verification_email(
+                request,
+                user,
+                subject="Reset Your Password",
+                template='users/emails/reset_password_email.html',
             )
+            messages.success(
+                request,
+                'Your password reset link has been sent'
+                ' to your email address.'
+            )
+            return redirect('users:login')
+
+        else:
+            messages.warning(request, 'Account with this email does not exist')
+            return redirect('users:forgot_password')
 
     else:
-        form = UserForgotPasswordForm()
+        form = ResetPasswordEmailForm()
     return render(request, "users/forgot_password.html", {"form": form})
+
+
+def reset_password_validation(
+        request, uidb64: str, token: str
+) -> HttpResponseRedirect:
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        request.session["uid"] = uid
+        messages.success(request, 'Please resset your password')
+        return redirect('users:reset_password')
+
+    else:
+        messages.error(request, 'This link is invalid or expired.')
+        return redirect('users:login')
+
+
+def reset_password(request) -> HttpResponse | HttpResponseRedirect:
+    pk = request.session.get("uid")
+    user = User.objects.get(pk=pk)
+    if request.method == "POST":
+        form = SetPasswordForm(user, data=request.POST)
+        if form.is_valid():
+            form.save(user)
+            messages.success(request, 'You successfully reset your password.')
+            return redirect('users:login')
+    else:
+        form = SetPasswordForm(request.user)
+    return render(
+        request, 'users/reset_password.html', {"form": form}
+    )
