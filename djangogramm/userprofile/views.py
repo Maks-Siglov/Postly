@@ -1,8 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils.http import urlsafe_base64_decode
 
 from users.models import User
 from userprofile.forms import ProfileForm
@@ -10,17 +12,33 @@ from userprofile.models import UserProfile, Follow
 from userprofile.selectors import get_followers, get_following
 
 
-def activate_profile(
-    request, link_key: str
-) -> HttpResponse | HttpResponseRedirect:
+def activate_profile_validation(request, uidb64: str, token: str):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        request.session["uid"] = uid
+        messages.success(request, 'Please activate your profile')
+        return redirect('profile:activate_profile')
+
+    else:
+        messages.error(request, 'This link is invalid or expired.')
+        return redirect('main:index')
+
+
+def activate_profile(request) -> HttpResponse | HttpResponseRedirect:
+    uid = request.session.get("uid")
+    user = User.objects.get(pk=uid)
     if request.method == "POST":
-        user = User.objects.get(email_hash=link_key)
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
-            user.activate_profile = True
 
             user_profile = UserProfile(**form.cleaned_data)
             user.profile = user_profile
+            user.activate_profile = True
             user_profile.save()
             user.save()
 
@@ -29,9 +47,7 @@ def activate_profile(
                 user,
                 backend="django.contrib.auth.backends.ModelBackend",
             )
-            messages.success(
-                request, "Profile saved and user logged in successfully"
-            )
+            messages.success(request, "Profile activated")
             return redirect("profile:profile", user.username)
     else:
         form = ProfileForm()

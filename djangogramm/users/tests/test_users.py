@@ -41,10 +41,13 @@ def test_registration(client: Client):
     assert profile_link
 
     response = client.get(profile_link)
-    assert response.status_code == 200
+    assert response.status_code == 302
+
+    redirected_activate_profile_page = response.url
+    assert redirected_activate_profile_page
 
     response = client.post(
-        profile_link,
+        redirected_activate_profile_page,
         {"full_name": "Test_full_name", "bio": "Test_bio"},
     )
 

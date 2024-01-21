@@ -20,7 +20,7 @@ def registration(request) -> HttpResponse:
             send_verification_email(
                 request,
                 user,
-                subject="Verification Email",
+                subject="Registration Confirmation",
                 template='users/emails/account_verification_email.html',
             )
             return render(request, "users/registration_success.html")
