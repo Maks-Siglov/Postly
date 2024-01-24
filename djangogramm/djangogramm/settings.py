@@ -71,6 +71,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
     "allauth.account.middleware.AccountMiddleware",
 ]
 
