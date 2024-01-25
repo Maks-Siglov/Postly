@@ -62,8 +62,8 @@ def activate_profile(request) -> HttpResponse | HttpResponseRedirect:
 @login_required(login_url="users:login")
 def profile(request, username: str) -> HttpResponse | HttpResponseRedirect:
     profile_owner = User.objects.get(username=username)
-
-    if not profile_owner.activate_profile:
+    print(profile_owner.activate_profile)
+    if not profile_owner.activate_profile and request.user == profile_owner:
         return redirect("users:confirm_email", profile_owner.email)
 
     if request.user == profile_owner:

@@ -23,7 +23,7 @@ def test_registration(client: Client):
             "password2": "test_password",
         },
     )
-    assert response.status_code == 200
+    assert response.status_code == 302
 
     user = User.objects.get(username="Test_username")
     assert user.email == "new_user@example.com"
@@ -78,6 +78,8 @@ def test_logout(client: Client):
     profile = UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user
     )
+    user.activate_profile = True
+    user.save()
     client.login(username="test_user", password="test_password")
 
     response = client.get(reverse("profile:profile", args=[user.username]))
