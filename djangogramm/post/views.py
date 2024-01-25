@@ -161,7 +161,10 @@ def edit_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
     return render(
         request,
         "post/edit_post.html",
-        {"form": form},
+        {
+            "form": form,
+            "post": post,
+        },
     )
 
 
@@ -243,7 +246,9 @@ def edit_comment(
     else:
         form = CommentForm(instance=comment)
 
-    return render(request, "post/edit_comment.html", {"form": form})
+    return render(
+        request, "post/edit_comment.html", {"form": form, "comment": comment}
+    )
 
 
 @login_required(login_url="users:login")

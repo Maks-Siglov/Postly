@@ -6,7 +6,7 @@
 <h2>Edit Post</h2>
 <div class="card">
     <div class="card-body">
-        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate action="{% url 'post:edit_post' post.id %}">
 
             {% include 'includes/non_field_errors.html' %}
 

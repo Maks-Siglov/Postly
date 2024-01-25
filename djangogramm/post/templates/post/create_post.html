@@ -5,7 +5,7 @@
 {% block content %}
 <h2>Create post</h2>
 
-<form method="post" action="/create_post/" enctype="multipart/form-data">
+<form method="post" action="{% url 'post:create_post' %}" enctype="multipart/form-data">
 
     {% include 'includes/non_field_errors.html' %}
 

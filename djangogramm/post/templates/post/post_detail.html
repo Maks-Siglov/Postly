@@ -89,7 +89,7 @@
             </div>
 
             <h4 class="add-comment-heading">Add Comment</h4>
-            <form method="post" class="comment-form">
+            <form method="post" class="comment-form" action="{% url 'post:post_detail' post.id %}">
                 {% csrf_token %}
 
                 <div class="form-group">
