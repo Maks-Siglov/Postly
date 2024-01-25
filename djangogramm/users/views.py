@@ -8,7 +8,12 @@ from django.utils.http import urlsafe_base64_decode
 
 from users.models import User
 from users.services.verification_email import send_verification_email
-from users.forms import RegisterForm, LoginForm, ResetPasswordEmailForm
+from users.forms import (
+    EmailForm,
+    RegisterForm,
+    LoginForm,
+    ResetPasswordEmailForm,
+)
 
 
 def registration(request) -> HttpResponse:
@@ -23,11 +28,67 @@ def registration(request) -> HttpResponse:
                 subject="Registration Confirmation",
                 template='users/emails/account_verification_email.html',
             )
-            return render(request, "users/registration_success.html")
+            return render(
+                request,
+                "users/registration_success.html",
+                {"email": user.email}
+            )
     else:
         form = RegisterForm()
 
     return render(request, "users/register.html", {"form": form})
+
+
+def resend_verification_email(request, email: str) -> HttpResponse:
+    user = User.objects.get(email=email)
+
+    send_verification_email(
+        request,
+        user,
+        subject="Registration Confirmation",
+        template='users/emails/account_verification_email.html',
+    )
+    messages.success(
+        request, f"We send new confirmation email to {user.email}"
+    )
+    return render(
+        request,
+        "users/registration_success.html",
+        {"email": user.email}
+    )
+
+
+def change_email(request, email: str) -> HttpResponse:
+    user = User.objects.get(email=email)
+    if request.method == "POST":
+        form = EmailForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            send_verification_email(
+                request,
+                user,
+                subject="Registration Confirmation",
+                template='users/emails/account_verification_email.html',
+            )
+            messages.success(
+                request, f'We sent new verification email to {user.email}'
+            )
+            return render(
+                request,
+                "users/registration_success.html",
+                {"email": user.email}
+            )
+    else:
+        form = EmailForm(instance=user)
+
+    return render(
+        request,
+        'users/change_email.html',
+        {
+            "form": form,
+            "email": email,
+        }
+    )
 
 
 def login_view(request) -> HttpResponse:

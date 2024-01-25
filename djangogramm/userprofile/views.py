@@ -26,7 +26,7 @@ def activate_profile_validation(request, uidb64: str, token: str):
 
     else:
         messages.error(request, 'This link is invalid or expired.')
-        return redirect('main:index')
+        return redirect('post:post_list')
 
 
 def activate_profile(request) -> HttpResponse | HttpResponseRedirect:
