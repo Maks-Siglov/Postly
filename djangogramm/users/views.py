@@ -28,15 +28,20 @@ def registration(request) -> HttpResponse:
                 subject="Registration Confirmation",
                 template='users/emails/account_verification_email.html',
             )
-            return render(
-                request,
-                "users/registration_success.html",
-                {"email": user.email}
-            )
+            messages.success(request, f"Please check your {user.email}")
+            return redirect("users:confirm_email", email=user.email)
     else:
         form = RegisterForm()
 
     return render(request, "users/register.html", {"form": form})
+
+
+def confirm_email(request, email) -> HttpResponse:
+    return render(
+        request,
+        "users/confirm_email.html",
+        {"email": email}
+    )
 
 
 def resend_verification_email(request, email: str) -> HttpResponse:
@@ -53,7 +58,7 @@ def resend_verification_email(request, email: str) -> HttpResponse:
     )
     return render(
         request,
-        "users/registration_success.html",
+        "users/confirm_email.html",
         {"email": user.email}
     )
 
@@ -75,7 +80,7 @@ def change_email(request, email: str) -> HttpResponse:
             )
             return render(
                 request,
-                "users/registration_success.html",
+                "users/confirm_email.html",
                 {"email": user.email}
             )
     else:
