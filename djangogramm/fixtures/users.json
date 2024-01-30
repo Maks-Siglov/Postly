@@ -1,0 +1,265 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$yKxjxkj39rYUdfDoS7bS86$qR/3E6P0aZcS/cNmJu426LwfGkXWk2vfX9Oi9lu7srk=",
+      "last_login": "2024-01-25T18:34:24.006Z",
+      "is_superuser": false,
+      "username": "Maks",
+      "first_name": "",
+      "last_name": "",
+      "email": "test@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-25T18:27:23.508Z",
+      "activate_profile": true,
+      "updated_at": "2024-01-25T18:34:24.003Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$4SvpmXXBi55CB5twzgUK2X$lvfPhZb0xXnwLPkRDpFj2UcxC9jkk7Ozo/9W+dSZRug=",
+      "last_login": "2024-01-29T15:55:17.142Z",
+      "is_superuser": false,
+      "username": "Pasha",
+      "first_name": "",
+      "last_name": "",
+      "email": "some",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-27T08:51:54.704Z",
+      "activate_profile": true,
+      "updated_at": "2024-01-29T15:55:17.141Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$b0npC4A5I2KHo5fnHCrzt8$ZI+LJX6ShpWOoksZE3DrbAyeyTrPHTm8/m99AoBb2lo=",
+      "last_login": "2024-01-29T15:57:01.720Z",
+      "is_superuser": false,
+      "username": "Malin",
+      "first_name": "",
+      "last_name": "",
+      "email": "gmb333x2@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-29T15:56:36.077Z",
+      "activate_profile": true,
+      "updated_at": "2024-01-29T15:57:01.717Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$yKxjxkj39rYUdfDoS7bS86$qR/3E6P0aZcS/cNmJu426LwfGkXWk2vfX9Oi9lu7srk=",
+      "last_login": "2024-01-25T18:34:24.006Z",
+      "is_superuser": false,
+      "username": "User20",
+      "first_name": "",
+      "last_name": "",
+      "email": "test4@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-25T18:27:23.508Z",
+      "activate_profile": true,
+      "updated_at": "2024-01-25T18:34:24.003Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$4SvpmXXBi55CB5twzgUK2X$lvfPhZb0xXnwLPkRDpFj2UcxC9jkk7Ozo/9W+dSZRug=",
+      "last_login": "2024-01-29T15:55:17.142Z",
+      "is_superuser": false,
+      "username": "User10",
+      "first_name": "",
+      "last_name": "",
+      "email": "test3@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-27T08:51:54.704Z",
+      "activate_profile": true,
+      "updated_at": "2024-01-29T15:55:17.141Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$b0npC4A5I2KHo5fnHCrzt8$ZI+LJX6ShpWOoksZE3DrbAyeyTrPHTm8/m99AoBb2lo=",
+      "last_login": "2024-01-29T15:57:01.720Z",
+      "is_superuser": false,
+      "username": "User30",
+      "first_name": "",
+      "last_name": "",
+      "email": "test2@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-29T15:56:36.077Z",
+      "activate_profile": true,
+      "updated_at": "2024-01-29T15:57:01.717Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+
+
+  {
+    "model": "userprofile.userprofile",
+    "pk": 1,
+    "fields": {
+      "full_name": "Maka",
+      "bio": "bio",
+      "avatar": "",
+      "created_at": "2024-01-25T18:34:24.001Z",
+      "user": 1
+    }
+  },
+  {
+    "model": "userprofile.userprofile",
+    "pk": 2,
+    "fields": {
+      "full_name": "Maks M",
+      "bio": "bio",
+      "avatar": "",
+      "created_at": "2024-01-29T15:55:17.138Z",
+      "user": 2
+    }
+  },
+  {
+    "model": "userprofile.userprofile",
+    "pk": 3,
+    "fields": {
+      "full_name": "Mal",
+      "bio": "bio",
+      "avatar": "",
+      "created_at": "2024-01-29T15:57:01.715Z",
+      "user": 3
+    }
+  },
+  {
+    "model": "userprofile.userprofile",
+    "pk": 4,
+    "fields": {
+      "full_name": "My full name",
+      "bio": "My bio",
+      "avatar": "",
+      "created_at": "2024-01-25T18:34:24.001Z",
+      "user": 4
+    }
+  },
+  {
+    "model": "userprofile.userprofile",
+    "pk": 5,
+    "fields": {
+      "full_name": "Maks Mil",
+      "bio": "bio",
+      "avatar": "",
+      "created_at": "2024-01-29T15:55:17.138Z",
+      "user": 5
+    }
+  },
+  {
+    "model": "userprofile.userprofile",
+    "pk": 6,
+    "fields": {
+      "full_name": "Full name",
+      "bio": "bio",
+      "avatar": "",
+      "created_at": "2024-01-29T15:57:01.715Z",
+      "user": 6
+    }
+  },
+
+  {
+    "model": "userprofile.follow",
+    "pk": 1,
+    "fields": {
+      "follower": 1,
+      "following": 2,
+      "created_at": "2024-01-30T12:39:35.802Z"
+    }
+  },
+  {
+    "model": "userprofile.follow",
+    "pk": 2,
+    "fields": {
+      "follower": 2,
+      "following": 1,
+      "created_at": "2024-01-30T12:39:35.802Z"
+    }
+  },
+  {
+    "model": "userprofile.follow",
+    "pk": 4,
+    "fields": {
+      "follower": 4,
+      "following": 1,
+      "created_at": "2024-01-30T12:39:35.802Z"
+    }
+  },
+  {
+    "model": "userprofile.follow",
+    "pk": 5,
+    "fields": {
+      "follower": 5,
+      "following": 1,
+      "created_at": "2024-01-30T12:39:35.802Z"
+    }
+  },
+  {
+    "model": "userprofile.follow",
+    "pk": 6,
+    "fields": {
+      "follower": 6,
+      "following": 1,
+      "created_at": "2024-01-30T12:39:35.802Z"
+    }
+  },
+  {
+    "model": "userprofile.follow",
+    "pk": 7,
+    "fields": {
+      "follower": 3,
+      "following": 2,
+      "created_at": "2024-01-30T13:18:56.148Z"
+    }
+  },
+  {
+    "model": "userprofile.follow",
+    "pk": 8,
+    "fields": {
+      "follower": 3,
+      "following": 1,
+      "created_at": "2024-01-30T13:19:14.190Z"
+    }
+  },
+  {
+    "model": "userprofile.follow",
+    "pk": 9,
+    "fields": {
+      "follower": 3,
+      "following": 4,
+      "created_at": "2024-01-30T13:19:28.306Z"
+    }
+  }
+]
+
