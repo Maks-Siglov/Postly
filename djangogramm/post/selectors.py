@@ -74,7 +74,7 @@ def get_post_details(post_id: int) -> tuple[QuerySet[Post], QuerySet[Comment]]:
         Post.objects
         .select_related("owner")
         .prefetch_related("likes", "dislikes", "tags")
-        .get(d=post_id)
+        .get(id=post_id)
     )
     comments = (
         Comment.objects.
