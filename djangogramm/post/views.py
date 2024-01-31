@@ -99,8 +99,8 @@ def following_posts(request, username: str) -> HttpResponse:
 
 @login_required(login_url="users:login")
 def post_detail(request, post_id: int) -> HttpResponse:
-    post = get_object_or_404(Post, id=post_id)
-    comments = Comment.objects.filter(post=post)
+    post = Post.objects.prefetch_related("likes", "dislikes", "tags").get(id=post_id)
+    comments = Comment.objects.filter(post=post).prefetch_related("likes", "dislikes")
     comment_form = CommentForm()
 
     if request.method == "POST":

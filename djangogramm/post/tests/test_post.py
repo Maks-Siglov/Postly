@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from userprofile.models import UserProfile
 from users.models import User
-from post.models import Comment, Post, Like
+from post.models import Comment, Post, Like, Dislike
 
 
 @pytest.mark.django_db
@@ -174,14 +174,14 @@ def test_post_like(client: Client, test_user_post):
 
     like_content_type = ContentType.objects.get_for_model(Post)
     like = Like.objects.get(
-        content_type=like_content_type, owner=user, value=True
+        content_type=like_content_type, owner=user
     )
     assert like
 
     response = client.get(reverse("post:like_post", args=[post.id]))
     with pytest.raises(ObjectDoesNotExist):
         Like.objects.get(
-            content_type=like_content_type, owner=user, value=True
+            content_type=like_content_type, owner=user
         )
 
 
@@ -194,15 +194,15 @@ def test_post_dislike(client: Client, test_user_post):
     assert response.status_code == 302
 
     like_content_type = ContentType.objects.get_for_model(Post)
-    dislike = Like.objects.get(
-        content_type=like_content_type, owner=user, value=False
+    dislike = Dislike.objects.get(
+        content_type=like_content_type, owner=user
     )
     assert dislike
 
     response = client.get(reverse("post:dislike_post", args=[post.id]))
     with pytest.raises(ObjectDoesNotExist):
-        Like.objects.get(
-            content_type=like_content_type, owner=user, value=False
+        Dislike.objects.get(
+            content_type=like_content_type, owner=user
         )
 
 
@@ -216,14 +216,14 @@ def test_comment_like(client: Client, test_user_post_comment):
 
     like_content_type = ContentType.objects.get_for_model(Comment)
     like = Like.objects.get(
-        content_type=like_content_type, owner=user, value=True
+        content_type=like_content_type, owner=user
     )
     assert like
 
     response = client.get(reverse("post:like_comment", args=[comment.id]))
     with pytest.raises(ObjectDoesNotExist):
-        Like.objects.get(
-            content_type=like_content_type, owner=user, value=True
+        Dislike.objects.get(
+            content_type=like_content_type, owner=user
         )
 
 
@@ -236,15 +236,15 @@ def test_comment_dislike(client: Client, test_user_post_comment):
     assert response.status_code == 302
 
     like_content_type = ContentType.objects.get_for_model(Comment)
-    dislike = Like.objects.get(
-        content_type=like_content_type, owner=user, value=False
+    dislike = Dislike.objects.get(
+        content_type=like_content_type, owner=user
     )
     assert dislike
 
     response = client.get(reverse("post:dislike_comment", args=[comment.id]))
     with pytest.raises(ObjectDoesNotExist):
-        Like.objects.get(
-            content_type=like_content_type, owner=user, value=False
+        Dislike.objects.get(
+            content_type=like_content_type, owner=user
         )
 
 

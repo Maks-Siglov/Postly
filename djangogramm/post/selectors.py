@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, QuerySet, Model
 
 from post.utils import q_search
-from post.models import Post, Like
+from post.models import Post, Like, Dislike
 from users.models import User
 
 
@@ -69,15 +69,13 @@ def _order_by_post(
 def get_like(instance: Model, user: User) -> tuple[Like, Like, bool]:
     content_type = ContentType.objects.get_for_model(instance.__class__)
 
-    dislike = Like.objects.filter(
-        value=False,
+    dislike = Dislike.objects.filter(
         owner=user,
         content_type=content_type,
         object_id=instance.id,
     ).first()
 
     like, like_created = Like.objects.get_or_create(
-        value=True,
         owner=user,
         content_type=content_type,
         object_id=instance.id,
@@ -90,14 +88,12 @@ def get_dislike(instance: Model, user: User) -> tuple[Like, Like, bool]:
     content_type = ContentType.objects.get_for_model(instance.__class__)
 
     like = Like.objects.filter(
-        value=True,
         owner=user,
         content_type=content_type,
         object_id=instance.id,
     ).first()
 
-    dislike, dislike_created = Like.objects.get_or_create(
-        value=False,
+    dislike, dislike_created = Dislike.objects.get_or_create(
         owner=user,
         content_type=content_type,
         object_id=instance.id,

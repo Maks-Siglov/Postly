@@ -17,6 +17,7 @@ class Post(models.Model):
     tags = models.ManyToManyField("post.Tag", related_name="posts")
 
     likes = GenericRelation("post.Like", related_name="liked_post")
+    dislikes = GenericRelation("post.Dislike", related_name="disliked_post")
 
     class Meta:
         ordering = ("id",)
