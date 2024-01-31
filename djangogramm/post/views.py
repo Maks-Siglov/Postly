@@ -1,5 +1,3 @@
-from django.contrib.sites.models import Site
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -48,9 +46,9 @@ def create_post(request) -> HttpResponse:
 
 def post_list(request) -> HttpResponse:
     page = request.GET.get("page", 1)
-    query = request.GET.get("q", None)
+    search_query = request.GET.get("search", None)
     order_by = request.GET.get("order_by", None)
-    posts = get_posts(query, order_by)
+    posts = get_posts(search_query, order_by)
 
     paginator = Paginator(posts, 5)
     current_page = paginator.page(int(page))
@@ -60,10 +58,10 @@ def post_list(request) -> HttpResponse:
 
 def user_posts(request, username: str) -> HttpResponse:
     page = request.GET.get("page", 1)
-    query = request.GET.get("q", None)
+    search_query = request.GET.get("search", None)
     order_by = request.GET.get("order_by", None)
     user = User.objects.get(username=username)
-    posts = get_users_post(user, query, order_by)
+    posts = get_users_post(user, search_query, order_by)
 
     paginator = Paginator(posts, 5)
     current_page = paginator.page(int(page))
@@ -85,11 +83,11 @@ def user_posts(request, username: str) -> HttpResponse:
 @login_required(login_url="users:login")
 def following_posts(request, username: str) -> HttpResponse:
     page = request.GET.get("page", 1)
-    query = request.GET.get("q", None)
+    search_query = request.GET.get("search", None)
     order_by = request.GET.get("order_by", None)
     user = User.objects.get(username=username)
 
-    posts = get_following_posts(user, query, order_by)
+    posts = get_following_posts(user, search_query, order_by)
 
     paginator = Paginator(posts, 5)
     current_page = paginator.page(int(page))
