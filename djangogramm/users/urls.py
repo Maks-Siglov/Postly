@@ -1,5 +1,5 @@
-from django.contrib.auth.views import LogoutView, PasswordResetConfirmView
-from django.urls import path, reverse_lazy
+from django.contrib.auth.views import LogoutView
+from django.urls import path
 
 from users import views
 

@@ -10,7 +10,7 @@ def get_posts(query: str | None, order_by: str | None) -> QuerySet[Post]:
     if query:
         posts = q_search(query)
     else:
-        posts = Post.objects.all()
+        posts = Post.objects.select_related("owner").all()
 
     if order_by and posts:
         _order_by_post(posts, order_by)
