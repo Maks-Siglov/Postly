@@ -13,7 +13,7 @@ def get_posts(query: str | None, order_by: str | None) -> QuerySet[Post]:
         posts = Post.objects.select_related("owner").all()
 
     if order_by and posts:
-        _order_by_post(posts, order_by)
+        posts = _order_by_post(posts, order_by)
 
     return posts
 
@@ -59,7 +59,7 @@ def _order_by_post(
     if order_by != "default" and order_by != "likes":
         posts = posts.order_by(order_by)
     elif order_by == "likes":
-        posts = Post.objects.annotate(like_count=Count("likes")).order_by(
+        posts = Post.objects.select_related("owner").annotate(like_count=Count("likes")).order_by(
             "-like_count"
         )
 
