@@ -11,5 +11,8 @@ class Like(models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
 
     owner = models.ForeignKey(
-        "users.User", on_delete=models.SET_NULL, null=True, related_name="likes"
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="likes",
     )

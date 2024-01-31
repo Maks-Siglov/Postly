@@ -33,7 +33,9 @@ class Migration(migrations.Migration):
                 ("bio", models.TextField()),
                 (
                     "avatar",
-                    models.ImageField(blank=True, null=True, upload_to="avatars/"),
+                    models.ImageField(
+                        blank=True, null=True, upload_to="avatars/"
+                    ),
                 ),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
             ],

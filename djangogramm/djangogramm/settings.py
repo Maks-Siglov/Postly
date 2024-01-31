@@ -32,7 +32,7 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -45,14 +45,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
-
     "debug_toolbar",
-
     "post.apps.PostConfig",
     "users.apps.AuthConfig",
     "userprofile.apps.UserprofileConfig",
@@ -69,8 +66,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-
-    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    "django.contrib.sites.middleware.CurrentSiteMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -166,7 +162,7 @@ SOCIALACCOUNT_PROVIDERS = {
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
 
 LOGOUT_REDIRECT_URL = "/"
 

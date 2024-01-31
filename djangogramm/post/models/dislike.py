@@ -11,5 +11,8 @@ class Dislike(models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
 
     owner = models.ForeignKey(
-        "users.User", on_delete=models.SET_NULL, null=True, related_name="dislikes"
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="dislikes",
     )

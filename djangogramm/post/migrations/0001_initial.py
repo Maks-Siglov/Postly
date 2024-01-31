@@ -24,7 +24,9 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 (
                     "image",
-                    models.ImageField(blank=True, null=True, upload_to="post_image/"),
+                    models.ImageField(
+                        blank=True, null=True, upload_to="post_image/"
+                    ),
                 ),
             ],
         ),

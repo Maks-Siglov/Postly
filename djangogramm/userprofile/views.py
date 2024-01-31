@@ -21,12 +21,12 @@ def activate_profile_validation(request, uidb64: str, token: str):
 
     if user is not None and default_token_generator.check_token(user, token):
         request.session["uid"] = uid
-        messages.success(request, 'Please activate your profile')
-        return redirect('profile:activate_profile')
+        messages.success(request, "Please activate your profile")
+        return redirect("profile:activate_profile")
 
     else:
-        messages.error(request, 'This link is invalid or expired.')
-        return redirect('post:post_list')
+        messages.error(request, "This link is invalid or expired.")
+        return redirect("post:post_list")
 
 
 def activate_profile(request) -> HttpResponse | HttpResponseRedirect:

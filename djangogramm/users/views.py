@@ -26,7 +26,7 @@ def registration(request) -> HttpResponse:
                 request,
                 user,
                 subject="Registration Confirmation",
-                template='users/emails/account_verification_email.html',
+                template="users/emails/account_verification_email.html",
             )
             messages.success(request, f"Please check your {user.email}")
             return redirect("users:confirm_email", email=user.email)
@@ -37,11 +37,7 @@ def registration(request) -> HttpResponse:
 
 
 def confirm_email(request, email) -> HttpResponse:
-    return render(
-        request,
-        "users/confirm_email.html",
-        {"email": email}
-    )
+    return render(request, "users/confirm_email.html", {"email": email})
 
 
 def resend_verification_email(request, email: str) -> HttpResponse:
@@ -51,16 +47,12 @@ def resend_verification_email(request, email: str) -> HttpResponse:
         request,
         user,
         subject="Registration Confirmation",
-        template='users/emails/account_verification_email.html',
+        template="users/emails/account_verification_email.html",
     )
     messages.success(
         request, f"We send new confirmation email to {user.email}"
     )
-    return render(
-        request,
-        "users/confirm_email.html",
-        {"email": user.email}
-    )
+    return render(request, "users/confirm_email.html", {"email": user.email})
 
 
 def change_email(request, email: str) -> HttpResponse:
@@ -73,26 +65,24 @@ def change_email(request, email: str) -> HttpResponse:
                 request,
                 user,
                 subject="Registration Confirmation",
-                template='users/emails/account_verification_email.html',
+                template="users/emails/account_verification_email.html",
             )
             messages.success(
-                request, f'We sent new verification email to {user.email}'
+                request, f"We sent new verification email to {user.email}"
             )
             return render(
-                request,
-                "users/confirm_email.html",
-                {"email": user.email}
+                request, "users/confirm_email.html", {"email": user.email}
             )
     else:
         form = EmailForm(instance=user)
 
     return render(
         request,
-        'users/change_email.html',
+        "users/change_email.html",
         {
             "form": form,
             "email": email,
-        }
+        },
     )
 
 
@@ -125,18 +115,18 @@ def forgot_password(request) -> HttpResponse:
                 request,
                 user,
                 subject="Reset Your Password",
-                template='users/emails/reset_password_email.html',
+                template="users/emails/reset_password_email.html",
             )
             messages.success(
                 request,
-                'Your password reset link has been sent'
-                ' to your email address.'
+                "Your password reset link has been sent"
+                " to your email address.",
             )
-            return redirect('users:login')
+            return redirect("users:login")
 
         else:
-            messages.warning(request, 'Account with this email does not exist')
-            return redirect('users:forgot_password')
+            messages.warning(request, "Account with this email does not exist")
+            return redirect("users:forgot_password")
 
     else:
         form = ResetPasswordEmailForm()
@@ -144,7 +134,7 @@ def forgot_password(request) -> HttpResponse:
 
 
 def reset_password_validation(
-        request, uidb64: str, token: str
+    request, uidb64: str, token: str
 ) -> HttpResponseRedirect:
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -154,12 +144,12 @@ def reset_password_validation(
 
     if user is not None and default_token_generator.check_token(user, token):
         request.session["uid"] = uid
-        messages.success(request, 'Please resset your password')
-        return redirect('users:reset_password')
+        messages.success(request, "Please resset your password")
+        return redirect("users:reset_password")
 
     else:
-        messages.error(request, 'This link is invalid or expired.')
-        return redirect('users:login')
+        messages.error(request, "This link is invalid or expired.")
+        return redirect("users:login")
 
 
 def reset_password(request) -> HttpResponse | HttpResponseRedirect:
@@ -169,10 +159,8 @@ def reset_password(request) -> HttpResponse | HttpResponseRedirect:
         form = SetPasswordForm(user, data=request.POST)
         if form.is_valid():
             form.save(user)
-            messages.success(request, 'You successfully reset your password.')
-            return redirect('users:login')
+            messages.success(request, "You successfully reset your password.")
+            return redirect("users:login")
     else:
         form = SetPasswordForm(request.user)
-    return render(
-        request, 'users/reset_password.html', {"form": form}
-    )
+    return render(request, "users/reset_password.html", {"form": form})

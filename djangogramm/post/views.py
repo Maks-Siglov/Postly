@@ -71,13 +71,11 @@ def user_posts(request, username: str) -> HttpResponse:
         return render(
             request,
             "post/my_posts.html",
-            {"posts": current_page, "user": user}
+            {"posts": current_page, "user": user},
         )
 
     return render(
-        request,
-        "post/user_posts.html",
-        {"posts": current_page, "user": user}
+        request, "post/user_posts.html", {"posts": current_page, "user": user}
     )
 
 
@@ -127,9 +125,7 @@ def post_detail(request, post_id: int) -> HttpResponse:
 def edit_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
     post = Post.objects.get(id=post_id)
     if request.user != post.owner:
-        messages.error(
-            request, "You do not have permission to do this."
-        )
+        messages.error(request, "You do not have permission to do this.")
         return redirect("post:post_list")
 
     if request.method == "POST":
@@ -171,9 +167,7 @@ def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
 
     if request.user != post.owner:
-        messages.error(
-            request, "You do not have permission to do this."
-        )
+        messages.error(request, "You do not have permission to do this.")
         return redirect("post:post_list")
 
     if request.method == "POST":
@@ -225,21 +219,19 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
 
 @login_required(login_url="users:login")
 def edit_comment(
-        request, comment_id: int
+    request, comment_id: int
 ) -> HttpResponse | HttpResponseRedirect:
     comment = Comment.objects.get(id=comment_id)
 
     if request.user != comment.owner:
-        messages.error(
-            request, "You do not have permission to do this."
-        )
+        messages.error(request, "You do not have permission to do this.")
         return redirect("post:post_list")
 
     if request.method == "POST":
         form = CommentForm(instance=comment, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('post:post_detail', comment.post.id)
+            return redirect("post:post_detail", comment.post.id)
 
     else:
         form = CommentForm(instance=comment)
@@ -254,13 +246,11 @@ def delete_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = Comment.objects.get(id=comment_id)
 
     if request.user != comment.owner:
-        messages.error(
-            request, "You do not have permission to do this."
-        )
+        messages.error(request, "You do not have permission to do this.")
         return redirect("post:post_list")
 
     comment.delete()
-    return redirect('post:post_detail', comment.post.id)
+    return redirect("post:post_detail", comment.post.id)
 
 
 @login_required(login_url="users:login")

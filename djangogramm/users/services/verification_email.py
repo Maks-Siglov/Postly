@@ -10,13 +10,13 @@ from users.models import User
 
 
 def send_verification_email(
-        request, user: User, subject: str, template: str
+    request, user: User, subject: str, template: str
 ) -> None:
     message = render_to_string(
         template_name=template,
         context={
             "user": user,
-            "domain": "localhost:8000",            # get_current_site(request)
+            "domain": "localhost:8000",  # get_current_site(request)
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
         },

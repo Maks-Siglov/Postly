@@ -18,13 +18,11 @@ urlpatterns = [
         views.reset_password_validation,
         name="reset_password_validation",
     ),
-    path('reset_password/', views.reset_password, name="reset_password"),
+    path("reset_password/", views.reset_password, name="reset_password"),
     path(
         "resend_verification_email/<str:email>",
         views.resend_verification_email,
         name="resend_verification_email",
     ),
-    path(
-        "change_email/<str:email>", views.change_email, name='change_email'
-    ),
+    path("change_email/<str:email>", views.change_email, name="change_email"),
 ]

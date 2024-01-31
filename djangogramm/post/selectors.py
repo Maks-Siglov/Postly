@@ -19,7 +19,7 @@ def get_posts(query: str | None, order_by: str | None) -> QuerySet[Post]:
 
 
 def get_users_post(
-        user: User, query: str | None, order_by: str | None
+    user: User, query: str | None, order_by: str | None
 ) -> QuerySet[Post]:
     if query:
         posts = q_search(query)
@@ -33,14 +33,12 @@ def get_users_post(
 
 
 def get_following_posts(
-        user: User, query: str | None, order_by: str | None
+    user: User, query: str | None, order_by: str | None
 ) -> QuerySet[Post]:
     following_id_list = list(
         user.profile.following.all().values_list("following_id", flat=True)
     )
-    following_users = User.objects.filter(
-        id__in=following_id_list
-    ).all()
+    following_users = User.objects.filter(id__in=following_id_list).all()
 
     if query:
         posts = q_search(query)
@@ -56,7 +54,7 @@ def get_following_posts(
 
 
 def _order_by_post(
-        posts: QuerySet[Post], order_by: str | None
+    posts: QuerySet[Post], order_by: str | None
 ) -> QuerySet[Post]:
     if order_by != "default" and order_by != "likes":
         posts = posts.order_by(order_by)
