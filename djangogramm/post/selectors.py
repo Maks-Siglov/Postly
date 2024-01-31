@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, QuerySet, Model
 
 from post.utils import q_search
-from post.models import Post, Like, Dislike
+from post.models import Post, Like, Dislike, Comment
 from users.models import User
 
 
@@ -24,7 +24,7 @@ def get_users_post(
     if query:
         posts = q_search(query)
     else:
-        posts = Post.objects.filter(owner=user)
+        posts = Post.objects.select_related("owner").filter(owner=user)
 
     if order_by and posts:
         _order_by_post(posts, order_by)
@@ -45,7 +45,9 @@ def get_following_posts(
     if query:
         posts = q_search(query)
     else:
-        posts = Post.objects.filter(owner__in=following_users)
+        posts = Post.objects.select_related("owner").filter(
+            owner__in=following_users
+        )
 
     if order_by and posts:
         _order_by_post(posts, order_by)
@@ -59,11 +61,30 @@ def _order_by_post(
     if order_by != "default" and order_by != "likes":
         posts = posts.order_by(order_by)
     elif order_by == "likes":
-        posts = Post.objects.select_related("owner").annotate(like_count=Count("likes")).order_by(
-            "-like_count"
+        posts = (
+            Post.objects.
+            select_related("owner").
+            annotate(like_count=Count("likes")).
+            order_by("-like_count")
         )
 
     return posts
+
+
+def get_post_details(post_id: int) -> tuple[QuerySet[Post], QuerySet[Comment]]:
+    post = (
+        Post.objects
+        .select_related("owner")
+        .prefetch_related("likes", "dislikes", "tags")
+        .get(d=post_id)
+    )
+    comments = (
+        Comment.objects.
+        select_related("owner").
+        prefetch_related("likes", "dislikes").
+        filter(post=post)
+    )
+    return post, comments
 
 
 def get_like(instance: Model, user: User) -> tuple[Like, Like, bool]:

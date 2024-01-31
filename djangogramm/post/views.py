@@ -12,6 +12,7 @@ from post.selectors import (
     get_following_posts,
     get_like,
     get_dislike,
+    get_post_details,
 )
 from users.models import User
 
@@ -97,8 +98,7 @@ def following_posts(request, username: str) -> HttpResponse:
 
 @login_required(login_url="users:login")
 def post_detail(request, post_id: int) -> HttpResponse:
-    post = Post.objects.prefetch_related("likes", "dislikes", "tags").get(id=post_id)
-    comments = Comment.objects.filter(post=post).prefetch_related("likes", "dislikes")
+    post, comments = get_post_details(post_id)
     comment_form = CommentForm()
 
     if request.method == "POST":
