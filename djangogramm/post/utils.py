@@ -1,10 +1,9 @@
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet
 
 from post.models import Post
 
 
 def q_search(query) -> QuerySet[Post] | None:
-    print('sadfas')
     if query.isdigit():
         return Post.objects.filter(id=int(query))
 
