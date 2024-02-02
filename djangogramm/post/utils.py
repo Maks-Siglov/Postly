@@ -4,14 +4,15 @@ from post.models import Post
 
 
 def q_search(query) -> QuerySet[Post] | None:
+    print('sadfas')
     if query.isdigit():
         return Post.objects.filter(id=int(query))
 
-    search_fields = (
-        "title__icontains", "content__icontains", "tags__name__icontains"
-    )
-    query_filters = Q(**{field: query for field in search_fields})
+    posts = (
+            Post.objects.filter(title__iexact=query) |
+            Post.objects.filter(owner__username__iexact=query) |
+            Post.objects.filter(content__iexact=query) |
+            Post.objects.filter(tags__name__iexact=query)
+    ).select_related("owner")
 
-    result = Post.objects.filter(query_filters).distinct()
-
-    return result
+    return posts

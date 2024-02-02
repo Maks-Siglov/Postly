@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col">
             <form class="d-flex " role="search" action="{% url "post:post_list" %}" method="get">
-                <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success " type="submit">Search</button>
             </form>
         </div>
@@ -40,8 +40,8 @@
         </div>
     </div>
 
-    {% if request.GET.q %}
-         <h3 class="mt-4">Search results by query {{ request.GET.q }}</h3>
+    {% if request.GET.search %}
+         <h3 class="mt-4">Search results by query {{ request.GET.search }}</h3>
      {% if not posts %}
          <h2 class="mt-4">Nothing was found for the query</h2>
      {% endif %}
