@@ -184,9 +184,8 @@ def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
 @login_required(login_url="users:login")
 def like_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
-    user = request.user
 
-    dislike, like, like_created = get_like(post, user)
+    dislike, like, like_created = get_like(post, request.user)
 
     if dislike:
         dislike.delete()
@@ -202,9 +201,8 @@ def like_post(request, post_id: int) -> HttpResponseRedirect:
 @login_required(login_url="users:login")
 def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     post = get_object_or_404(Post, id=post_id)
-    user = request.user
 
-    like, dislike, dislike_created = get_dislike(post, user)
+    like, dislike, dislike_created = get_dislike(post, request.user)
 
     if like:
         like.delete()
@@ -256,9 +254,8 @@ def delete_comment(request, comment_id: int) -> HttpResponseRedirect:
 @login_required(login_url="users:login")
 def like_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
-    user = request.user
 
-    dislike, like, like_created = get_like(comment, user)
+    dislike, like, like_created = get_like(comment, request.user)
 
     if dislike:
         dislike.delete()
@@ -274,9 +271,8 @@ def like_comment(request, comment_id: int) -> HttpResponseRedirect:
 @login_required(login_url="users:login")
 def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
     comment = get_object_or_404(Comment, id=comment_id)
-    user = request.user
 
-    like, dislike, dislike_created = get_dislike(comment, user)
+    like, dislike, dislike_created = get_dislike(comment, request.user)
 
     if like:
         like.delete()

@@ -1,4 +1,5 @@
 {% load custom_filters %}
+{% load static %}
 
 <div>
     <div class="row">
@@ -55,9 +56,25 @@
                     <h4 class="card-title"><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></h4>
                     <p class="card-text">{{ post.content|slice:":150" }}</p>
 
-                    {% if post.tag %}
-                        <p class="card-text">Tag: <span class="badge badge-info">{{ post.tag.name }}</span></p>
+                    {% if post.tags %}
+                        Tags:
+                        {% for tag in post.tags.all %}
+                            <span>{{ tag.name }}</span>
+                        {% endfor %}
                     {% endif %}
+                
+                <div >
+                    <a href="{% url 'post:like_post' post.id %}" class="like-button no-decoration">
+                        <img src="{% static 'deps/images/like-button.png' %}" alt="Like" class="like-icon small-icon">
+                    </a>
+                    <span class="like-count" id="like-count-{{ post.id }}">{{ post.likes.count }}</span>
+    
+                    <a href="{% url 'post:dislike_post' post.id %}" class="dislike-button no-decoration">
+                        <img src="{% static 'deps/images/dislike-button.png' %}" alt="Dislike" class="dislike-icon small-icon">
+                    </a>
+                    <span class="dislike-count" id="dislike-count-{{ post.id }}">{{ post.dislikes.count}}</span>
+                </div>
+                
                 </div>
                 <div class="col-md-4 text-end">
                     <a href="{% url 'profile:profile' post.owner.username %}">{{ post.owner.username }}</a>

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% load static %}
-{% load custom_filters %}
 
 {% block title %}Post {{ post.title }}{% endblock %}
 
@@ -37,7 +36,6 @@
             {% endif %}
 
             <div class="post-actions">
-                {% csrf_token %}
 
                 <a href="{% url 'post:like_post' post.id %}" class="like-button no-decoration">
                     <img src="{% static 'deps/images/like-button.png' %}" alt="Like" class="like-icon small-icon">
