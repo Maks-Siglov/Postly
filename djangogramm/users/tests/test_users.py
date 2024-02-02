@@ -75,7 +75,7 @@ def test_logout(client: Client):
     user = User.objects.create_user(
         username="test_user", password="test_password"
     )
-    profile = UserProfile.objects.create(
+    UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user
     )
     user.activate_profile = True

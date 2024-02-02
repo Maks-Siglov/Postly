@@ -22,10 +22,10 @@ def test_following_posts(client: Client):
     user = User.objects.create_user(
         username="test_username", password="test_password"
     )
-    profile = UserProfile.objects.create(
+    UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user
     )
-    post = Post.objects.create(
+    Post.objects.create(
         title="test_title_post", content="test_content", owner=user
     )
     client.login(username="test_username", password="test_password")
@@ -50,7 +50,7 @@ def test_user_posts(client: Client, test_user_post):
 
 @pytest.mark.django_db
 def test_other_user_posts(client: Client, test_user_post):
-    user = User.objects.create_user(
+    User.objects.create_user(
         username="my_test_username", password="my_test_password"
     )
     client.login(username="my_test_username", password="my_test_password")

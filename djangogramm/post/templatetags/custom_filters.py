@@ -1,8 +1,6 @@
 from django import template
 from django.utils.http import urlencode
 
-from post.models import Like
-
 register = template.Library()
 
 

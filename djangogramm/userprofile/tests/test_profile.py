@@ -17,7 +17,7 @@ def test_profile(client: Client, test_user_profile):
 
 @pytest.mark.django_db
 def test_not_owner_profile_view(client: Client):
-    user = User.objects.create_user(
+    User.objects.create_user(
         username="test_user", password="test_password"
     )
     client.login(username="test_user", password="test_password")
@@ -25,7 +25,7 @@ def test_not_owner_profile_view(client: Client):
     other_user = User.objects.create_user(
         username="other_test_user", password="other_test_password"
     )
-    profile = UserProfile.objects.create(
+    UserProfile.objects.create(
         full_name="other_test_full_name", bio="other_test_bio", user=other_user
     )
 
