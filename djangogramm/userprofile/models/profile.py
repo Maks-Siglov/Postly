@@ -2,7 +2,6 @@ from django.db import models
 
 
 class UserProfile(models.Model):
-    id = models.AutoField(primary_key=True)
 
     full_name = models.CharField(max_length=255)
     bio = models.TextField()
@@ -15,3 +14,7 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
+
+    def __str__(self):
+        return f"Profile {self.full_name}"
