@@ -33,7 +33,7 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
     python manage.py loaddata fixtures/dumpdata.json
     ```
 
-5. If you want you can create superuser:
+5. Superuser:
 
    - **Create a Superuser:**
      ```bash
@@ -51,16 +51,17 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
     python manage.py runserver
     ```
 
-6. Visit `http://127.0.0.1:8000/admin/` to log in with your superuser account and start using DjangoGramm.
+7. Visit `http://127.0.0.1:8000/admin/` to log in with your superuser account and start using DjangoGramm.
 
 ## Features
 
-- **User Authentication**: Users can sign up, log in, and log out securely.
-- **Post Creation**: Users can create posts with text content and images.
-- **Tagging**: Users can tag other users in their posts.
+- **User Authentication**: Users can sign up with email verification, log in, and log out securely.
+- - **Password Functionality**: Users can reset the password if they forgot hem.
+- **Post Creation**: Users can create posts with content and images.
+- **Tagging**: Users can add tag to posts.
 - **Following**: Users can follow and unfollow other users to see their posts in their feed.
-- **Likes/Dislikes**: Users can like or dislike comments on posts.
-- **Responsive Design**: The platform is designed to be accessible and user-friendly on various devices.
+- **Likes/Dislikes**: Users can like or dislike comments and posts.
+- **Responsive Design**: The platform is designed to be accessible and user-friendly.
 
 ## Usage
 
