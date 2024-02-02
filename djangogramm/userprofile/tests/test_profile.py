@@ -18,17 +18,16 @@ def test_profile(client: Client, test_user_profile):
 @pytest.mark.django_db
 def test_not_owner_profile_view(client: Client):
     User.objects.create_user(
-        username="test_user", password="test_password"
+        username="test_user", password="test_password", email="test@email.com"
     )
     client.login(username="test_user", password="test_password")
 
     other_user = User.objects.create_user(
-        username="other_test_user", password="other_test_password"
+        username="other_test_user",
+        password="other_test_password",
+        email="other@email.com",
     )
-    UserProfile.objects.create(
-        full_name="other_test_full_name", bio="other_test_bio", user=other_user
-    )
-
+    UserProfile.objects.create(user=other_user)
     response = client.get(
         reverse("profile:profile", args=[other_user.username])
     )
@@ -70,7 +69,9 @@ def test_follow(client: Client, test_user_profile):
     user, profile = test_user_profile
 
     second_user = User.objects.create_user(
-        username="second_test_user", password="second_test_password"
+        username="second_test_user",
+        password="second_test_password",
+        email="second@email.com",
     )
     second_profile = UserProfile.objects.create(
         full_name="second_full_name", bio="second_bio", user=second_user

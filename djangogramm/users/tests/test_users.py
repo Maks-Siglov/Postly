@@ -59,7 +59,7 @@ def test_registration(client: Client):
 @pytest.mark.django_db
 def test_login(client: Client):
     user = User.objects.create_user(
-        username="tes_tuser", password="test_password"
+        username="tes_tuser", password="test_password", email="test@email.com"
     )
     response = client.post(
         reverse("users:login"),
@@ -73,7 +73,7 @@ def test_login(client: Client):
 @pytest.mark.django_db
 def test_logout(client: Client):
     user = User.objects.create_user(
-        username="test_user", password="test_password"
+        username="test_user", password="test_password", email="test@email.com"
     )
     UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user

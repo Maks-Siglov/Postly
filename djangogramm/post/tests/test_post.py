@@ -20,7 +20,9 @@ def test_post_list(client: Client):
 @pytest.mark.django_db
 def test_following_posts(client: Client):
     user = User.objects.create_user(
-        username="test_username", password="test_password"
+        username="test_username",
+        password="test_password",
+        email="test@email.com",
     )
     UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user
@@ -51,7 +53,9 @@ def test_user_posts(client: Client, test_user_post):
 @pytest.mark.django_db
 def test_other_user_posts(client: Client, test_user_post):
     User.objects.create_user(
-        username="my_test_username", password="my_test_password"
+        username="my_test_username",
+        password="my_test_password",
+        email="other@email.com",
     )
     client.login(username="my_test_username", password="my_test_password")
 
@@ -71,7 +75,9 @@ def test_other_user_posts(client: Client, test_user_post):
 @pytest.mark.django_db
 def test_create_post(client: Client):
     user = User.objects.create_user(
-        username="test_username", password="test_password"
+        username="test_username",
+        password="test_password",
+        email="test@email.com",
     )
     client.login(username="test_username", password="test_password")
 
