@@ -170,7 +170,7 @@ def test_post_like(client: Client, test_user_post):
     client.login(username="test_username", password="test_password")
 
     response = client.get(reverse("post:like_post", args=[post.id]))
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     like_content_type = ContentType.objects.get_for_model(Post)
     like = Like.objects.get(content_type=like_content_type, owner=user)
@@ -187,7 +187,7 @@ def test_post_dislike(client: Client, test_user_post):
     client.login(username="test_username", password="test_password")
 
     response = client.get(reverse("post:dislike_post", args=[post.id]))
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     like_content_type = ContentType.objects.get_for_model(Post)
     dislike = Dislike.objects.get(content_type=like_content_type, owner=user)

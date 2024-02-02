@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from post.forms import CommentForm, PostForm
@@ -182,7 +182,7 @@ def delete_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
 
 
 @login_required(login_url="users:login")
-def like_post(request, post_id: int) -> HttpResponseRedirect:
+def like_post(request, post_id: int) -> JsonResponse:
     post = get_object_or_404(Post, id=post_id)
 
     dislike, like, like_created = get_like(post, request.user)
@@ -195,11 +195,15 @@ def like_post(request, post_id: int) -> HttpResponseRedirect:
     else:
         like.delete()
 
-    return redirect("post:post_detail", post.id)
+    return JsonResponse({
+        "success": True,
+        "like_count": post.likes.count(),
+        "dislike_count": post.dislikes.count()
+    })
 
 
 @login_required(login_url="users:login")
-def dislike_post(request, post_id: int) -> HttpResponseRedirect:
+def dislike_post(request, post_id: int) -> JsonResponse:
     post = get_object_or_404(Post, id=post_id)
 
     like, dislike, dislike_created = get_dislike(post, request.user)
@@ -212,7 +216,11 @@ def dislike_post(request, post_id: int) -> HttpResponseRedirect:
     else:
         dislike.delete()
 
-    return redirect("post:post_detail", post.id)
+    return JsonResponse({
+        "success": True,
+        "like_count": post.likes.count(),
+        "dislike_count": post.dislikes.count()
+    })
 
 
 @login_required(login_url="users:login")

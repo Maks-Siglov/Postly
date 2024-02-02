@@ -35,18 +35,17 @@
                 </div>
             {% endif %}
 
-            <div class="post-actions">
-
-                <a href="{% url 'post:like_post' post.id %}" class="like-button no-decoration">
+            <div>
+                {% csrf_token %}
+                <a href="#" data-url="{% url 'post:like_post' post.id %}" data-post-id="{{ post.id }}" class="like-button no-decoration">
                     <img src="{% static 'deps/images/like-button.png' %}" alt="Like" class="like-icon small-icon">
                 </a>
                 <span class="like-count" id="like-count-{{ post.id }}">{{ post.likes.count }}</span>
 
-                <a href="{% url 'post:dislike_post' post.id %}" class="dislike-button no-decoration">
+                <a href="#" data-url="{% url 'post:dislike_post' post.id %}" data-post-id="{{ post.id }}" class="dislike-button no-decoration">
                     <img src="{% static 'deps/images/dislike-button.png' %}" alt="Dislike" class="dislike-icon small-icon">
                 </a>
                 <span class="dislike-count" id="dislike-count-{{ post.id }}">{{ post.dislikes.count}}</span>
-
             </div>
         </div>
 
@@ -100,4 +99,6 @@
             </form>
         </div>
     </div>
+    
+    <script src="{% static 'deps/js/like.js' %}"></script>    
 {% endblock %}
