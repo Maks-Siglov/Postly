@@ -204,7 +204,7 @@ def test_comment_like(client: Client, test_user_post_comment):
     client.login(username="test_username", password="test_password")
 
     response = client.get(reverse("post:like_comment", args=[comment.id]))
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     like_content_type = ContentType.objects.get_for_model(Comment)
     like = Like.objects.get(content_type=like_content_type, owner=user)
@@ -221,7 +221,7 @@ def test_comment_dislike(client: Client, test_user_post_comment):
     client.login(username="test_username", password="test_password")
 
     response = client.get(reverse("post:dislike_comment", args=[comment.id]))
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     like_content_type = ContentType.objects.get_for_model(Comment)
     dislike = Dislike.objects.get(content_type=like_content_type, owner=user)

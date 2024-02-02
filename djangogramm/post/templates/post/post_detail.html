@@ -72,14 +72,14 @@
                         {% endif %}
 
                         <p class="comment-actions">
-                             <a href="{% url 'post:like_comment' comment.id %}?referring_page={{ request.path }}" class="no-decoration">
+                             <a href="#" data-url="{% url 'post:like_comment' comment.id %}" data-comment-id="{{ comment.id }}" class="like-comment-button no-decoration">
                              <img src="{% static 'deps/images/like-button.png' %}" alt="Like_comment" class="like-icon small-icon">
                              </a>
-                             <span class="like-count">{{ comment.likes.count }}</span>
-                             <a href="{% url 'post:dislike_comment' comment.id %}?referring_page={{ request.path }}" class="no-decoration">
+                             <span id="like-comment-count-{{ comment.id }}">{{ comment.likes.count }}</span>
+                             <a href="#" data-url="{% url 'post:dislike_comment' comment.id %}" data-comment-id="{{ comment.id }}" class="dislike-comment-button no-decoration">
                                  <img src="{% static 'deps/images/dislike-button.png' %}" alt="Dislike_comment" class="dislike-icon small-icon">
                             </a>
-                            <span class="dislike-count">{{ comment.dislikes.count }}</span>
+                            <span id="dislike-comment-count-{{ comment.id }}">{{ comment.dislikes.count }}</span>
                         </p>
                     </div>
                 {% endfor %}
@@ -100,5 +100,6 @@
         </div>
     </div>
     
-    <script src="{% static 'deps/js/like.js' %}"></script>    
+    <script src="{% static 'deps/js/like_post.js' %}"></script>    
+    <script src="{% static 'deps/js/like_comment.js' %}"></script>
 {% endblock %}

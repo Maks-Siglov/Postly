@@ -260,7 +260,7 @@ def delete_comment(request, comment_id: int) -> HttpResponseRedirect:
 
 
 @login_required(login_url="users:login")
-def like_comment(request, comment_id: int) -> HttpResponseRedirect:
+def like_comment(request, comment_id: int) -> JsonResponse:
     comment = get_object_or_404(Comment, id=comment_id)
 
     dislike, like, like_created = get_like(comment, request.user)
@@ -273,11 +273,15 @@ def like_comment(request, comment_id: int) -> HttpResponseRedirect:
     else:
         like.delete()
 
-    return redirect("post:post_detail", comment.post.id)
+    return JsonResponse({
+        "success": True,
+        "like_count": comment.likes.count(),
+        "dislike_count": comment.dislikes.count()
+    })
 
 
 @login_required(login_url="users:login")
-def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
+def dislike_comment(request, comment_id: int) -> JsonResponse:
     comment = get_object_or_404(Comment, id=comment_id)
 
     like, dislike, dislike_created = get_dislike(comment, request.user)
@@ -290,4 +294,8 @@ def dislike_comment(request, comment_id: int) -> HttpResponseRedirect:
     else:
         dislike.delete()
 
-    return redirect("post:post_detail", comment.post.id)
+    return JsonResponse({
+        "success": True,
+        "like_count": comment.likes.count(),
+        "dislike_count": comment.dislikes.count()
+    })
