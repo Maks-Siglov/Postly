@@ -12,14 +12,18 @@ class DislikeInline(GenericTabularInline):
     model = Dislike
 
 
+class CommentInline(admin.TabularInline):
+    model = Comment
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     model = Post
     list_display = ("title", "owner", "creation_date")
     readonly_fields = ("creation_date",)
-    search_fields = ("title", "owner", "content", "creation_date")
+    search_fields = ("title", "owner__username", "content", "creation_date")
     list_filter = ("creation_date", "owner", "title")
-    inlines = (LikeInline, DislikeInline)
+    inlines = (CommentInline, LikeInline, DislikeInline)
 
 
 @admin.register(Tag)

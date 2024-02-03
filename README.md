@@ -67,8 +67,3 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
 
 - Navigate to `http://127.0.0.1:8000/` to access the main application.
 - Explore the features, create posts, follow other users, and engage with the community.
-
-
-## Acknowledgements
-
-- [Django Documentation](https://docs.djangoproject.com/)

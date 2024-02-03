@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -16,7 +15,7 @@ def send_verification_email(
         template_name=template,
         context={
             "user": user,
-            "domain": "localhost:8000",  # get_current_site(request)
+            "domain": "localhost:8000",
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
         },
