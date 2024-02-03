@@ -18,7 +18,8 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
 2. Install dependencies:
 
     ```bash
-    pip install -r requirements/prod.txt
+    pip install -r requirements/prod.txt -r requirements/dev.txt
+
     ```
 
 3. Apply migrations:
