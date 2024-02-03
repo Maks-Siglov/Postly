@@ -71,7 +71,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-ROOT_URLCONF = "djangogramm.urls"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
@@ -89,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "djangogramm.wsgi.application"
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
