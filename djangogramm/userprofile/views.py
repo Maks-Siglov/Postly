@@ -6,10 +6,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.http import urlsafe_base64_decode
 
-from users.models import User
 from userprofile.forms import ProfileForm
-from userprofile.models import UserProfile, Follow
+from userprofile.models import Follow, UserProfile
 from userprofile.selectors import get_followers, get_following
+
+from users.models import User
 
 
 def activate_profile_validation(request, uidb64: str, token: str):

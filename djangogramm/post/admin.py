@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from post.models import Post, Tag, Like, Dislike, Comment
+from post.models import Comment, Dislike, Like, Post, Tag
 
 
 class LikeInline(GenericTabularInline):

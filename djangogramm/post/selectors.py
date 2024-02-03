@@ -1,8 +1,9 @@
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, QuerySet, Model
+from django.db.models import Count, Model, QuerySet
 
+from post.models import Comment, Dislike, Like, Post
 from post.utils import q_search
-from post.models import Post, Like, Dislike, Comment
+
 from users.models import User
 
 
@@ -60,10 +61,9 @@ def _order_by_post(
         posts = posts.order_by(order_by)
     elif order_by == "likes":
         posts = (
-            Post.objects.
-            select_related("owner").
-            annotate(like_count=Count("likes")).
-            order_by("-like_count")
+            Post.objects.select_related("owner")
+            .annotate(like_count=Count("likes"))
+            .order_by("-like_count")
         )
 
     return posts
@@ -71,16 +71,14 @@ def _order_by_post(
 
 def get_post_details(post_id: int) -> tuple[QuerySet[Post], QuerySet[Comment]]:
     post = (
-        Post.objects
-        .select_related("owner")
+        Post.objects.select_related("owner")
         .prefetch_related("likes", "dislikes", "tags")
         .get(id=post_id)
     )
     comments = (
-        Comment.objects.
-        select_related("owner").
-        prefetch_related("likes", "dislikes").
-        filter(post=post)
+        Comment.objects.select_related("owner")
+        .prefetch_related("likes", "dislikes")
+        .filter(post=post)
     )
     return post, comments
 

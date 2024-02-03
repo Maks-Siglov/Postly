@@ -6,14 +6,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.http import urlsafe_base64_decode
 
-from users.models import User
-from users.services.verification_email import send_verification_email
 from users.forms import (
     EmailForm,
-    RegisterForm,
     LoginForm,
+    RegisterForm,
     ResetPasswordEmailForm,
 )
+from users.models import User
+from users.services.verification_email import send_verification_email
 
 
 def registration(request) -> HttpResponse:

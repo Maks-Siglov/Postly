@@ -1,6 +1,7 @@
 import pytest
 
-from post.models import Post, Comment
+from post.models import Comment, Post
+
 from users.models import User
 
 
@@ -25,7 +26,7 @@ def test_user_post_comment(db):
     user = User.objects.create_user(
         username="test_username",
         password="test_password",
-        email="test@email.com"
+        email="test@email.com",
     )
     post = Post.objects.create(
         title="test_title_post", content="test_content", owner=user

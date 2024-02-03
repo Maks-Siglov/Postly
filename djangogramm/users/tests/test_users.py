@@ -1,12 +1,12 @@
 import re
-import pytest
 
+import pytest
 from django.core import mail
 from django.test import Client
 from django.urls import reverse
 
-from users.models import User
 from userprofile.models import UserProfile
+from users.models import User
 
 
 @pytest.mark.django_db

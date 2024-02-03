@@ -1,18 +1,18 @@
-from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from post.forms import CommentForm, PostForm
 from post.models import Comment, Image, Post, Tag
 from post.selectors import (
-    get_posts,
-    get_users_post,
+    get_dislike,
     get_following_posts,
     get_like,
-    get_dislike,
     get_post_details,
+    get_posts,
+    get_users_post,
 )
 from users.models import User
 
@@ -195,11 +195,13 @@ def like_post(request, post_id: int) -> JsonResponse:
     else:
         like.delete()
 
-    return JsonResponse({
-        "success": True,
-        "like_count": post.likes.count(),
-        "dislike_count": post.dislikes.count()
-    })
+    return JsonResponse(
+        {
+            "success": True,
+            "like_count": post.likes.count(),
+            "dislike_count": post.dislikes.count(),
+        }
+    )
 
 
 @login_required(login_url="users:login")
@@ -216,11 +218,13 @@ def dislike_post(request, post_id: int) -> JsonResponse:
     else:
         dislike.delete()
 
-    return JsonResponse({
-        "success": True,
-        "like_count": post.likes.count(),
-        "dislike_count": post.dislikes.count()
-    })
+    return JsonResponse(
+        {
+            "success": True,
+            "like_count": post.likes.count(),
+            "dislike_count": post.dislikes.count(),
+        }
+    )
 
 
 @login_required(login_url="users:login")
@@ -273,11 +277,13 @@ def like_comment(request, comment_id: int) -> JsonResponse:
     else:
         like.delete()
 
-    return JsonResponse({
-        "success": True,
-        "like_count": comment.likes.count(),
-        "dislike_count": comment.dislikes.count()
-    })
+    return JsonResponse(
+        {
+            "success": True,
+            "like_count": comment.likes.count(),
+            "dislike_count": comment.dislikes.count(),
+        }
+    )
 
 
 @login_required(login_url="users:login")
@@ -294,8 +300,10 @@ def dislike_comment(request, comment_id: int) -> JsonResponse:
     else:
         dislike.delete()
 
-    return JsonResponse({
-        "success": True,
-        "like_count": comment.likes.count(),
-        "dislike_count": comment.dislikes.count()
-    })
+    return JsonResponse(
+        {
+            "success": True,
+            "like_count": comment.likes.count(),
+            "dislike_count": comment.dislikes.count(),
+        }
+    )

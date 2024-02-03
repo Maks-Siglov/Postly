@@ -5,9 +5,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test.client import Client
 from django.urls import reverse
 
+from post.models import Comment, Dislike, Like, Post
+
 from userprofile.models import UserProfile
 from users.models import User
-from post.models import Comment, Post, Like, Dislike
 
 
 @pytest.mark.django_db

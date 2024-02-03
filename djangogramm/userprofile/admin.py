@@ -1,16 +1,16 @@
 from django.contrib import admin
 
-from userprofile.models import UserProfile, Follow
+from userprofile.models import Follow, UserProfile
 
 
 class FollowerInline(admin.TabularInline):
     model = Follow
-    fk_name = 'following'
+    fk_name = "following"
 
 
 class FollowingInline(admin.TabularInline):
     model = Follow
-    fk_name = 'follower'
+    fk_name = "follower"
 
 
 @admin.register(UserProfile)

@@ -1,9 +1,11 @@
 import pytest
+
 from django.test.client import Client
 from django.urls import reverse
 
-from users.models import User
 from userprofile.models import UserProfile
+
+from users.models import User
 
 
 @pytest.mark.django_db

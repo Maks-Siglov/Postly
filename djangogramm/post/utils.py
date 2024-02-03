@@ -8,10 +8,10 @@ def q_search(query) -> QuerySet[Post] | None:
         return Post.objects.filter(id=int(query))
 
     posts = (
-        Post.objects.filter(title__icontains=query) |
-        Post.objects.filter(content__icontains=query) |
-        Post.objects.filter(owner__username__icontains=query) |
-        Post.objects.filter(tags__name__icontains=query)
+        Post.objects.filter(title__icontains=query)
+        | Post.objects.filter(content__icontains=query)
+        | Post.objects.filter(owner__username__icontains=query)
+        | Post.objects.filter(tags__name__icontains=query)
     ).select_related("owner")
 
     return posts

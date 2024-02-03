@@ -1,9 +1,11 @@
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 from allauth.socialaccount.models import SocialAccount
 
-from users.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from userprofile.models import UserProfile
+
+from users.models import User
 
 
 @receiver(post_save, sender=SocialAccount)

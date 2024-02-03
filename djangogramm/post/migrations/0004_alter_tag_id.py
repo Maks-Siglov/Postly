@@ -6,7 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("post", "0003_remove_like_value_alter_like_id_alter_like_owner_and_more"),
+        (
+            "post",
+            "0003_remove_like_value_alter_like_id_alter_like_owner_and_more",
+        ),
     ]
 
     operations = [
@@ -14,7 +17,10 @@ class Migration(migrations.Migration):
             model_name="tag",
             name="id",
             field=models.BigAutoField(
-                auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                auto_created=True,
+                primary_key=True,
+                serialize=False,
+                verbose_name="ID",
             ),
         ),
     ]

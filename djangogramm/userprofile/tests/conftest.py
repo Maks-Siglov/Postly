@@ -1,7 +1,8 @@
 import pytest
 
-from users.models import User
 from userprofile.models import UserProfile
+
+from users.models import User
 
 
 @pytest.fixture
@@ -10,7 +11,7 @@ def test_user_profile(db):
         username="test_user",
         password="test_password",
         activate_profile=True,
-        email="test@email.com"
+        email="test@email.com",
     )
     profile = UserProfile.objects.create(
         full_name="Test_full_name", bio="Test_bio", user=user
