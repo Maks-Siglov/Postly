@@ -200,3 +200,7 @@ AWS_DEFAULT_ACL = os.getenv("AWS_DEFAULT_ACL")
 AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+
+DEFAULT_PAGE = 1
+POSTS_PER_PAGE = 5

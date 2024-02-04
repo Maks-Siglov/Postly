@@ -2,16 +2,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Model, QuerySet
 
 from post.models import Comment, Dislike, Like, Post
-from post.utils import q_search
+from post.utils import get_posts_q_search
 
 from users.models import User
 
 
-def get_posts(query: str | None, order_by: str | None) -> QuerySet[Post]:
-    if query:
-        posts = q_search(query)
-    else:
-        posts = Post.objects.select_related("owner").all()
+def get_posts(value: str | None, order_by: str | None) -> QuerySet[Post]:
+
+    posts = get_posts_q_search(value)
 
     if order_by and posts:
         posts = _order_by_post(posts, order_by)
@@ -19,13 +17,11 @@ def get_posts(query: str | None, order_by: str | None) -> QuerySet[Post]:
     return posts
 
 
-def get_users_post(
-    user: User, query: str | None, order_by: str | None
+def get_user_posts(
+    user: User, value: str | None, order_by: str | None
 ) -> QuerySet[Post]:
-    if query:
-        posts = q_search(query)
-    else:
-        posts = Post.objects.select_related("owner").filter(owner=user)
+
+    posts = get_posts_q_search(value).filter(owner=user)
 
     if order_by and posts:
         _order_by_post(posts, order_by)
@@ -34,19 +30,18 @@ def get_users_post(
 
 
 def get_following_posts(
-    user: User, query: str | None, order_by: str | None
+    user: User, value: str | None, order_by: str | None
 ) -> QuerySet[Post]:
+
+    posts = get_posts_q_search(value)
+
     following_id_list = list(
         user.profile.following.all().values_list("following_id", flat=True)
     )
-    following_users = User.objects.filter(id__in=following_id_list).all()
 
-    if query:
-        posts = q_search(query)
-    else:
-        posts = Post.objects.select_related("owner").filter(
-            owner__in=following_users
-        )
+    posts = posts.filter(
+        owner__in=User.objects.filter(id__in=following_id_list)
+    )
 
     if order_by and posts:
         _order_by_post(posts, order_by)
@@ -57,33 +52,38 @@ def get_following_posts(
 def _order_by_post(
     posts: QuerySet[Post], order_by: str | None
 ) -> QuerySet[Post]:
-    if order_by != "default" and order_by != "likes":
-        posts = posts.order_by(order_by)
-    elif order_by == "likes":
-        posts = (
-            Post.objects.select_related("owner")
+    if order_by is None:
+        return posts
+
+    if order_by == "likes":
+        return (
+            posts
             .annotate(like_count=Count("likes"))
             .order_by("-like_count")
         )
 
-    return posts
+    return posts.order_by(order_by)
 
 
-def get_post_details(post_id: int) -> tuple[QuerySet[Post], QuerySet[Comment]]:
-    post = (
+def get_post_by_id(post_id: int) -> Post | None:
+    return (
         Post.objects.select_related("owner")
         .prefetch_related("likes", "dislikes", "tags")
         .get(id=post_id)
     )
-    comments = (
+
+
+def get_post_comments(post: Post) -> QuerySet[Comment]:
+    return (
         Comment.objects.select_related("owner")
         .prefetch_related("likes", "dislikes")
         .filter(post=post)
     )
-    return post, comments
 
 
-def get_like(instance: Model, user: User) -> tuple[Like, Like, bool]:
+def get_like(
+        instance: Model, user: User
+) -> tuple[Dislike | None, Like, bool]:
     content_type = ContentType.objects.get_for_model(instance.__class__)
 
     dislike = Dislike.objects.filter(
@@ -101,7 +101,9 @@ def get_like(instance: Model, user: User) -> tuple[Like, Like, bool]:
     return dislike, like, like_created
 
 
-def get_dislike(instance: Model, user: User) -> tuple[Like, Like, bool]:
+def get_dislike(
+        instance: Model, user: User
+) -> tuple[Like | None, Dislike, bool]:
     content_type = ContentType.objects.get_for_model(instance.__class__)
 
     like = Like.objects.filter(

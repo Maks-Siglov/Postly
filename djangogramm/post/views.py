@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -10,9 +12,10 @@ from post.selectors import (
     get_dislike,
     get_following_posts,
     get_like,
-    get_post_details,
     get_posts,
-    get_users_post,
+    get_post_comments,
+    get_post_by_id,
+    get_user_posts,
 )
 from users.models import User
 
@@ -46,25 +49,25 @@ def create_post(request) -> HttpResponse:
 
 
 def post_list(request) -> HttpResponse:
-    page = request.GET.get("page", 1)
-    search_query = request.GET.get("search", None)
+    page = request.GET.get("page", settings.DEFAULT_PAGE)
+    search_value = request.GET.get("search", None)
     order_by = request.GET.get("order_by", None)
-    posts = get_posts(search_query, order_by)
+    posts = get_posts(search_value, order_by)
 
-    paginator = Paginator(posts, 5)
+    paginator = Paginator(posts, settings.POSTS_PER_PAGE)
     current_page = paginator.page(int(page))
 
     return render(request, "post/post_list.html", {"posts": current_page})
 
 
 def user_posts(request, username: str) -> HttpResponse:
-    page = request.GET.get("page", 1)
-    search_query = request.GET.get("search", None)
+    page = request.GET.get("page", settings.DEFAULT_PAGE)
+    search_value = request.GET.get("search", None)
     order_by = request.GET.get("order_by", None)
     user = User.objects.get(username=username)
-    posts = get_users_post(user, search_query, order_by)
+    posts = get_user_posts(user, search_value, order_by)
 
-    paginator = Paginator(posts, 5)
+    paginator = Paginator(posts, settings.POSTS_PER_PAGE)
     current_page = paginator.page(int(page))
 
     if request.user == user:
@@ -81,14 +84,14 @@ def user_posts(request, username: str) -> HttpResponse:
 
 @login_required(login_url="users:login")
 def following_posts(request, username: str) -> HttpResponse:
-    page = request.GET.get("page", 1)
-    search_query = request.GET.get("search", None)
+    page = request.GET.get("page", settings.DEFAULT_PAGE)
+    search_value = request.GET.get("search", None)
     order_by = request.GET.get("order_by", None)
     user = User.objects.get(username=username)
 
-    posts = get_following_posts(user, search_query, order_by)
+    posts = get_following_posts(user, search_value, order_by)
 
-    paginator = Paginator(posts, 5)
+    paginator = Paginator(posts, settings.POSTS_PER_PAGE)
     current_page = paginator.page(int(page))
 
     return render(request, "post/following_feed.html", {"posts": current_page})
@@ -96,7 +99,8 @@ def following_posts(request, username: str) -> HttpResponse:
 
 @login_required(login_url="users:login")
 def post_detail(request, post_id: int) -> HttpResponse:
-    post, comments = get_post_details(post_id)
+    post = get_post_by_id(post_id)
+    comments = get_post_comments(post)
     comment_form = CommentForm()
 
     if request.method == "POST":
@@ -123,7 +127,12 @@ def post_detail(request, post_id: int) -> HttpResponse:
 
 @login_required(login_url="users:login")
 def edit_post(request, post_id: int) -> HttpResponse | HttpResponseRedirect:
-    post = Post.objects.get(id=post_id)
+    try:
+        post = Post.objects.get(id=post_id)
+    except ObjectDoesNotExist:
+        messages.error(request, f"Post {post_id} not exist")
+        return redirect("post:post_list")
+
     if request.user != post.owner:
         messages.error(request, "You do not have permission to do this.")
         return redirect("post:post_list")

@@ -1,17 +1,20 @@
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 
 from post.models import Post
 
 
-def q_search(query) -> QuerySet[Post] | None:
-    if query.isdigit():
-        return Post.objects.filter(id=int(query))
+def get_posts_q_search(value: str | None) -> QuerySet[Post]:
+    if value is None:
+        return Post.objects.select_related("owner")
 
-    posts = (
-        Post.objects.filter(title__icontains=query)
-        | Post.objects.filter(content__icontains=query)
-        | Post.objects.filter(owner__username__icontains=query)
-        | Post.objects.filter(tags__name__icontains=query)
-    ).select_related("owner")
+    if value.isdigit():
+        return Post.objects.filter(id=int(value)).select_related('owner')
 
-    return posts
+    post_where = (
+        Q(title__icontains=value) |
+        Q(description__icontains=value) |
+        Q(owner__username__icontains=value) |
+        Q(tags__name__icontains=value)
+    )
+
+    return Post.objects.filter(post_where).select_related('owner')

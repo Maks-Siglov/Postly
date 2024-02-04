@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let dislikeCountSpan = document.getElementById('dislike-count-' + postId);
                 dislikeCountSpan.textContent = dislikeCount;
             } else {
-                console.error('Error disliking the post.');
+                console.error('Error during disliking the post.');
             }
         }
     }
