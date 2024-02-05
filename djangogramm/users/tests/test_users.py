@@ -1,11 +1,12 @@
 import re
-
 import pytest
+
 from django.core import mail
 from django.test import Client
 from django.urls import reverse
 
 from userprofile.models import UserProfile
+
 from users.models import User
 
 

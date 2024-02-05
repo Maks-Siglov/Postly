@@ -15,7 +15,7 @@ def send_verification_email(
         template_name=template,
         context={
             "user": user,
-            "domain": "localhost:8000",
+            "domain": settings.DOMAIN,
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
         },

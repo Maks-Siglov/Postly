@@ -1,9 +1,7 @@
-from django.db.models import QuerySet
-
 from userprofile.models import UserProfile
 
 
-def get_followers(profile_id: int) -> QuerySet[UserProfile]:
+def get_followers(profile_id: int) -> list[UserProfile]:
     user_profile = UserProfile.objects.get(id=profile_id)
 
     follower_ids_list = list(
@@ -12,7 +10,7 @@ def get_followers(profile_id: int) -> QuerySet[UserProfile]:
     return UserProfile.objects.filter(id__in=follower_ids_list).all()
 
 
-def get_following(profile_id: int) -> QuerySet[UserProfile]:
+def get_following(profile_id: int) -> list[UserProfile]:
     user_profile = UserProfile.objects.get(id=profile_id)
 
     following_id_list = list(

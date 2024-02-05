@@ -56,10 +56,8 @@ def _order_by_post(
         return posts
 
     if order_by == "likes":
-        return (
-            posts
-            .annotate(like_count=Count("likes"))
-            .order_by("-like_count")
+        return posts.annotate(like_count=Count("likes")).order_by(
+            "-like_count"
         )
 
     return posts.order_by(order_by)
@@ -81,9 +79,7 @@ def get_post_comments(post: Post) -> QuerySet[Comment]:
     )
 
 
-def get_like(
-        instance: Model, user: User
-) -> tuple[Dislike | None, Like, bool]:
+def get_like(instance: Model, user: User) -> tuple[Dislike | None, Like, bool]:
     content_type = ContentType.objects.get_for_model(instance.__class__)
 
     dislike = Dislike.objects.filter(
@@ -102,7 +98,7 @@ def get_like(
 
 
 def get_dislike(
-        instance: Model, user: User
+    instance: Model, user: User
 ) -> tuple[Like | None, Dislike, bool]:
     content_type = ContentType.objects.get_for_model(instance.__class__)
 

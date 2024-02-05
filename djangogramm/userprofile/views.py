@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.http import urlsafe_base64_decode
 
@@ -13,11 +14,13 @@ from userprofile.selectors import get_followers, get_following
 from users.models import User
 
 
-def activate_profile_validation(request, uidb64: str, token: str):
+def activate_profile_validation(
+    request: HttpRequest, uidb64: str, token: str
+) -> HttpResponseRedirect:
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, ObjectDoesNotExist):
         user = None
 
     if user is not None and default_token_generator.check_token(user, token):
@@ -30,9 +33,16 @@ def activate_profile_validation(request, uidb64: str, token: str):
         return redirect("post:post_list")
 
 
-def activate_profile(request) -> HttpResponse | HttpResponseRedirect:
-    uid = request.session.get("uid")
-    user = User.objects.get(pk=uid)
+def activate_profile(
+    request: HttpRequest,
+) -> HttpResponse | HttpResponseRedirect:
+    try:
+        uid = request.session.get("uid")
+        user = User.objects.get(pk=uid)
+    except ObjectDoesNotExist:
+        messages.error(request, "Error during activating profile")
+        return redirect("post:post_list")
+
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -61,8 +71,15 @@ def activate_profile(request) -> HttpResponse | HttpResponseRedirect:
 
 
 @login_required(login_url="users:login")
-def profile(request, username: str) -> HttpResponse | HttpResponseRedirect:
-    profile_owner = User.objects.get(username=username)
+def profile(
+    request: HttpRequest, username: str
+) -> HttpResponse | HttpResponseRedirect:
+    try:
+        profile_owner = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        messages.error(request, "This user does not exist")
+        return redirect("post:post_list")
+
     if not profile_owner.activate_profile and request.user == profile_owner:
         return redirect("users:confirm_email", profile_owner.email)
 
@@ -82,9 +99,13 @@ def profile(request, username: str) -> HttpResponse | HttpResponseRedirect:
 
 @login_required(login_url="users:login")
 def edit_profile(
-    request, username: str
+    request: HttpRequest, username: str
 ) -> HttpResponse | HttpResponseRedirect:
-    user = User.objects.get(username=username)
+    try:
+        user = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        messages.error(request, "Error during reset password")
+        return redirect("post:post_list")
 
     if request.user != user:
         messages.error(
@@ -112,8 +133,13 @@ def edit_profile(
 
 
 @login_required(login_url="users:login")
-def follow(request, profile_id: int) -> HttpResponseRedirect:
-    following_profile = UserProfile.objects.get(id=profile_id)
+def follow(request: HttpRequest, profile_id: int) -> HttpResponseRedirect:
+    try:
+        following_profile = UserProfile.objects.get(id=profile_id)
+    except ObjectDoesNotExist:
+        messages.error(request, "Following profile does not exist")
+        return redirect("post:post_list")
+
     follower_profile = request.user.profile
     if not follower_profile.following.filter(
         following_id=following_profile.id
@@ -128,8 +154,13 @@ def follow(request, profile_id: int) -> HttpResponseRedirect:
 
 
 @login_required(login_url="users:login")
-def unfollow(request, profile_id: int) -> HttpResponseRedirect:
-    unfollowing_profile = UserProfile.objects.get(id=profile_id)
+def unfollow(request: HttpRequest, profile_id: int) -> HttpResponseRedirect:
+    try:
+        unfollowing_profile = UserProfile.objects.get(id=profile_id)
+    except ObjectDoesNotExist:
+        messages.error(request, "Following profile does not exist")
+        return redirect("post:post_list")
+
     unfollower_profile = request.user.profile
     follow_obj = unfollower_profile.following.filter(
         following_id=unfollowing_profile.id
@@ -144,8 +175,12 @@ def unfollow(request, profile_id: int) -> HttpResponseRedirect:
 
 
 @login_required(login_url="users:login")
-def followers(request, profile_id: int) -> HttpResponse:
-    user_followers = get_followers(profile_id)
+def followers(request: HttpRequest, profile_id: int) -> HttpResponse:
+    try:
+        user_followers = get_followers(profile_id)
+    except ObjectDoesNotExist:
+        messages.error(request, f"Profile {profile_id }does not exist")
+        return redirect("post:post_list")
 
     return render(
         request,
@@ -155,8 +190,12 @@ def followers(request, profile_id: int) -> HttpResponse:
 
 
 @login_required(login_url="users:login")
-def following(request, profile_id: int) -> HttpResponse:
-    following_users = get_following(profile_id)
+def following(request: HttpRequest, profile_id: int) -> HttpResponse:
+    try:
+        following_users = get_following(profile_id)
+    except ObjectDoesNotExist:
+        messages.error(request, f"Profile {profile_id }does not exist")
+        return redirect("post:post_list")
 
     return render(
         request,

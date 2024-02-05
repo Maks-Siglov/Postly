@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.http import urlsafe_base64_decode
 
@@ -16,7 +17,7 @@ from users.models import User
 from users.services.verification_email import send_verification_email
 
 
-def registration(request) -> HttpResponse:
+def registration(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
     if request.method == "POST":
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
@@ -36,12 +37,18 @@ def registration(request) -> HttpResponse:
     return render(request, "users/register.html", {"form": form})
 
 
-def confirm_email(request, email) -> HttpResponse:
+def confirm_email(request: HttpRequest, email) -> HttpResponse:
     return render(request, "users/confirm_email.html", {"email": email})
 
 
-def resend_verification_email(request, email: str) -> HttpResponse:
-    user = User.objects.get(email=email)
+def resend_verification_email(
+    request: HttpRequest, email: str
+) -> HttpResponse | HttpResponseRedirect:
+    try:
+        user = User.objects.get(email=email)
+    except ObjectDoesNotExist:
+        messages.error(request, f"User with {email} not exist")
+        return redirect("post:post_list")
 
     send_verification_email(
         request,
@@ -55,8 +62,15 @@ def resend_verification_email(request, email: str) -> HttpResponse:
     return render(request, "users/confirm_email.html", {"email": user.email})
 
 
-def change_email(request, email: str) -> HttpResponse:
-    user = User.objects.get(email=email)
+def change_email(
+    request: HttpRequest, email: str
+) -> HttpResponse | HttpResponseRedirect:
+    try:
+        user = User.objects.get(email=email)
+    except ObjectDoesNotExist:
+        messages.error(request, f"User with {email} not exist")
+        return redirect("post:post_list")
+
     if request.method == "POST":
         form = EmailForm(request.POST, instance=user)
         if form.is_valid():
@@ -86,7 +100,7 @@ def change_email(request, email: str) -> HttpResponse:
     )
 
 
-def login_view(request) -> HttpResponse:
+def login_view(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
     if request.method == "POST":
         form = LoginForm(request, request.POST)
         if form.is_valid():
@@ -104,12 +118,19 @@ def login_view(request) -> HttpResponse:
     return render(request, "users/login.html", {"form": form})
 
 
-def forgot_password(request) -> HttpResponse:
+def forgot_password(
+    request: HttpRequest,
+) -> HttpResponse | HttpResponseRedirect:
     if request.method == "POST":
         form = ResetPasswordEmailForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data["email"]
-            user = User.objects.get(email=email)
+
+            try:
+                user = User.objects.get(email=email)
+            except ObjectDoesNotExist:
+                messages.error(request, f"User with {email} not exist")
+                return redirect("post:post_list")
 
             send_verification_email(
                 request,
@@ -124,22 +145,18 @@ def forgot_password(request) -> HttpResponse:
             )
             return redirect("users:login")
 
-        else:
-            messages.warning(request, "Account with this email does not exist")
-            return redirect("users:forgot_password")
-
     else:
         form = ResetPasswordEmailForm()
     return render(request, "users/forgot_password.html", {"form": form})
 
 
 def reset_password_validation(
-    request, uidb64: str, token: str
+    request: HttpRequest, uidb64: str, token: str
 ) -> HttpResponseRedirect:
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, ObjectDoesNotExist):
         user = None
 
     if user is not None and default_token_generator.check_token(user, token):
@@ -152,9 +169,16 @@ def reset_password_validation(
         return redirect("users:login")
 
 
-def reset_password(request) -> HttpResponse | HttpResponseRedirect:
-    pk = request.session.get("uid")
-    user = User.objects.get(pk=pk)
+def reset_password(
+    request: HttpRequest,
+) -> HttpResponse | HttpResponseRedirect:
+    try:
+        pk = request.session.get("uid")
+        user = User.objects.get(pk=pk)
+    except ObjectDoesNotExist:
+        messages.error(request, "Error during reset password")
+        return redirect("post:post_list")
+
     if request.method == "POST":
         form = SetPasswordForm(user, data=request.POST)
         if form.is_valid():

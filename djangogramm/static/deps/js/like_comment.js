@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function handleCommentButtonClick(button, actionCallback) {
         button.addEventListener('click', function (event) {
-            event.preventDefault();
 
             const url = this.getAttribute('data-url');
             const commentId = this.getAttribute('data-comment-id');
@@ -28,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 actionCallback(xhr, commentId);
             };
             xhr.send();
+            event.preventDefault();
         });
     }
 
