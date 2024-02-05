@@ -12,7 +12,7 @@ def get_posts_q_search(value: str | None) -> QuerySet[Post]:
 
     post_where = (
         Q(title__icontains=value)
-        | Q(description__icontains=value)
+        | Q(content__icontains=value)
         | Q(owner__username__icontains=value)
         | Q(tags__name__icontains=value)
     )

@@ -44,7 +44,7 @@ def create_post(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
             for tag_name in tag_names:
                 tag_name = tag_name.strip()
                 if tag_name:
-                    tag, created = Tag.objects.get_or_create(name=tag_name)
+                    tag, _ = Tag.objects.get_or_create(name=tag_name)
                     post.tags.add(tag)
 
             return redirect("post:post_list")
@@ -160,7 +160,7 @@ def edit_post(
             for tag_name in tag_names:
                 tag_name = tag_name.strip()
                 if tag_name:
-                    tag, created = Tag.objects.get_or_create(name=tag_name)
+                    tag, _ = Tag.objects.get_or_create(name=tag_name)
                     post.tags.add(tag)
 
             images = request.FILES.getlist("images")
