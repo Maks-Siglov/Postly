@@ -56,8 +56,10 @@ def _order_by_post(
         return posts
 
     if order_by == "likes":
-        return posts.annotate(like_count=Count("likes")).order_by(
-            "-like_count"
+        return (
+            posts
+            .annotate(like_count=Count("likes"))
+            .order_by("-like_count")
         )
 
     return posts.order_by(order_by)
