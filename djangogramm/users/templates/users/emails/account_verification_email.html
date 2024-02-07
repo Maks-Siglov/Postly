@@ -1,0 +1,7 @@
+{% autoescape off %}
+    Hi {{ user.first_name }},
+
+    Please click on link below to confirm your registration
+    http://{{ domain }}{% url 'profile:activate_profile_validation' uidb64=uid token=token %}
+
+{% endautoescape %}

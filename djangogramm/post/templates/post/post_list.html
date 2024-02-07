@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Post List{% endblock %}
+
+{% block content %}
+        {% if posts or request.GET.search %}
+            <h1 class="mb-4">Post List</h1>
+            {% include 'post/includes/posts_display.html' %}
+        {% else %}
+            <h2>There is no posts yet, you can <a href="{% url 'post:create_post' %}">create</a> one</h2>
+        {% endif %}
+
+{% endblock %}

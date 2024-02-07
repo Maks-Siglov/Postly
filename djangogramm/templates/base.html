@@ -1,0 +1,28 @@
+{% load static %}
+{% load profile_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static "deps/css/bootstrap/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/my_css.css" %}">
+
+    <link rel="icon" type="image/png" href="{% static "deps/favicon/d-favicon.png" %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+    {% include 'includes/header.html' %}
+
+    {% include 'includes/notifications.html' %}
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
+</body>
+</html>

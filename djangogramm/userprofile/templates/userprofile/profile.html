@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<div class="col-md-5 mx-auto">
+    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+        <h3 class="text-center mb-4">Profile</h3>
+        <div class="row">
+                <div class="col-md-12 mb-3 text-center">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" alt="Current Avatar" width="200" height="200">
+                    {% else %}
+                        <img src="{% static "deps/images/default-avatar.png" %}" alt="Current Avatar" class="img-fluid rounded" width="200" height="200">
+                    {% endif %}
+                </div>
+
+                <div class="m-4 justify-content-center d-flex">
+                    <a href="{% url 'profile:followers' profile.id %}" class="m-2 ">Followers</a>
+                    <a href="{% url 'profile:following' profile.id %}" class="m-2">My following</a>
+                </div>
+
+                <div class="col-md-12 mb-3 text-center">
+                     <label for="id_first_name" class="form-label">Full name:</label>
+                    {{ profile.full_name }}
+                </div>
+
+                <div class="col-md-12 mb-3 text-center">
+                     <label for="id_first_name" class="form-label">Bio:</label>
+                    {{ profile.bio }}
+                </div>
+
+            <div class=" text-center">
+                <a href="{% url 'profile:edit_profile' username=user.username %}" class="btn btn-primary">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
