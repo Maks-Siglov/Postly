@@ -11,8 +11,8 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
 1. Clone the repository:
 
     ```bash
-    git clone https://git.foxminded.ua/foxstudent105590/task_11-djangogramm.git
-    cd cd task_11-djangogramm/
+    git clone https://github.com/Maks-Siglov/DjangoGramm.git
+    cd cd DjangoGramm/
 
     ```
 
