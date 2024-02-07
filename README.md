@@ -12,7 +12,7 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
 
     ```bash
     git clone https://github.com/Maks-Siglov/DjangoGramm.git
-    cd cd DjangoGramm/
+    cd DjangoGramm/
 
     ```
 
