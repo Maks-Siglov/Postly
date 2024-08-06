@@ -11,8 +11,10 @@ Postly is a dynamic mini-social network where users can create and share posts, 
 1. Clone the repository:
 
     ```bash
+
     git clone https://github.com/Maks-Siglov/Postly.git
     cd Postly/
+
 
     ```
 
