@@ -3,8 +3,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-      "domain": "djangogramm.com",
-      "name": "djangogramm.com"
+      "domain": "postly.com",
+      "name": "postly.com"
     }
   },
   {

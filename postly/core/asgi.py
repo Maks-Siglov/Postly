@@ -1,5 +1,5 @@
 """
-ASGI config for djangogramm project.
+ASGI config for postly project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
