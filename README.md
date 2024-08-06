@@ -1,6 +1,6 @@
-# DjangoGramm
+# Postly
 
-DjangoGramm is a social media platform With the power of Django, users can seamlessly express themselves through captivating posts, rich content, and engaging interactions.
+Postly is a dynamic mini-social network where users can create and share posts, like and comment on content, and follow other users to stay updated with their activities. Engage with your community and enjoy a personalized feed tailored to your interests.
 
 
 ## Getting Started
@@ -11,8 +11,10 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/Maks-Siglov/DjangoGramm.git
-    cd DjangoGramm/
+
+    git clone https://github.com/Maks-Siglov/Postly.git
+    cd Postly/
+
 
     ```
 
@@ -26,7 +28,7 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
 3. Apply migrations:
 
     ```bash
-    cd djangogramm/
+    cd postly/
     python manage.py migrate
     ```
    
@@ -47,14 +49,13 @@ DjangoGramm is a social media platform With the power of Django, users can seaml
      - **Username:** admin
      - **Password:** 223344qq
 
-    
 6. Run the development server:
 
     ```bash
     python manage.py runserver
     ```
-
-7. Visit `http://127.0.0.1:8000/admin/` to log in with your superuser account and start using DjangoGramm.
+   
+7. Visit `http://127.0.0.1:8000/admin/` to log in with your superuser account and start using Postly.
 
 
 ### Enable extended functionality
